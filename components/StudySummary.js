@@ -1,4 +1,3 @@
-import { useState, useRef } from 'react';
 import {
 	Flex,
 	Box,
@@ -9,13 +8,10 @@ import {
 	Link
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import Tile from '../../board/Tile';
-import { ItemBadge } from '../shared/TreatmentCompareItem';
-import ExpandableDeck from '../../shared/ExpandableDeck';
-import { ExpandableText } from '../../shared/ExpandableText';
-import StudyUpvote from '../shared/StudyUpvote';
-import AnalyticsBubbleSummary from '../shared/AnalyticsBubbleSummary';
-import { useHistory } from 'react-router-dom';
+import { ItemBadge } from './TreatmentCompareItem';
+import ExpandableDeck from './ExpandableDeck';
+import StudyUpvote from './StudyUpvote';
+import AnalyticsBubbleSummary from './AnalyticsBubbleSummary';
 
 
 export function EffectsSummary(props) {

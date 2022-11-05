@@ -19,7 +19,7 @@ import {
   Heading } from '@chakra-ui/react'
 import { theme } from '../../_app';
 import StudySummary from '../../../components/StudySummary';
-import MeasuresSideDeck from '.../../../components/MeasuresSideDeck';
+import MeasuresSideDeck from '../../../components/MeasuresSideDeck';
 import InsightsDeck from '../../../components/InsightsDeck';
 import BaselinesDeck from '../../../components/BaselinesDeck';
 import SectionHeader from '../../../components/SectionHeader';
@@ -37,6 +37,22 @@ const groupColorWheel = [
 'var(--chakra-colors-purple-700)', 
 'var(--chakra-colors-purple-900)'];
 
+export const cat2index = {
+  'overview': 0,
+  'participants': 1,
+  'results': 2,
+  'adverse effects': 3,
+  'related studies': 4
+}
+
+export const index2cat = [
+  'overview',
+  'participants',
+  'results',
+  'adverse effects',
+  'related studies'
+]
+
 export async function getServerSideProps(context) {
   const { title, id, ...rest } = context.params;
 
@@ -52,23 +68,24 @@ export async function getServerSideProps(context) {
   const baselinesRes = await fetch(`${process.env.REACT_APP_API_URL}/studies/${id}/baselines`);
   const baselinesData = await baselinesRes.json();
 
+  const measuresRes = await fetch(`${process.env.REACT_APP_API_URL}/studies/${id}/measures`);
+  const measuresData = await measuresRes.json();
+
   return { props: { 
     study: studyData,
     groups: groupData?.groups?.map((x, index) => ({...x, color: groupColorWheel[index % groupColorWheel.length]})),
     effects: effectsData?.effects,
-    baselines: baselinesData?.baselines
+    baselines: baselinesData?.baselines,
+    measures: measuresData?.measures
   }};
 }
 
 export default function Study(props) {
   return (
-    <html lang='en'>
-      <head />
-      <body>
-        <Heading>{"Hello World"}</Heading>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      </body>
-    </html>
+    <>
+      <Main {...props} />
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    </>
   );
 }
 
@@ -105,7 +122,6 @@ function Main(props) {
           <Text textAlign='left' fontSize='13px' fontWeight='500'>{props.study?.description}</Text>
           <Link float='left' color='purple.300' href={`https://clinicaltrials.gov/ct2/show/${id}`}>{'see source'}</Link>
           <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
-          {/*TODO add a bunch of study qualities*/}
           </Hide>
 
         </Flex>

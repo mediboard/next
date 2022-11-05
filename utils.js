@@ -135,3 +135,9 @@ export function getBaseLog(x, y) {
 export function capitalizeEachWord(string) {
   return string.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
 }
+
+export const adminUsers = ['porterhunley'];
+
+export const isAdminUser = (username) => {
+  return adminUsers.includes(username);
+}

@@ -8,10 +8,7 @@ import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import * as d3 from 'd3';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
-import Card from '../../../shared/Card';
-import SignIntile from '../../../board/SignInTile';
-
-import { EfficacyPanel } from '../../../compare/EfficacyComparisonStack';
+import Card from '../Card';
 
 
 function createMinMaxs(data) {
@@ -218,7 +215,6 @@ export default function EffectsBubbleChart(props) {
 	const ToolTip = ({e, d}) => {
 		return (
 			<Card pos="absolute" top={(e.pageY + 5) + "px"} left={(e.pageX + 5) + "px"} alignContent='center'>
-			{user ? 
 				<Flex w='100%' pl='20px' pr='20px' alignItems='center' flexDirection='column' background={'#ffffff'}>
 					<Text marginBottom={'5px'}>{'Studies'}</Text>
 					{[...new Set(d?.studies ? d?.studies.split(',') : [])].map(x => (
@@ -234,10 +230,7 @@ export default function EffectsBubbleChart(props) {
 							</Link>
 						</Text>
 					))}
-				</Flex> : 
-
-				<SignIntile>{'Sign In to view side effect origins'}</SignIntile>
-			}
+				</Flex>
 			</Card>
 		);
 	};

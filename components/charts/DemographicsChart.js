@@ -1,4 +1,3 @@
-import React, { useRef, useEffect, useState } from 'react';
 import { 
 	PieChart,
 	Pie,
@@ -7,8 +6,8 @@ import {
 	ResponsiveContainer,
 	Sector } from 'recharts';
 import { Box } from '@chakra-ui/react';
-import EmptyPieChart from '../../shared/EmptyPieChart';
-import { Text } from '../../../../styles/themeStyles';
+import EmptyPieChart from './EmptyPieChart';
+import { Text } from '../../styles/themeStyles';
 
 
 function PieChartNameLabel(props) {

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import {
 	Flex,
 } from '@chakra-ui/react';
-import studyHttpClient from '../../../services/clientapis/StudyHttpClient';
-import LoadMoreDeck from '../../shared/LoadMoreDeck';
-import StudyCard from '../shared/StudyCard';
+import studyHttpClient from '../services/clientapis/StudyHttpClient';
+import LoadMoreDeck from './LoadMoreDeck';
+import StudyCard from './StudyCard';
 
 
 export default function RelatedStudiesPage(props) {
