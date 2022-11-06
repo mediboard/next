@@ -28,6 +28,7 @@ import MeasureOverview from '../../../components/MeasureOverview';
 import ResultsPage from '../../../components/ResultsPage';
 import EffectsPage from '../../../components/EffectsPage';
 import RelatedStudiesPage from '../../../components/RelatedStudiesPage';
+import PageBody from '../../../components/PageBody';
 
 
 const groupColorWheel = [
@@ -103,14 +104,14 @@ function Main(props) {
   }
 
   return (
+    <PageBody mt={0} align='center' justifyContent='center' bg='#CED4DB'>
     <Flex minH='90vh' 
       h='100%'
       flexDirection={['column', 'row']}
       w='100%'
       borderRadius={4}
-      mt={'2.5%'}
+      m={'2.5%'}
       pb={5}
-      mb={'2.5%'}
       bg='white'
       alignItems='start'>
       <VStack w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
@@ -209,5 +210,6 @@ function Main(props) {
         </TabPanels>
       </Tabs>
     </Flex>
+    </PageBody>
   ) 
 }

@@ -1,3 +1,4 @@
+import React, { useReducer } from 'react';
 import '../styles/globals.css'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { 
@@ -7,6 +8,7 @@ import {
   Heading,
   Badge } from '../styles/themeStyles';
 import { Authenticator } from '@aws-amplify/ui-react';
+import AppLayout from '../components/AppLayout';
 
 
 export const theme = extendTheme({
@@ -55,11 +57,32 @@ export const theme = extendTheme({
   },
 })
 
+export const SignInContext = React.createContext(null);
+
+function userReducer(state, action) {
+  switch (action?.type) {
+    case 'NewUser':
+      return {type: 'NewUser'}
+    case 'SignIn':
+      return {type: 'SignIn'}
+    case 'Verify':
+      return {type: 'Verify', username: action.body?.username}
+    default:
+      return undefined;
+  }
+}
+
 function MyApp({ Component, pageProps }) {
+  const [userAction, dispatchUserAction] = useReducer(userReducer);
+
   return (
     <Authenticator.Provider>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+      <SignInContext.Provider value={dispatchUserAction}>
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
+      </SignInContext.Provider>
       </ChakraProvider>
     </Authenticator.Provider>
   )
