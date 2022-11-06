@@ -13,14 +13,16 @@ export default function BasicWhiskerPlot(props) {
 
 	const [clientWidth, setClientWidth] = useState(undefined);
 
-	const resizeObserver = new ResizeObserver((entries) => {
-		setClientWidth(entries[0].contentRect.width);
-	});
+	let resizeObserver = undefined; 
 
 	const vizAnchor = useRef(undefined);
 	const container = useRef(undefined);
 
 	useEffect(() => {
+		resizeObserver = new ResizeObserver((entries) => {
+			setClientWidth(entries[0].contentRect.width);
+		});
+		
 		if (container?.current) {
 			resizeObserver.observe(container.current);
 		}

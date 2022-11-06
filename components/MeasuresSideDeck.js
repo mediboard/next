@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import {
 	VStack,
@@ -10,24 +11,18 @@ import MeasuresTile from './MeasuresTile';
 export default function MeasuresSideDeck(props) {
 	const { setSelectedMeasure, selectedMeasure, measures, ...kv } = props;
 
-	const resultMatch = useRouteMatch('/medical/studies/:study/:title/results/:result_id');
-	const resultPageMatch = useRouteMatch('/medical/studies/:study/:title/results');
-
-	const history = useHistory();
+  const router = useRouter();
+  const { title, id, section, result } = router.query;
 
 	useEffect(() => {
-		let resultId = resultMatch?.params['result_id'];
-		if (resultId && measures?.length) {
-			setSelectedMeasure(measures?.filter(measure => measure.id == resultId)[0]);
+		if (result && measures?.length) {
+			setSelectedMeasure(measures?.filter(measure => measure.id == result)[0]);
 		}
-	}, [resultMatch?.params['result_id'], measures?.length])
+	}, [result, measures?.length])
 
 	function selectMeasure(measureId) {
-		let study_id = resultPageMatch?.params['study'];
-		let title = resultPageMatch?.params['title'];
-
-		let newPath = `/medical/studies/${study_id}/${title}/results/${measureId}`;
-		history.push(newPath);
+		router.query.result = measureId;
+		router.push(router, undefined, { shallow: true });
 	}
 
 	return (
@@ -36,6 +31,9 @@ export default function MeasuresSideDeck(props) {
 		{measures.map(measure => (
 			<MeasuresTile key={measure.id} 
 				measure={measure}
+				_hover={{
+					cursor: 'pointer'
+				}}
 				bg={selectedMeasure?.id === measure.id ? '#cccccc44' : 'white'}
 				border={selectedMeasure?.id === measure.id ? '2px solid rgb(129, 133, 255)' : 'default'} 
 				onClick={() => selectMeasure(measure.id)} />

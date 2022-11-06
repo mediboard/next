@@ -1,3 +1,4 @@
+import NextLink from 'next/link';
 import {
 	Flex,
 	Text,
@@ -9,7 +10,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 
 
 export default function AttributeSummaryCard(props) {
-	const { children, text, color, href, ...kv } = props;
+	const { children, text, color, href, shallow, ...kv } = props;
 
 	return (
 		<LinkBox
@@ -22,9 +23,11 @@ export default function AttributeSummaryCard(props) {
 			w='fit-content'
 			alignItems='center'
 			{...kv}>
-			<LinkOverlay href={href || '#'}>
-				<Text fontSize={['14px','16px']} fontWeight='500'>{text}</Text>
-			</LinkOverlay>
+			<NextLink legacyBehavior href={href || '#'} passHref shallow={shallow}>
+				<LinkOverlay>
+					<Text fontSize={['14px','16px']} fontWeight='500'>{text}</Text>
+				</LinkOverlay>
+			</NextLink>
 
 			<Flex justifyContent='center' bg='white' p={1} pr={0} borderRadius={4} alignItems='center'>
 				<Text fontSize={['18px','22px']} fontWeight='550' color={color}>{children}</Text>

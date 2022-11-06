@@ -72,7 +72,7 @@ export async function getServerSideProps(context) {
   const measuresData = await measuresRes.json();
 
   return { props: { 
-    study: studyData,
+    study: studyData?.studies[0],
     groups: groupData?.groups?.map((x, index) => ({...x, color: groupColorWheel[index % groupColorWheel.length]})),
     effects: effectsData?.effects,
     baselines: baselinesData?.baselines,
@@ -97,9 +97,9 @@ function Main(props) {
 
   function handleChange(index) {
     const cat = index2cat[index];
-    const newPath = `/medical/studies/${id}/${title}/?section=${section}`;
+    router.query.section = cat
 
-    router.push(newPath, undefined, { shallow: true });
+    router.push(router, undefined, { shallow: true });
   }
 
   return (
@@ -128,7 +128,7 @@ function Main(props) {
 
         <Hide below='md'>
         <Box display={section === 'results' ? 'default' : 'none'}>
-          <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} study={props.study}/>
+          <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} measures={props.measures}/>
         </Box>
         </Hide>
       </VStack>
@@ -162,7 +162,7 @@ function Main(props) {
 
             <Box>
               <SectionHeader pt={1} mb={5} innerSx={{pt: 2, pb: 2, pl:4, pr:4}} title={'Results'} />
-              <MeasureOverview study={props.study} groups={props.groups}/>
+              <MeasureOverview study={props.study} groups={props.groups} measure={props.measures[0]}/>
               <Link textColor={'purple.300'} 
                 float='right'
                 href={`/medical/studies/${id}/${title}/results`}>
@@ -194,7 +194,7 @@ function Main(props) {
             <ResultsPage study={props.study} selectedMeasure={selectedMeasure} groups={props.groups}/>
 
             <Hide above='sm'>
-            <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} study={props.study}/>
+            <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} measures={props.measures}/>
             </Hide>
           </VStack>
         </TabPanel>  

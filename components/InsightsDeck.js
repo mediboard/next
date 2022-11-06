@@ -8,6 +8,7 @@ import {
 import { StarIcon, CheckIcon } from '@chakra-ui/icons';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { isAdminUser } from '../utils';
+import studyHttpClient from '../services/clientapis/StudyHttpClient';
 
 
 export default function InsightsDeck(props) {

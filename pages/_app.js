@@ -6,6 +6,7 @@ import {
   Text, 
   Heading,
   Badge } from '../styles/themeStyles';
+import { Authenticator } from '@aws-amplify/ui-react';
 
 
 export const theme = extendTheme({
@@ -56,9 +57,11 @@ export const theme = extendTheme({
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <Authenticator.Provider>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </Authenticator.Provider>
   )
 }
 

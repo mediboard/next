@@ -58,7 +58,7 @@ export default function StudySummary(props) {
 
 	return (
 		<Flex flexDirection='column' textAlign='left' {...kv}>
-			<Link href={`/medical/studies/${id}/${short_title.toLowerCase().replaceAll(' ', '_')}`}>
+			<Link href={`/medical/studies/${id}/${short_title?.toLowerCase()?.replaceAll(' ', '_')}`}>
 				<Heading _hover={{textDecoration: 'underline'}}
 					fontSize='16px'
 					noOfLines={3}

@@ -91,20 +91,18 @@ export default function BaselinesDeck(props) {
 	const { studyId, title, fullPage, baselines, ...kv } = props;
 
 	if (fullPage) {
-		return <BaselinesPage studyId={studyId} baselines={baselines} />
+		return <BaselinesPage studyId={studyId} baselines={groupBaselinesByBase(baselines)} />
 	}
 
 	return (
 		<VStack>
 			<Flex w='100%'
 				flexWrap='wrap'
-				loading={baselinesIsLoading}
 				alignItems='center'
 				justifyContent='center'>
 				<Flex w={['70%', '31%']} mb={[4, 0]} h='100%' justifyContent='center' alignItems='center'>
 					<VerticalTextCard
-						isLoading={baselinesIsLoading}
-						header={getMaxNoParticipantsFromBaselines(baselines)}
+						header={getMaxNoParticipantsFromBaselines(groupBaselinesByBase(baselines))}
 						subHeader={'TOTAL STUDY PARTICIPANTS'}
 						color={'purple'} />
 				</Flex>
@@ -114,7 +112,7 @@ export default function BaselinesDeck(props) {
 						colorWheel={colorWheel}
 						fill="#82ca9d"
 						aspect={1.3}
-						data={getGenderBaselines(baselines)?.data}
+						data={getGenderBaselines(groupBaselinesByBase(baselines))?.data}
 					/>
 				</Box>
 {/*				<Box w={['70%', '31%']}>
@@ -129,14 +127,16 @@ export default function BaselinesDeck(props) {
 */}			
 				<Flex flexDirection='column' gap={4} justifyContent='center'>	
 					<AttributeSummaryCard
-						href={`/medical/studies/${studyId}/${title}/participants`}
+						shallow={true}
+						href={`/studies/${studyId}/${title}/?section=participants`}
 						text={'Demographic Measures: '}
-						color='purple.300'>{baselines?.length}
+						color='purple.300'>{groupBaselinesByBase(baselines)?.length}
 					</AttributeSummaryCard>
 					<AttributeSummaryCard 
-						href={`/medical/studies/${studyId}/${title}/participants`}
+						shallow={true}
+						href={`/studies/${studyId}/${title}/?section=participants`}
 						text={'Racial Data: '}
-						color='purple.300'>{getRaceBaselines(baselines)?.data ? 'Available' : 'No'}
+						color='purple.300'>{getRaceBaselines(groupBaselinesByBase(baselines))?.data ? 'Available' : 'No'}
 					</AttributeSummaryCard>
 				</Flex>	
 			</Flex>

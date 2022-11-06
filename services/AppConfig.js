@@ -4,10 +4,10 @@ class AppConfig {
 	constructor({
 		treatmentsRoute,
 		conditionsRoute}) {
-    this.API_URL = process.env.REACT_APP_API_URL;
+    this.API_URL = process.env.NEXT_PUBLIC_REACT_APP_API_URL;
     this.conditionsRoute = conditionsRoute;
     this.treatmentsRoute = treatmentsRoute;
-    console.log('api: ' + process.env.REACT_APP_API_URL);
+    console.log('api: ' + process.env.NEXT_PUBLIC_REACT_APP_API_URL);
 	}
 
 	get api_url() {

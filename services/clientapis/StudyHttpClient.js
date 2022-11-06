@@ -7,7 +7,7 @@ class StudyHttpClient {
 	constructor(cache, baseUrl) {
 		this.cache = cache;
 		this.instance = axios.create({
-			baseURL: baseUrl
+			baseURL: baseUrl 
 		});
 		this.base = baseUrl;
 	}
