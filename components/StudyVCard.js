@@ -83,7 +83,7 @@ export default function StudyVCard(props) {
 					<Link
 						textDecoration='underline'
 						color='purple.300'
-						href={`/medical/studies/${id}/${short_title.toLowerCase().replaceAll(' ', '_')}`}>
+						href={`/studies/${id}/${short_title.toLowerCase().replaceAll(' ', '_')}`}>
 					{'see full study'}
 					</Link>
 

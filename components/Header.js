@@ -29,7 +29,7 @@ const componentId = 'shared/Header';
 export const navNameToRoute = {
   'Compare Treatments': '/',
   Treatments: '/treatments',
-  'Browse Studies': '/studies',
+  'Browse Studies': '/studies/browse',
   Conditions: '/medical/conditions',
   FAQ: '/medical/faq',
   Blog: '/blog/articles'

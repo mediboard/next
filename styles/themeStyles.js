@@ -95,7 +95,7 @@ export const Text = {
   },
   // The default variant value
   defaultProps: {
-    variant: 'thick',
+    variant: 'normal',
   },
 }
 
