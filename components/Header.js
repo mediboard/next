@@ -128,7 +128,7 @@ export default function Header() {
 
         <Show below='sm'>
         <Flex alignItems='center' align='stretch' w='100%'>
-          <Box w='65%'>
+          <Box w='65%' onClick={onLogoCLick}>
             <Image src='/black_and_white.svg' width={200} height={20}/>
           </Box>
           <Spacer />
