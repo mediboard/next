@@ -121,15 +121,15 @@ export default function Header() {
             size="md"
             variant="black"
             border='1px solid white'
-            onClick={() => {signInContext({'type': 'SignIn'})}}>Sign In</Button> :
+            onClick={() => {signInContext({'type': 'NewUser'})}}>Sign Up</Button> :
             <UserButton/> }
         </Box>
         </Hide>
 
         <Show below='sm'>
-        <Flex alignItems='center' align='stretch'>
+        <Flex alignItems='center' align='stretch' w='100%'>
           <Box w='65%'>
-            <Image src='/components/icons/black_and_white.svg' width={20} height={20}/>
+            <Image src='/black_and_white.svg' width={200} height={20}/>
           </Box>
           <Spacer />
          { user === undefined ? 
@@ -137,7 +137,7 @@ export default function Header() {
             size="md"
             variant="black"
             border='1px solid white'
-            onClick={() => {signInContext({'type': 'SignIn'})}}>Sign In</Button> :
+            onClick={() => {signInContext({'type': 'NewUser'})}}>Sign Up</Button> :
             <UserButton /> }
           <Spacer />
           <HeaderDropdown options={['Compare Treatments', 'Browse Studies', 'Community']} />

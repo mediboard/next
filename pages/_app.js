@@ -8,6 +8,7 @@ import {
   Heading,
   Badge } from '../styles/themeStyles';
 import { Authenticator } from '@aws-amplify/ui-react';
+import RegistrationModal from '../components/RegistrationModal';
 import AppLayout from '../components/AppLayout';
 
 
@@ -82,6 +83,9 @@ function MyApp({ Component, pageProps }) {
         <AppLayout>
           <Component {...pageProps} />
         </AppLayout>
+        <RegistrationModal
+          showDialog={userAction?.type === 'NewUser' || userAction?.type === 'SignIn'} 
+          type={userAction?.type} />
       </SignInContext.Provider>
       </ChakraProvider>
     </Authenticator.Provider>
