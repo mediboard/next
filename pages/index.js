@@ -19,6 +19,13 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>{`The Medical Board: Learn the truth about your medication.`}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={'MediBoard gives users access to high quality medical data so that they can choose treatments themselves.'} />
+        <meta name="og:title" content={'The Medical Board: Learn the truth about your medication.'} />
+        <meta name="og:description" content="MediBoard gives users access to high quality medical data so that they can choose treatments themselves." />
+      </Head>
       <LandingPage />
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     </>

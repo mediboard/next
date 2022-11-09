@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { 
   ColorModeScript,
   Box,
@@ -84,6 +85,13 @@ export async function getServerSideProps(context) {
 export default function Study(props) {
   return (
     <>
+      <Head>
+        <title>{`${props.study.short_title}`}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={props.study.description} />
+        <meta name="og:title" content={props.study.short_title} />
+        <meta name="og:description" content={props.study.description} />
+      </Head>
       <Main {...props} />
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     </>
