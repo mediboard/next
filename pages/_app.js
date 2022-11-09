@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import '../styles/globals.css'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { 
@@ -93,6 +94,7 @@ function MyApp({ Component, pageProps }) {
       <SignInContext.Provider value={dispatchUserAction}>
         <AppLayout>
           <Component {...pageProps} />
+          <Analytics />
         </AppLayout>
         <VerificationProvider 
           showDialog={userAction?.type === 'Verify'}
