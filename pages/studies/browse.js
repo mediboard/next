@@ -53,8 +53,8 @@ function Main(props) {
 
 				<Flex flexDirection='column' w='100%' gap={5}>
 					<StudySearchBar />
-					<StudiesLandingDeck studies={props.studies}/>
-				</Flex>
+{/*					<StudiesLandingDeck studies={props.studies}/>
+*/}				</Flex>
 			</Flex>
 		</PageBody>
 	);

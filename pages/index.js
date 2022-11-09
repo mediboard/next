@@ -14,6 +14,7 @@ import {
   Button
 } from '@chakra-ui/react';
 import { theme, SignInContext } from './_app';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
 
 export function LandingPage() {
   const signInContext = useContext(SignInContext);
+  const { user, signOut } = useAuthenticator((context) => [context.user]);
 
   return (
     <Flex flexDirection='column' w='100%'>
@@ -34,7 +36,11 @@ export function LandingPage() {
           <Heading mb={[1,3]}>{'Make Better'}</Heading>
           <Heading mb={4}>{'Health Decisions'}</Heading>
           <Text mb={10}>{'Clinical trial data made accessible, plus the tools you need to understand your prescription. Join the MediBoard community today. '}</Text>
-          <Button onClick={() => {signInContext({'type': 'NewUser'})}}>{'Join Beta Now'}</Button>
+          <Button 
+            variant={!user ? "purple" : "disabled"}
+            onClick={() => {signInContext({'type': 'NewUser'})}}>
+            {!user ? 'Join Beta Now' : "We'll contact you soon"}
+          </Button>
         </Flex>
         <Flex w='100%' mt={[10, 0]}>
           <Spacer />
@@ -100,7 +106,11 @@ export function LandingPage() {
           <Heading mb={[0,3]}>{'See Real Medical'}</Heading>
           <Heading mb={4}>{'Data'}</Heading>
           <Text mb={10}>{'Medical data that you can measure and compare, parsed from tens of thousands of clinical trials.'}</Text>
-          <Button onClick={() => {signInContext({'type': 'NewUser'})}}>{'Join Beta Now'}</Button>
+          <Button 
+            variant={!user ? "purple" : "disabled"}
+            onClick={() => {signInContext({'type': 'NewUser'})}}>
+            {!user ? 'Join Beta Now' : "We'll contact you soon"}
+          </Button>
         </Flex>
       </SimpleGrid>
     </Flex>
