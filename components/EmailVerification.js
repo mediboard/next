@@ -13,13 +13,10 @@ import {
 	Text
 } from '@chakra-ui/react';
 import { Auth } from 'aws-amplify';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 import { SignInContext } from '../pages/_app';
 
 
-export default function EmailVerification({
-	username
-}) {
+export default function EmailVerification({email}) {
 	const body = 'An email has been sent - please verify yourself\
 	by entering the verification code in the email';
 	const [error, setError] = useState(undefined);
@@ -29,7 +26,7 @@ export default function EmailVerification({
 
 	async function confirmSignUp() {
 		setIsLoading(true);
-		Auth.confirmSignUp(username, document.getElementById("verify")?.value).then(() => {
+		Auth.confirmSignUp(email, document.getElementById("verify")?.value).then(() => {
 			signInContext({type: 'SignIn'});
 		}).catch(error => {
 			setError(error.message);
