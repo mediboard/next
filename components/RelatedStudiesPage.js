@@ -4,6 +4,7 @@ import {
 } from '@chakra-ui/react';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import LoadMoreDeck from './LoadMoreDeck';
+import SignInBlocker from './SignInBlocker'
 import StudyCard from './StudyCard';
 
 
@@ -34,15 +35,18 @@ export default function RelatedStudiesPage(props) {
 
 	return (
 		<Flex flexDirection='column'>
+			<SignInBlocker text='Join the beta to view related studies'>
 			<LoadMoreDeck
 				showLoadMore={nextPage}
 				onLoadMore={() => fetchRelatedStudies(false)}
 				p={0}
+				minH='80vh'
 				isLoading={studiesIsLoading}>
 			{studies?.map(x => (
 				<StudyCard w={['100%', '100%']} key={x.id} {...x}/>
 			))}
 			</LoadMoreDeck>
+			</SignInBlocker>
 		</Flex>
 	);
 }
