@@ -27,7 +27,7 @@ import { ReactComponent as BWLogo } from './icons/black_and_white.svg'
 const componentId = 'shared/Header';
 
 export const navNameToRoute = {
-  'Compare Treatments': '/',
+  'Compare Treatments': '/compare',
   Treatments: '/treatments',
   'Browse Studies': '/studies/browse',
   Conditions: '/medical/conditions',
@@ -79,6 +79,15 @@ export default function Header() {
     });
   }
 
+  function onSignInClick() {
+    if (router.pathname === '/') {
+      signInContext({'type': 'NewUser'});
+      return;
+    }
+
+    router.push('/');
+  }
+
   return (
     <Box 
       align='false' 
@@ -121,7 +130,7 @@ export default function Header() {
             size="md"
             variant="black"
             border='1px solid white'
-            onClick={() => {signInContext({'type': 'NewUser'})}}>Sign Up</Button> :
+            onClick={onSignInClick}>Sign Up</Button> :
             <UserButton/> }
         </Box>
         </Hide>
@@ -137,7 +146,7 @@ export default function Header() {
             size="md"
             variant="black"
             border='1px solid white'
-            onClick={() => {signInContext({'type': 'NewUser'})}}>Sign Up</Button> :
+            onClick={onSignInClick}>Sign Up</Button> :
             <UserButton /> }
           <Spacer />
           <HeaderDropdown options={['Compare Treatments', 'Browse Studies', 'Community']} />

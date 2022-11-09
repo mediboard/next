@@ -35,7 +35,7 @@ export default function RegistrationBody({type}) {
 
 	async function signIn() {
 		return Auth.signIn({
-			username: document.getElementById("username")?.value,
+			username: document.getElementById("email")?.value,
 			password: document.getElementById("password")?.value,
 		}).then((response) => {
 			signInContext(undefined);
@@ -58,10 +58,10 @@ export default function RegistrationBody({type}) {
 
 	async function signUp() {
 		return Auth.signUp({
-			username: document.getElementById("username")?.value,
+			username: document.getElementById("email")?.value,
 			password: document.getElementById("password")?.value,
 			attributes: {
-				email: document.getElementById("email")?.value
+				preferred_username: document.getElementById("username")?.value
 			}
 		}).then((response) => {
 			signInContext({
@@ -82,13 +82,13 @@ export default function RegistrationBody({type}) {
 		<Box>
 			<FormControl isInvalid={signInError}>
 				<FormErrorMessage>{signInError}</FormErrorMessage>
-				<Box display={type === 'NewUser' ? 'default' : 'none'}>
 				<FormLabel htmlFor='email'>Email address</FormLabel>
 				<Input mb={4} id='email' type='email' />
-				</Box>
 
+				<Box display={type === 'NewUser' ? 'default' : 'none'}>
 				<FormLabel htmlFor='username'>Username</FormLabel>
 				<Input mb={4} id='username' type='username' />
+				</Box>
 
 				<FormLabel htmlFor='password'>Password</FormLabel>
 				<Input mb={4} id='password' type='password' />

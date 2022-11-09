@@ -7,9 +7,12 @@ import {
   Text, 
   Heading,
   Badge } from '../styles/themeStyles';
+import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import RegistrationModal from '../components/RegistrationModal';
+import VerificationProvider from '../components/VerificationProvider';
 import AppLayout from '../components/AppLayout';
+import awsExports from '../aws-exports';
 
 
 export const theme = extendTheme({
@@ -67,11 +70,19 @@ function userReducer(state, action) {
     case 'SignIn':
       return {type: 'SignIn'}
     case 'Verify':
-      return {type: 'Verify', username: action.body?.username}
+      return {
+        type: 'Verify',
+        username: action.body?.username,
+        email: action.body?.email
+    }
     default:
       return undefined;
   }
 }
+
+Amplify.configure({
+  ...awsExports
+})
 
 function MyApp({ Component, pageProps }) {
   const [userAction, dispatchUserAction] = useReducer(userReducer);
@@ -83,6 +94,9 @@ function MyApp({ Component, pageProps }) {
         <AppLayout>
           <Component {...pageProps} />
         </AppLayout>
+        <VerificationProvider 
+          showDialog={userAction?.type === 'Verify'}
+          email={userAction?.email}/>
         <RegistrationModal
           showDialog={userAction?.type === 'NewUser' || userAction?.type === 'SignIn'} 
           type={userAction?.type} />

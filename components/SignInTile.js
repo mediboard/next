@@ -6,7 +6,7 @@ import {
 	Flex
 } from '@chakra-ui/react';
 import Tile from './Tile';
-import { SignInContext } from '../App';
+import { SignInContext } from '../pages/_app';
 
 
 export default function SignInTile(props) {
@@ -20,7 +20,7 @@ export default function SignInTile(props) {
 
 	return (
 		<Tile bg='white' {...kv}>
-			<Flex flexDirection='column' gap={4}>
+			<Flex flexDirection='column' alignItems='center' gap={4}>
 				<Text>{children}</Text>
 				<Box>
 					<Button onClick={onClick}>{'Sign In'}</Button>

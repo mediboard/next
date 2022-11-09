@@ -6,6 +6,7 @@ import {
 	Heading,
 	Spacer
 } from '@chakra-ui/react';
+import PageBody from '../../components/PageBody';
 import StudiesLandingDeck from '../../components/StudiesLandingDeck';
 import FeaturedStudiesDeck from '../../components/FeaturedStudiesDeck';
 import StudySearchBar from '../../components/StudySearchBar';
@@ -42,17 +43,19 @@ export default function StudyBrowse(props) {
 
 function Main(props) {
 	return (
-		<Flex direction={'column'} mb={'2.5%'} mt={'2.5%'} borderRadius={4} p={4} bg='white' w='100%' gap={5}>
-			<Flex w='100%'>
-				<Heading fontSize='18px'>{'Trending Studies: '}</Heading>
-				<Spacer />
-			</Flex>
-			<FeaturedStudiesDeck studies={props.featuredStudies}/>
+		<PageBody mt={0} bg='#CED4DB'>
+			<Flex direction={'column'} m={'2.5%'} borderRadius={4} p={10} bg='white' w='100%' gap={5}>
+				<Flex w='100%'>
+					<Heading fontSize='18px'>{'Trending Studies: '}</Heading>
+					<Spacer />
+				</Flex>
+				<FeaturedStudiesDeck studies={props.featuredStudies}/>
 
-			<Flex flexDirection='column' w='100%' gap={5}>
-				<StudySearchBar />
-				<StudiesLandingDeck studies={props.studies}/>
+				<Flex flexDirection='column' w='100%' gap={5}>
+					<StudySearchBar />
+					<StudiesLandingDeck studies={props.studies}/>
+				</Flex>
 			</Flex>
-		</Flex>
+		</PageBody>
 	);
 }

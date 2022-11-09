@@ -4,7 +4,7 @@ import {
 	Flex
 } from '@chakra-ui/react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import SignInTile from '../board/SignInTile';
+import SignInTile from './SignInTile';
 
 
 export default function SignInBlocker(props) {
