@@ -57,19 +57,19 @@ export const index2cat = [
 export async function getServerSideProps(context) {
   const { title, id, ...rest } = context.params;
 
-  const studyRes = await fetch(`${process.env.REACT_APP_API_URL}/studies/${id}`);
+  const studyRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}`);
   const studyData = await studyRes.json();
 
-  const groupsRes = await fetch(`${process.env.REACT_APP_API_URL}/studies/${id}/groups`);
+  const groupsRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/groups`);
   const groupData = await groupsRes.json();
 
-  const effectsRes = await fetch(`${process.env.REACT_APP_API_URL}/studies/${id}/effects`);
+  const effectsRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/effects`);
   const effectsData = await effectsRes.json();
 
-  const baselinesRes = await fetch(`${process.env.REACT_APP_API_URL}/studies/${id}/baselines`);
+  const baselinesRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/baselines`);
   const baselinesData = await baselinesRes.json();
 
-  const measuresRes = await fetch(`${process.env.REACT_APP_API_URL}/studies/${id}/measures`);
+  const measuresRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/measures`);
   const measuresData = await measuresRes.json();
 
   return { props: { 
