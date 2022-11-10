@@ -136,7 +136,7 @@ export function capitalizeEachWord(string) {
   return string.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
 }
 
-export const adminUsers = ['porterhunley'];
+export const adminUsers = ['4711515d-519e-4d68-9f67-5ddb9612eadd', 'f2c90573-baaa-4303-8c54-f844a9cd6d61'];
 
 export const isAdminUser = (username) => {
   return adminUsers.includes(username);

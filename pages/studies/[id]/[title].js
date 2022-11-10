@@ -76,7 +76,11 @@ export async function getServerSideProps(context) {
   return { props: { 
     study: studyData?.studies[0],
     groups: groupData?.groups?.map((x, index) => ({...x, color: groupColorWheel[index % groupColorWheel.length]})),
-    effects: effectsData?.effects,
+    effects: effectsData?.effects.map((effectGroup, i) => ({
+      name: effectGroup.title,
+      effects: effectGroup.effects,
+      fill: groupColorWheel[i] 
+    })),
     baselines: baselinesData?.baselines,
     measures: measuresData?.measures
   }};
