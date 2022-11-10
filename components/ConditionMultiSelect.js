@@ -44,7 +44,7 @@ export default function ConditionMultiSelect(props) {
 				borderColor='purple.300'
 				value={conditionNames?.map(x => ({label: x, value: x}))}
 				onInputChange={(value) => { searchConditions(value) }}
-				onChange={(values) => { setConditions(values?.map(x => x.value.name)); }}
+				onChange={(values) => { setConditionNames(values?.map(x => x.value.name.toLowerCase())); }}
 				options={options?.map(x => ({label: x.name, value: {...x}}))} {...kv} />
 		</Box>
 	);

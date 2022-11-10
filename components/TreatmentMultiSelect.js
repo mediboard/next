@@ -44,7 +44,7 @@ export default function TreatmentMultiSelect(props) {
 				borderColor='purple.300'
 				value={treatmentNames?.map(x => ({label: x, value: x}))}
 				onInputChange={(value) => { searchTreatments(value) }}
-				onChange={(values) => { setTreatments(values?.map(x => x.value.name)); }}
+				onChange={(values) => { setTreatmentNames(values?.map(x => x.value.name.toLowerCase())); }}
 				options={options?.map(x => ({label: x.name, value: {...x}}))} {...kv} />
 		</Box>
 	);

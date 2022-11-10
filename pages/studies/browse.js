@@ -15,21 +15,9 @@ import { theme } from '../_app';
 
 
 export async function getServerSideProps(context) {
-	let params = {};
-
-	if (context.params?.query) { params['q'] = context.params.query; }
-	if (context.params?.conditions) { params['conditions'] = context.params.conditions; }
-	if (context.params?.treatments) { params['treatments'] = context.params.treatments; }
-	if (context.params?.gender) { params['gender'] = context.params.gender; }
-
-	const studies = await studyHttpClient.search(context.params?.page || 1, params);
-
 	const featuredStudies = await studyHttpClient.getBannerStudies();
 
-	return {props: { 
-		studies: studies?.studies,
-		featuredStudies: featuredStudies?.studies
-	}};
+	return {props: { featuredStudies: featuredStudies?.studies }};
 }
 
 export default function StudyBrowse(props) {
@@ -53,7 +41,7 @@ function Main(props) {
 
 				<Flex flexDirection='column' w='100%' gap={5}>
 					<StudySearchBar />
-					<StudiesLandingDeck studies={props.studies}/>
+					<StudiesLandingDeck />
 				</Flex>
 			</Flex>
 		</PageBody>

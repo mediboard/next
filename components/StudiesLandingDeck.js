@@ -1,13 +1,37 @@
-import StudyCard from './StudyCard';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import {
 	Flex,
 } from '@chakra-ui/react';
 import PageDeck from './PageDeck';
+import StudyCard from './StudyCard';
+import studyHttpClient from '../services/clientapis/StudyHttpClient';
 
 
+export default function StudiesLandingDeck() {
+	const [studies, setStudies] = useState([]);
 
-export default function StudiesLandingDeck(props) {
-	const { studies, ...kv } = props;
+	const router = useRouter();
+
+	const { treatments, conditions, q, gender } = router.query;
+
+	useEffect(() => {
+		fetchStudiesFromQuery();
+	}, [conditions, treatments, q])
+
+	async function fetchStudiesFromQuery(hardRefresh=false) {
+		const params = {
+			'q': q,
+			'conditions': conditions,
+			'treatments': treatments,
+			'gender': gender
+		}
+
+		studyHttpClient.search(1, params).then(data => {
+			let studiesToAdd = data['studies'];
+			setStudies(studiesToAdd);
+		})
+	}
 
 	return (
 		<Flex flexDirection='column'>

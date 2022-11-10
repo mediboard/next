@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
 	InputGroup,
 	Text,
@@ -34,6 +34,13 @@ export default function StudySearchBar(props) {
 		setIsModalOpen(!isModalOpen);
 	}
 
+	function onSearchClick() {
+		const treats = treatmentNames.join(',');
+		const conditions = conditionNames.join(',');
+
+		router.push(`/studies/browse/?treatments=${treats}&conditions=${conditions}&q=${query || ''}`, undefined, { shallow: true });
+	}
+
 	return (
 		<Flex alignItems={['center','stretch']}
 			border='1px solid #cccccc'
@@ -53,13 +60,13 @@ export default function StudySearchBar(props) {
 
 			<Flex alignItems='center' w='50%'>
 				<Box w='100%'>
-					<Text fontWeight='500'>{'Conditions'}</Text>
+					<Text ml={4} fontWeight='500'>{'Conditions'}</Text>
 					<ConditionMultiSelect setConditionNames={setConditionNames} conditionNames={conditionNames}/>
 				</Box>
 				<Box h='100%' w='1px' bg='#cccccc'/>
 
 				<Box w='100%'>
-					<Text fontWeight='500'>{'Treatments'}</Text>
+					<Text ml={4} fontWeight='500'>{'Treatments'}</Text>
 					<TreatmentMultiSelect setTreatmentNames={setTreatmentNames} treatmentNames={treatmentNames}/>
 				</Box>
 				<Box h='100%' w='1px' bg='#cccccc'/>
@@ -67,13 +74,17 @@ export default function StudySearchBar(props) {
 
 			<Flex alignItems='center' w='15%'>
 				<Box w='100%'>
-					<Text fontWeight='500'>{'Genders'}</Text>
+					<Text ml={4} fontWeight='500'>{'Genders'}</Text>
 					<ChakraSelect w='100%' border='none' >
 						<option>{'All'}</option>
 						<option>{'Male'}</option>
 						<option>{'Female'}</option>
 					</ChakraSelect>
 				</Box>
+			</Flex>
+
+			<Flex alignItems='center' w='5%'>
+				<IconButton onClick={onSearchClick} icon={<SearchIcon />}/>
 			</Flex>
 			</Hide>
 
