@@ -49,7 +49,7 @@ export default function Header() {
 
   useEffect(() => {
     if (searchInput && searchInput.itemType && searchInput.name) {
-      router.push(`/search/query/${searchInput.name}`);
+      router.push(`/studies/browse/?q=${searchInput.name}`);
     }
   }, [searchInput])
 
