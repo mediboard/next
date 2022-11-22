@@ -162,6 +162,28 @@ class TreatmentHttpClient {
 		return finalData;
 	}
 
+	async getNoAnalytics(drug, params) {
+		let config = {
+			params: params,
+			url: this.base + '/treatments/'+drug+'/no_analytics'
+		};
+		let uri = this.instance.getUri(config);
+
+		if (this.checkCache(uri)) {
+			return this.checkCache(uri);
+		}
+		
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to collect conditions data, status: " + response.status);
+		}
+
+		const data = await response.data;
+		this.cacheResponse(uri, data);
+
+		return data;
+	}
+
 	async getConditionAnalytics(drug) {
 		let config = { url: this.base + '/treatments/'+drug+'/conditionanalytics' }
 		let uri = this.instance.getUri(config);
