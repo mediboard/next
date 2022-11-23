@@ -23,7 +23,7 @@ export default function TreatmentSummary(props) {
 	useEffect(() => {
 		if (treatment?.id) {
 			fetchEffects();
-			fetchNoAnalytics();
+			// fetchNoAnalytics();
 		}
 	}, [treatment?.id])
 
@@ -38,16 +38,16 @@ export default function TreatmentSummary(props) {
 		})
 	}
 
-	async function fetchNoAnalytics() {
-		setNoAnalyticsIsLoading(true);
-		treatmentHttpClient.getNoAnalytics(treatment?.name, {condition_group: conditionGroup}).then(data => {
-			setNoAnalytics(data['no_analytics']);
-		}).catch(error => {
-			console.log(error);
-		}).finally(() => {
-			setNoAnalyticsIsLoading(false);
-		})
-	}
+	// async function fetchNoAnalytics() {
+	// 	setNoAnalyticsIsLoading(true);
+	// 	treatmentHttpClient.getNoAnalytics(treatment?.name, {condition_group: conditionGroup}).then(data => {
+	// 		setNoAnalytics(data['no_analytics']);
+	// 	}).catch(error => {
+	// 		console.log(error);
+	// 	}).finally(() => {
+	// 		setNoAnalyticsIsLoading(false);
+	// 	})
+	// }
 
 	return (
 		<Flex w='100%' rowGap={4} flexDirection='column' alignItems='center' {...kv}>

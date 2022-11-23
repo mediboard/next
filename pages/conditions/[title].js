@@ -1,3 +1,4 @@
+import { useSate } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import {
@@ -5,9 +6,10 @@ import {
 	Heading,
 	Flex
 } from '@chakra-ui/react';
+import { Select } from 'chakra-react-select';
 import { theme } from '../_app';
 import PageBody from '../../components/PageBody';
-import TreatmentCard from '../../components/TreatmentCard';
+import TreatmentModal from '../../components/TreatmentModel';
 
 
 export async function getServerSideProps(context) {
@@ -46,17 +48,14 @@ export default function Condition(props) {
 
 function Main(props) {
 	const router = useRouter();
-  const { title } = router.query;
+  const { title, treatments } = router.query;
 
 	return (
 		<PageBody mt={0} align='center' justifyContent='center' bg='#E0E0E0'>
-			<Flex flexWrap='wrap' justifyContent='center' columnGap={5} rowGap={5} p={10} minH='90vh' w='100%' m={'2.5%'}>
-			{props.treatments?.map(treat => (
-				<TreatmentCard
-					conditionGroup={title} 
-					treatment={treat}/>
-			))}
-			</Flex>
+			<TreatmentModal
+				conditionName={title}
+				treatments={props.treatments}
+				selectedTreatments={treatments.split(',')}/>
 		</PageBody>
 	);
 }
