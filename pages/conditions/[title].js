@@ -10,6 +10,7 @@ import { Select } from 'chakra-react-select';
 import { theme } from '../_app';
 import PageBody from '../../components/PageBody';
 import TreatmentModal from '../../components/TreatmentModel';
+import ConditionEffects from '../../components/ConditionEffects';
 
 
 export async function getServerSideProps(context) {
@@ -46,16 +47,27 @@ export default function Condition(props) {
 	)
 }
 
+const treatmentsColorWheel = [
+  "#818BEE",
+  "#002779",
+  "#D65108"
+];
+
 function Main(props) {
 	const router = useRouter();
   const { title, treatments } = router.query;
 
 	return (
 		<PageBody mt={0} align='center' justifyContent='center' bg='#E0E0E0'>
-			<TreatmentModal
-				conditionName={title}
-				treatments={props.treatments}
-				selectedTreatments={treatments.split(',')}/>
+			<Flex flexDirection='column' w='100%'>
+				<TreatmentModal
+					conditionName={title}
+					treatments={props.treatments}
+					selectedTreatments={treatments.split(',')}/>
+				<ConditionEffects 
+					treatColorMap={{Citalopram: 'purple'}}
+					treatmentNames={treatments.split(',')} />
+			</Flex>
 		</PageBody>
 	);
 }
