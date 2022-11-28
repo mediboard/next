@@ -4,6 +4,8 @@ import Head from 'next/head';
 import {
 	ColorModeScript,
 	Heading,
+	Text,
+	Box,
 	Flex
 } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
@@ -57,16 +59,32 @@ function Main(props) {
 	const router = useRouter();
   const { title, treatments } = router.query;
 
+  const treatColorMap = () => {
+  	const map = {};
+  	treatments?.split(',')?.forEach((name,i) => {
+  		map[name] = treatmentsColorWheel[i % treatmentsColorWheel.length];
+  	});
+
+  	return map;
+  }
+
 	return (
-		<PageBody mt={0} align='center' justifyContent='center' bg='#E0E0E0'>
-			<Flex flexDirection='column' w='100%'>
+		<PageBody p={'2.5%'} mt={0} align='center' justifyContent='center' bg='#E0E0E0'>
+			<Flex flexDirection='column' w='100%' rowGap={5}>
+				<Box p={5} bg='white' borderRadius={10}>
+					<Heading>{`Clinical Data for ${title}`}</Heading>
+					<Text>{'Some summary for depression'}</Text>
+				</Box>
 				<TreatmentModal
 					conditionName={title}
 					treatments={props.treatments}
 					selectedTreatments={treatments.split(',')}/>
-				<ConditionEffects 
-					treatColorMap={{Citalopram: 'purple'}}
-					treatmentNames={treatments.split(',')} />
+
+				<Box p={5} bg='white' borderRadius={10}>
+					<ConditionEffects 
+						treatColorMap={treatColorMap()}
+						treatmentNames={treatments.split(',')}/>
+				</Box>
 			</Flex>
 		</PageBody>
 	);
