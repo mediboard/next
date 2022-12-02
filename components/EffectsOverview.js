@@ -51,8 +51,14 @@ export default function EffectsOverview(props) {
 					key={effect + '-bage'}
 					color='purpleHover.300' 
 					w='fit-content'
+					alignItems='center'
 					textAlign='center'>{effect}</ItemBadge>
 			))}
+			{distinctEffects(effectsGroups)?.length > 5 && <ItemBadge
+				color='#CED4DB' 
+				w='fit-content'
+				alignItems='center'
+				textAlign='center'>{`+ ${distinctEffects(effectsGroups)?.length - 5} more`}</ItemBadge>}
 		</Flex>
 		</Flex>
 	);

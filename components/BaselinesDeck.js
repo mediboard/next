@@ -95,7 +95,7 @@ export default function BaselinesDeck(props) {
 	}
 
 	return (
-		<VStack>
+		<VStack w='100%'>
 			<Flex w='100%'
 				flexWrap='wrap'
 				alignItems='center'

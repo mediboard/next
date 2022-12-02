@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
-	Flex, 
+	Flex,
+	Box,
 	VStack, 
 	Text, 
 	Textarea,
@@ -63,6 +64,7 @@ export default function InsightsDeck(props) {
 	}
 
 	return (
+		<>
 		<VStack w='100%' alignItems='start'>
 		{insights?.map(x => (
 			<Flex key={x.id} alignItems='center' gap={2}>
@@ -76,5 +78,13 @@ export default function InsightsDeck(props) {
 			<IconButton icon={<CheckIcon />} onClick={onSubmit} />
 			</>}
 		</VStack>
+		{
+		<Flex w='100%' justifyContent='center'>
+			<Box pt={1} pb={1} pl={3} pr={3} borderRadius={5} bg='#CED4DB'>
+				<Text fontWeight='500'>{'Key insights not available for this study'}</Text>
+			</Box>
+		</Flex>
+		}
+		</>
 	);
 }

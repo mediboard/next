@@ -146,46 +146,41 @@ function Main(props) {
         </Hide>
       </VStack>
 
-      <Tabs w={['100%', '70%']}
-        isLazy
-        index={cat2index[section || 'overview']}
-        onChange={handleChange}>
-        <TabList bg={['none','#CED4DB']} overflowX='scroll'>
-          <Tab ml={[0,1]} bg='white'>{'Overview'}</Tab>
-          <Tab ml={[0,1]} bg='white'>{'Participants'}</Tab>
-          <Tab ml={[0,1]} bg='white'>{'Results'}</Tab>
-          <Tab ml={[0,1]} bg='white'>{'Adverse Effects'}</Tab>
-          <Tab ml={[0,1]} bg='white'>{'Related Studies'}</Tab>
+      <Tabs w={['100%', '70%']} isLazy
+        variant='enclosed'
+        index={cat2index[section || 'overview']} onChange={handleChange}>
+        <TabList bg={['none','#CED4DB']} /*overflowX='scroll'*/>
+          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Overview'}</Tab>
+          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Participants'}</Tab>
+          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Results'}</Tab>
+          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Adverse Effects'}</Tab>
+          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Related Studies'}</Tab>
         </TabList>
 
         <TabPanels w={['100%']} borderLeft={['none','1px solid #cccccc']}>
         <TabPanel w='100%'>
-          <VStack w='100%' pl={[2,5]} pr={[2,5]} alignItems='stretch'>
+          <VStack mt={5} spacing={10} w='100%' pl={[2,5]} pr={[2,5]} alignItems='stretch'>
             <Box>
-              <SectionHeader pt={1} mb={5} innerSx={{pt: 2, pb: 2, pl:4, pr:4}} title={'Key Insights'} />
               <InsightsDeck study_id={id} type={'STUDY'} />
             </Box>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
-            <Box>
-              <SectionHeader pt={1} mb={2} innerSx={{pt: 2, pb: 2, pl:4, pr:4}} title={'Participants'} />
+            <Box w='100%'>
               <BaselinesDeck {...{studyId: id, title: title, baselines: props.baselines}}/>
             </Box>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box>
-              <SectionHeader pt={1} mb={5} innerSx={{pt: 2, pb: 2, pl:4, pr:4}} title={'Results'} />
-              <MeasureOverview study={props.study} groups={props.groups} measure={props.measures[0]}/>
-              <Link textColor={'purple.300'} 
-                float='right'
-                href={`/medical/studies/${id}/${title}/results`}>
-                {'See more results'}
-              </Link>
+              <MeasureOverview 
+                no_measures={props.measures?.length}
+                title={title}
+                studyId={id}
+                groups={props.groups}
+                measure={props.measures[0]}/>
             </Box>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box>
-              <SectionHeader pt={1} mb={5} innerSx={{pt: 2, pb: 2, pl:4, pr:4}} title={'Adverse Effects'} />
               <EffectsOverview
                 title={title}
                 studyId={id}

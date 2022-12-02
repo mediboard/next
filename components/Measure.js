@@ -29,20 +29,22 @@ export default function Measure(props) {
 	}
 
 	return (
-		<VStack spacing={2} align='stretch' w='100%'>
-			<Text textAlign='left'>{measureData?.title}</Text>
-			<Text textAlign='left' fontSize='13px' fontWeight='500'>{measureData?.description}</Text>
+		<VStack spacing={8} align='stretch' w='100%'>
+			<Text fontWeight='600' textAlign='center'>{measureData?.title}</Text>
+
+			{/*<Text textAlign='left' fontSize='13px' fontWeight='500'>{measureData?.description}</Text>*/}
 			{	isAdminUser(user?.username) && <Button onClick={onClick}>Download Chart</Button> }
+ 			<GroupsDeck groups={groupData} />
+
 			<Box ref={chartRef} h='100%'>
 				<OutcomeDataChart {...{
 					unit: measureData?.units,
-					border:'10px solid #CED4DB',
 					borderRadius: 4,
-					chartH: 250,
+					chartH: 350,
 					outcomes: measureData?.outcomes, 
 					groups: groupData}} /> 
 			</Box>
- 			<GroupsDeck groups={groupData} />
+
 		</VStack>
 	);
 }
