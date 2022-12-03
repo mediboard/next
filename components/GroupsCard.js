@@ -79,7 +79,7 @@ export default function GroupsCard({groupData, index}) {
 			skStyles={{'height': '100%'}}
 			gap={0}
 			flexDirection='column'
-			border={'2px solid '+groupData.color} 
+			border={'4px solid '+groupData.color} 
 			overflowWrap='breakWord'>
 {/*      <Flex 
         bg={groupData.color}
@@ -104,7 +104,7 @@ export default function GroupsCard({groupData, index}) {
 				fontSize='16px'
 				mb={3}
 				whiteSpace='normal'>{groupData.title}</Text>
-			<Flex flewWrap='wrap' justifyContent='center' w='100%'>
+			<Flex gap={2} flexWrap='wrap' justifyContent='center' w='100%'>
 			{currentTreatments.map(x => (
 				<TreatmentCard key={x.id}
 					treatment={x}

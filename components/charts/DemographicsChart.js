@@ -3,6 +3,7 @@ import {
 	PieChart,
 	Pie,
 	Label,
+	Legend,
 	Cell,
 	ResponsiveContainer,
 	Sector } from 'recharts';
@@ -75,6 +76,7 @@ export default function DemographicsChart(props) {
 		<ResponsiveContainer w='100%' aspect={props.aspect || 1}>
 		{filterDemoData(data).length === 0 ? EmptyPieChart(name) : 
 			<PieChart>
+				<Legend />
 			  <Pie
 			  	activeIndex={activeIndex}
 			  	activeShape={<PieChartNameLabel text={name} />}

@@ -78,8 +78,7 @@ export default function InsightsDeck(props) {
 			<IconButton icon={<CheckIcon />} onClick={onSubmit} />
 			</>}
 		</VStack>
-		{
-		<Flex w='100%' justifyContent='center'>
+		{!insights && <Flex w='100%' justifyContent='center'>
 			<Box pt={1} pb={1} pl={3} pr={3} borderRadius={5} bg='#CED4DB'>
 				<Text fontWeight='500'>{'Key insights not available for this study'}</Text>
 			</Box>

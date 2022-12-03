@@ -33,11 +33,11 @@ import PageBody from '../../../components/PageBody';
 
 
 const groupColorWheel = [
-'var(--chakra-colors-purple-100)', 
-'var(--chakra-colors-purple-300)', 
-'var(--chakra-colors-purple-500)', 
-'var(--chakra-colors-purple-700)', 
-'var(--chakra-colors-purple-900)'];
+'#E7DAF7', 
+'#8185FF', 
+'#5C61FF', 
+'#0A12FF', 
+'#000593'];
 
 export const cat2index = {
   'overview': 0,
