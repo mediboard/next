@@ -7,6 +7,7 @@ import {
 	useState,
 	useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
+import { shadeColor } from '../../utils';
 
 
 export default function GroupedWhiskerPlot(props) {
@@ -102,7 +103,8 @@ export default function GroupedWhiskerPlot(props) {
 				.attr("x2", (d) => (x(d.title) + xSubGroup(d.groupName) + xSubGroup.bandwidth() / 2))
 				.attr("y1", (d) => (y(d.bottomWhisker)))
 				.attr("y2", (d) => (y(d.topWhisker)))
-				.attr("stroke", "black")
+				.attr("stroke", (d) => (shadeColor(d.fill, -30)))
+				.attr("stroke-width", '2')
 
 		svg.selectAll(".myRect")
 			.data(sumstat)
@@ -117,7 +119,8 @@ export default function GroupedWhiskerPlot(props) {
 						.attr("width", xSubGroup.bandwidth())
 						.attr('rx', 5)
 						.attr('ry', 5)
-						.attr("stroke", "black")
+						.attr("stroke", (d) => (shadeColor(d.fill, -30)))
+						.attr("stroke-width", '2')
 						.attr("fill", (d) => (d.fill))
 				},
 				update => {
@@ -142,7 +145,8 @@ export default function GroupedWhiskerPlot(props) {
 				.attr("x2", (d) => (x(d.title) + xSubGroup(d.groupName) + xSubGroup.bandwidth()))
 				.attr("y1", (d) => (y(d.value)))
 				.attr("y2", (d) => (y(d.value)))
-				.attr("stroke", "black")
+				.attr("stroke", (d) => (shadeColor(d.fill, -30)))
+				.attr("stroke-width", '2')
 	}
 
 	return (

@@ -17,14 +17,17 @@ import { isAdminUser } from '../utils';
 
 
 function TreatmentCard(props) {
-	const { treatment, onCloseClick, ...kv } = props;
+	const { treatment, onCloseClick, bg, ...kv } = props;
 
 	return (
-		<Flex w='100%'>
+		<Flex>
 			<Flex
 				w='100%'
-				bg='purple.300'
-				p
+				pl={3}
+				pr={3}
+				pt={1}
+				pb={1}
+				bg={bg || 'purple.300'}
 				borderRadius={10}
 				alignItems='center'
 				justifyContent='center'>
@@ -76,9 +79,9 @@ export default function GroupsCard({groupData, index}) {
 			skStyles={{'height': '100%'}}
 			gap={0}
 			flexDirection='column'
-			border={'2px solid '+groupData.color} 
+			border={'4px solid '+groupData.color} 
 			overflowWrap='breakWord'>
-      <Flex 
+{/*      <Flex 
         bg={groupData.color}
         w={10}
         h={10}
@@ -92,20 +95,25 @@ export default function GroupsCard({groupData, index}) {
         	{index + 1}
         </Text>
       </Flex>
+*/}			
 			<Text
 				w='100%'
 				mt='6px'
-				fontWeight='600'
+      	textAlign='center'
+				fontWeight='500'
 				fontSize='16px'
 				mb={3}
 				whiteSpace='normal'>{groupData.title}</Text>
-			<VStack w='100%'>
+			<Flex gap={2} flexWrap='wrap' justifyContent='center' w='100%'>
 			{currentTreatments.map(x => (
-				<TreatmentCard key={x.id} treatment={x} onCloseClick={isAdminUser(user?.username) ? () => onCloseClick(x.admin_id) : undefined}/>
+				<TreatmentCard key={x.id}
+					treatment={x}
+					bg={groupData.color}
+					onCloseClick={isAdminUser(user?.username) ? () => onCloseClick(x.admin_id) : undefined}/>
 			))}
 			{	isAdminUser(user?.username) && <TreatmentSelect w='100%' setSelectedTreatment={onSelect} /> }
-			</VStack>
-			<Text whiteSpace='normal' fontWeight='400'>{groupData.description}</Text>
+			</Flex>
+			{/*<Text whiteSpace='normal' fontWeight='400'>{groupData.description}</Text>*/}
 		</Card>
 	);
 }

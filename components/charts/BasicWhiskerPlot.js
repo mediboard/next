@@ -6,6 +6,7 @@ import {
 	useState,
 	useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
+import { shadeColor } from '../../utils';
 
 
 export default function BasicWhiskerPlot(props) {
@@ -66,6 +67,9 @@ export default function BasicWhiskerPlot(props) {
 			.attr('font-size', '14px')
 			.style("font-weight", "600")
 
+		let maxBoxHeight = Math.abs(y(top) - y(bottom));
+		let maxBoxWidth = maxBoxHeight / 4;
+
 		var x = d3.scaleBand()
 			.range([0, width])
 			.domain(xGroups)
@@ -85,30 +89,33 @@ export default function BasicWhiskerPlot(props) {
 				.attr("x2", (d) => (x(d.groupName) + x.bandwidth() / 2))
 				.attr("y1", (d) => (y(d.bottomWhisker)))
 				.attr("y2", (d) => (y(d.topWhisker)))
-				.attr("stroke", "black")
+				.attr("stroke", (d) => (shadeColor(d.fill, -30)))
+				.attr("stroke-width", '2')
 
 		svg.selectAll(".myRect")
 			.data(sumstat)
 			.join("rect")
 				.attr("class", "rect myRect")
-				.attr("x", (d) => (x(d.groupName)))
+				.attr("x", (d) => (x(d.groupName) + (x.bandwidth() - Math.min(x.bandwidth(), maxBoxWidth))/2))
 				.attr("y", (d) => (y(d.topBox)))
 				.attr("height", (d) => (Math.abs(y(d.topBox) - y(d.bottomBox))))
-				.attr("width", x.bandwidth())
+				.attr("width", (d) => (Math.min(x.bandwidth(), maxBoxWidth)))
 				.attr('rx', 5)
 				.attr('ry', 5)
-				.attr("stroke", "black")
+				.attr("stroke", (d) => (shadeColor(d.fill, -30)))
+				.attr("stroke-width", '2')
 				.attr("fill", (d) => (d.fill))
 
 		svg.selectAll(".medianLines")
 			.data(sumstat)
 			.join("line")
 				.attr("class", "line medianLines")
-				.attr("x1", (d) => (x(d.groupName)))
-				.attr("x2", (d) => (x(d.groupName) + x.bandwidth()))
+				.attr("x1", (d) => (x(d.groupName) + (x.bandwidth() - Math.min(x.bandwidth(), maxBoxWidth))/2))
+				.attr("x2", (d) => (x(d.groupName) + x.bandwidth() - (x.bandwidth() - Math.min(x.bandwidth(), maxBoxWidth))/2))
 				.attr("y1", (d) => (y(d.value)))
 				.attr("y2", (d) => (y(d.value)))
-				.attr("stroke", "black")
+				.attr("stroke", (d) => (shadeColor(d.fill, -30)))
+				.attr("stroke-width", '2')
 	}
 
 	return (

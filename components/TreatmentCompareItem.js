@@ -12,7 +12,7 @@ export function ItemBadge(props) {
 	const { children, color, ...kv } = props;
 
 	return (
-		<Box
+		<Flex
 			w='100%'
 			pt={1}
 			pb={1}
@@ -22,7 +22,7 @@ export function ItemBadge(props) {
 			bg={children ? color : 'grey'}
 			{...kv}>
 			<Text fontSize='14px' fontWeight='500'>{children || (<Flex columnGap={2} ml={2}><p>&#x1F6A7;</p> {'Under Construction'} <p>&#x1F6A7;</p></Flex>)}</Text>
-		</Box>
+		</Flex>
 	)
 }
 
