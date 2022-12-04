@@ -101,7 +101,7 @@ export default function GroupsCard({groupData, index}) {
 				mt='6px'
       	textAlign='center'
 				fontWeight='500'
-				fontSize='16px'
+				fontSize='14px'
 				mb={3}
 				whiteSpace='normal'>{groupData.title}</Text>
 			<Flex gap={2} flexWrap='wrap' justifyContent='center' w='100%'>

@@ -240,12 +240,12 @@ export default function WhiskerPlot({
 
 	if (grouped) {
 		return (
-			<GroupedWhiskerPlot height={height || 400} sumstat={sumstat}/>
+			<GroupedWhiskerPlot unit={unit} height={height || 400} sumstat={sumstat}/>
 		)
 	}
 
 
 	return (
-		<BasicWhiskerPlot height={height || 400} sumstat={sumstat}/>
+		<BasicWhiskerPlot unit={unit} height={height || 400} sumstat={sumstat}/>
 	)
 }

@@ -11,7 +11,7 @@ import { shadeColor } from '../../utils';
 
 
 export default function GroupedWhiskerPlot(props) {
-	const { sumstat, height, ...kv } = props;
+	const { sumstat, height, unit, ...kv } = props;
 
 	const [clientWidth, setClientWidth] = useState(undefined);
 
@@ -94,6 +94,16 @@ export default function GroupedWhiskerPlot(props) {
 			.style("font-weight", "600")
 			.style("text-anchor", "end")
 			.attr("transform", "rotate(-10)");
+
+		svg.append("text")
+			.attr('class', "text yLabel")
+			.attr("text-anchor", "middle")
+			.attr("transform", "rotate(-90)")
+	    .attr("y", -margin.left+10)
+	    .attr("x", 0 - (height / 2))
+			.attr('font-size', '14px')
+			.style("font-weight", "600")
+			.text(unit);
 
 		svg.selectAll(".myVerts")
 			.data(sumstat)

@@ -10,7 +10,7 @@ import { shadeColor } from '../../utils';
 
 
 export default function BasicWhiskerPlot(props) {
-	const { sumstat, height, ...kv } = props;
+	const { sumstat, height, unit, ...kv } = props;
 
 	const [clientWidth, setClientWidth] = useState(undefined);
 
@@ -39,7 +39,7 @@ export default function BasicWhiskerPlot(props) {
 		const noPoints = 60;
 
 		const margin = {
-			left: 40,
+			left: 50,
 			right: 10,
 			top: 10,
 			bottom: 50
@@ -80,6 +80,16 @@ export default function BasicWhiskerPlot(props) {
 			.selectAll(".tick text")
 			.attr('font-size', '14px')
 			.style("font-weight", "600")
+
+		svg.append("text")
+			.attr('class', "text yLabel")
+			.attr("text-anchor", "middle")
+			.attr("transform", "rotate(-90)")
+	    .attr("y", -margin.left+10)
+	    .attr("x", 0 - (height / 2))
+			.attr('font-size', '14px')
+			.style("font-weight", "600")
+			.text(unit);
 
 		svg.selectAll(".myVerts")
 			.data(sumstat)
