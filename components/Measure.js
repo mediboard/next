@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import {
 	Flex,
 	VStack,
@@ -11,6 +11,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import { isAdminUser } from '../utils';
 import OutcomeDataChart from './OutcomeDataChart';
 import GroupsDeck from './GroupsDeck';
+import PowerHeatMap from './PowerHeatMap';
 import { parseMeasureType } from '../utils';
 import { toPng } from 'html-to-image';
 import download from 'downloadjs';
@@ -44,6 +45,11 @@ export default function Measure(props) {
 					outcomes: measureData?.outcomes, 
 					groups: groupData}} /> 
 			</Box>
+
+			<PowerHeatMap
+				outcomeData={measureData?.outcomes}
+				groupData={groupData}
+				analyticsData={measureData?.analytics || []}/>
 
 		</VStack>
 	);
