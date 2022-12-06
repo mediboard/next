@@ -118,14 +118,13 @@ function Main(props) {
   return (
     <PageBody mt={0} align='center' justifyContent='center' bg='#CED4DB'>
     <Flex minH='90vh' 
-      h='100%'
       flexDirection={['column', 'row']}
       w='100%'
       borderRadius={4}
       m={'2.5%'}
       pb={5}
       bg='white'
-      alignItems='start'>
+      alignItems='stretch'>
       <VStack w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
         <StudySummary headingSx={{fontSize: '18px'}} {...props.study}/>
         <Flex flexDirection='column' display={section !== 'results' ? 'flex' : 'none'}>
@@ -138,18 +137,12 @@ function Main(props) {
           </Hide>
 
         </Flex>
-
-        <Hide below='md'>
-        <Box display={section === 'results' ? 'default' : 'none'}>
-          <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} measures={props.measures}/>
-        </Box>
-        </Hide>
       </VStack>
 
       <Tabs w={['100%', '70%']} isLazy
         variant='enclosed'
         index={cat2index[section || 'overview']} onChange={handleChange}>
-        <TabList bg={['none','#CED4DB']} /*overflowX='scroll'*/>
+        <TabList bg={['none','#CED4DB']} overflowX={['auto', 'visible']}>
           <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Overview'}</Tab>
           <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Participants'}</Tab>
           <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Results'}</Tab>
@@ -198,13 +191,12 @@ function Main(props) {
         </TabPanel>  
 
         <TabPanel>
-          <VStack>
-            <ResultsPage study={props.study} selectedMeasure={selectedMeasure} groups={props.groups}/>
-
-            <Hide above='sm'>
-            <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} measures={props.measures}/>
-            </Hide>
-          </VStack>
+          <ResultsPage 
+            study={props.study}
+            measures={props.measures}
+            selectedMeasure={selectedMeasure}
+            setSelectedMeasure={setSelectedMeasure}
+            groups={props.groups}/>
         </TabPanel>  
 
         <TabPanel>

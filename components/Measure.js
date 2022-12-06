@@ -18,7 +18,12 @@ import download from 'downloadjs';
 
 
 export default function Measure(props) {
-	const { measureData, groupData, ...kv } = props;
+	const { 
+		measureData,
+		groupData,
+		hideTitle,
+		...kv } = props;
+
   const { user } = useAuthenticator((context) => [context.user]);
 
 	const chartRef = useRef(undefined);
@@ -31,7 +36,7 @@ export default function Measure(props) {
 
 	return (
 		<VStack spacing={8} align='stretch' w='100%'>
-			<Text fontWeight='600' textAlign='center'>{measureData?.title}</Text>
+			{!hideTitle && <Text fontWeight='600' textAlign='center'>{measureData?.title}</Text>}
 
 			{/*<Text textAlign='left' fontSize='13px' fontWeight='500'>{measureData?.description}</Text>*/}
 			{	isAdminUser(user?.username) && <Button onClick={onClick}>Download Chart</Button> }
@@ -46,10 +51,11 @@ export default function Measure(props) {
 					groups: groupData}} /> 
 			</Box>
 
-			<PowerHeatMap
+			{measureData?.analytics?.length && <PowerHeatMap
 				outcomeData={measureData?.outcomes}
 				groupData={groupData}
 				analyticsData={measureData?.analytics || []}/>
+			}
 
 		</VStack>
 	);

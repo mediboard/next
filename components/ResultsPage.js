@@ -6,11 +6,18 @@ import {
 	Divider
 } from '@chakra-ui/react';
 import Measure from './Measure';
+import MeasuresSelector from './MeasuresSelector';
 import InsightsDeck from './InsightsDeck';
 
 
 export default function ResultsPage(props) {
-	const { selectedMeasure, groups, study, ...kv } = props;
+	const {
+		selectedMeasure,
+	  setSelectedMeasure,
+	  measures,
+	  groups,
+	  study,
+	  ...kv } = props;
 
 	return (
 		<VStack w='100%' gap={5} align='stretch'>
@@ -20,9 +27,14 @@ export default function ResultsPage(props) {
 			</Box>
 			<Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
-			<Box>
-				<Measure measureData={selectedMeasure} groupData={groups?.filter(group => selectedMeasure?.outcomes?.map(out => out.group)?.includes(group.id))} />
-			</Box>
+			<MeasuresSelector 
+				setSelectedMeasure={setSelectedMeasure}
+				selectedMeasure={selectedMeasure}
+				measures={measures} />
+			<Measure 
+				measureData={selectedMeasure} 
+				hideTitle
+				groupData={groups?.filter(group => selectedMeasure?.outcomes?.map(out => out.group)?.includes(group.id))} />
 		</VStack>
 	);
 }

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 
 import * as d3 from 'd3'
 import { Box, HStack } from '@chakra-ui/react';
+import { shadeColor } from '../utils';
 
 
 function wrap(text, width) {
@@ -103,7 +104,19 @@ export default function HeatMap({
 	    .style("font-size", 0)
 	    .attr("transform", `translate(0,${boxHeight})`)
 	    .call(d3.axisBottom(x).tickSize(0))
-	    .select(".domain").remove()
+	    .style("stroke-width", 0)
+	    .selectAll('.tick')
+	    .append("foreignObject")
+			.attr("width", x.bandwidth())
+			.attr("height", margin.bottom)
+			.attr("x", -1 * x.bandwidth() / 2)
+			.append("xhtml:div")
+			.style("height", "100%")
+			.style("width", "100%")
+			.style("background", (d) => (group2Fill[d]))
+			.style("border", (d) => (`3px solid ${shadeColor(group2Fill[d], -30)}`))
+			.style("border-radius", "4px")
+
 
     // Build Y scales and axis:
 	  var y = d3.scaleBand()
@@ -114,6 +127,7 @@ export default function HeatMap({
 	    .style("font-size", 0)
 			.attr("width", margin.left)
 	    .call(d3.axisLeft(y).tickSize(0))
+	    .style("stroke-width", 0)
 	    .selectAll('.tick')
 	    .append("foreignObject")
 			.attr("width", margin.left)
@@ -121,15 +135,19 @@ export default function HeatMap({
 			.attr("x", -margin.left)
 			.attr("y", -1 * y.bandwidth() / 2)
 			.append("xhtml:div")
-			.attr('style','word-wrap: break-word; display: flex; align-items:center; justify-content:right; text-align:right; padding-right:10px;line-height:1; font-size:14px;')
+			.attr('style','word-wrap: break-word; display: flex; align-items:center; justify-content:center; text-align:center; padding-right:10px;line-height:1; font-size:14px;')
 			.style("height", "100%")
-			.style("border", (d) => (`2px solid ${group2Fill[d]}`))
+			.style("border", (d) => (`3px solid ${shadeColor(group2Fill[d], -30)}`))
+			.style("background", (d) => (group2Fill[d]))
+			.style("border-radius", "10px")
 			.style("font-weight", "500")
+			.style("color", "white")
 			.style("font-family", "var(--chakra-fonts-body)")
 			.html(d => (d))
-	    .select(".domain").remove()
 
-  var onClick = function(d, i) {
+	  var onClick = function(d, i) {
+	  	if (i.value === -1) return;
+
 	    setSelectedValue(i.value);
 	    setSelectedGroup(i.outcomeGroupA);
 	    setSelectedVariable(i.outcomeGroupB);
@@ -146,7 +164,7 @@ export default function HeatMap({
 	      .attr("width", x.bandwidth() )
 	      .attr("height", y.bandwidth() )
 	      .style("fill", function(d) { return getFill4Value(d.value)} )
-	      .style("cursor", 'pointer')
+	      .style("cursor", (d) => (d.value === -1 ? 'not-allowed' : 'pointer'))
 	      .style("stroke-width", 4)
 	      .style("stroke", (d) => (isRectSelected(d, selectedGroup, selectedVariable) ? 'black' : 'none'))
 	      .style("opacity", (d) => (isRectSelected(d, selectedGroup, selectedVariable) ? 1 : .7))

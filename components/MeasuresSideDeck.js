@@ -26,7 +26,7 @@ export default function MeasuresSideDeck(props) {
 	}
 
 	return (
-		<VStack w='100%' maxH={['500px', '800px']} overflow='scroll' align='stretch'>
+		<VStack w='100%' h={'100%'} overflow='scroll' align='stretch'>
 			<Text textAlign='left'>{'Measures: '}</Text>
 		{measures.map(measure => (
 			<MeasuresTile key={measure.id} 

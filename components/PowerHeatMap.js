@@ -7,6 +7,13 @@ import {
 	HStack,
 	Text,
 	VStack,
+	Table,
+	TableContainer,
+	Thead,
+	Tbody,
+	Tr,
+	Th,
+	Td,
 	Spacer,
 	StackDivider,
 	Badge } from '@chakra-ui/react';
@@ -145,7 +152,7 @@ export default function PowerHeatMap({analyticsData, groupData, outcomeData, dis
 			margin: {
 				right: 100,
 				left: 200,
-				bottom: 80,
+				bottom: 40,
 				top: 10
 			},
 			setSelectedGroup: setSelectedGroup,
@@ -202,9 +209,55 @@ export default function PowerHeatMap({analyticsData, groupData, outcomeData, dis
 						w='60px'
 						h='60px'
 						><Text fontSize='xl' opacity='1' color='white'>{Math.round(value*100) / 100}</Text></Center>
-					<Text mt='15px' fontSize='xl' ml='10px'>{' - ' + value}</Text>
 				</Flex>
-				<HStack
+
+				<TableContainer>
+					<Table variant='simple'>
+				    <Thead>
+				      <Tr>
+				        <Th>{"Name"}</Th>
+				        <Th isNumeric>{"Value"}</Th>
+				        <Th isNumeric>{"Dispersion"}</Th>
+				        <Th isNumeric>{"Participants"}</Th>
+				      </Tr>
+				    </Thead>
+		        <Tbody>
+				      <Tr>
+				        <Td>{groupName}</Td>
+				        <Td isNumeric>{groupOutcome.value}</Td>
+				        <Td isNumeric>{groupOutcome.dispersion}</Td>
+				        <Td isNumeric>{groupOutcome.no_participants}</Td>
+				      </Tr>
+				      <Tr>
+				        <Td>{variableName}</Td>
+				        <Td isNumeric>{variableOutcome.value}</Td>
+				        <Td isNumeric>{variableOutcome.dispersion}</Td>
+				        <Td isNumeric>{variableOutcome.no_participants}</Td>
+				      </Tr>
+				    </Tbody>
+					</Table>
+				</TableContainer>
+
+{/*				<SimpleGrid columns={3} rows={4} textAlign='center'>
+					<Center><Badge>{"Name"}</Badge></Center>
+					<Text>{groupName}</Text>
+					<Text>{variableName}</Text>
+
+					<Center><Badge>{"Value"}</Badge></Center>
+					<Text>{groupOutcome.value || "N/A"}</Text>
+					<Text>{variableOutcome.value || "NA"}</Text>
+
+					<Center><Badge>{"Dispersion"}</Badge></Center>
+					<Text>{getDispersionForVis(groupOutcome.dispersion)}</Text>
+					<Text>{getDispersionForVis(variableOutcome.dispersion)}</Text>
+
+					<Center><Badge>{"Participants"}</Badge></Center>
+					<Text>{getDispersionForVis(groupOutcome.participants)}</Text>
+					<Text>{getDispersionForVis(variableOutcome.participants)}</Text>
+				</SimpleGrid>
+*/}
+
+{/*				<HStack
 					align='start'
 					divider={<StackDivider borderColor='gray.200' />}>
 					<VStack align='left' spacing={2}>
@@ -225,7 +278,7 @@ export default function PowerHeatMap({analyticsData, groupData, outcomeData, dis
 						<Text>{`${variableOutcome.no_participants} participants`}</Text>
 					</VStack>
 				</HStack>
-			</VStack>
+*/}			</VStack>
 		);
 	}
 
@@ -235,7 +288,17 @@ export default function PowerHeatMap({analyticsData, groupData, outcomeData, dis
 			w='100%' 
 			pl='1%'
 			pr='1%'>
-			<Center pt='3'>
+			<Center pt='3' flexDirection='column'>
+				<Flex alignItems='center' columnGap={3}>
+					<Box bg='gray.300' w={10} h={10} borderRadius={4}/>
+					<Text>{'Not Available'}</Text>
+
+					<Box bg='red.300' w={10} h={10} borderRadius={4}/>
+					<Text>{'No Difference'}</Text>
+
+					<Box bg='green.300' w={10} h={10} borderRadius={4}/>
+					<Text>{'Significantly Different'}</Text>
+				</Flex>
 				<HeatMap {...mapDataToHeatmapProps(transformData(addGroupNames(analyticsData, groupData)))}/>
 			</Center>
 			<Spacer />
