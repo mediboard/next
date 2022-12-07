@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import {
 	BarChart,
 	CartesianGrid,
@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import GroupedWhiskerPlot from './GroupedWhiskerPlot';
 import BasicWhiskerPlot from './BasicWhiskerPlot';
+import BoundedLinePlot from './BoundedLinePlot';
 
 
 const DotBar = (rectangleProps) => {
@@ -201,49 +202,15 @@ export default function WhiskerPlot({
 	defaultFill
 }) {
 
-	function groupData(data, grouped) {
-		return grouped ? groupDataByXAxis(data) : groupDataByGroup(data);
-	}
-
-	const WhiskerPlotSet = (groupId) => {
-		return (
-			<React.Fragment key={groupId}>
-	      <Bar stackId={groupId} dataKey={groupId + '-bar'} shape={<HorizonBar />} />
-	      { groupId ? <Bar stackId={groupId} dataKey={groupId + '-min'} fill={'none'} /> : 
-	    		<Bar stackId={groupId} dataKey={groupId + '-min'}> {sumstat.map((entry, index) => (
-	    			<Cell key={`cell-${index}`} fill={'none'} />
-    		))} </Bar>}
-	      <Bar stackId={groupId} dataKey={groupId + '-min'} fill={'none'} />
-	      <Bar stackId={groupId} dataKey={groupId + '-bottomWhisker'} shape={<DotBar />} />
-	      <Bar stackId={groupId} dataKey={groupId + '-bottomBox'} fill={colorMapping[groupId] || defaultFill} />
-	      <Bar stackId={groupId} dataKey={groupId + '-bar'} shape={<HorizonBar />} />
-	      <Bar stackId={groupId} dataKey={groupId + '-topBox'} fill={colorMapping[groupId] || defaultFill} />
-	      <Bar stackId={groupId} dataKey={groupId + '-topWhisker'} shape={<DotBar />} />
-	      <Bar stackId={groupId} dataKey={groupId + '-bar'} shape={<HorizonBar />} />
-	    </React.Fragment>
-		)
-	}
-
-	const BoxPlotSet = (groupId) => {
-		return (
-			<React.Fragment key={groupId}>
-	      { groupId ? <Bar stackId={groupId} dataKey={groupId + '-min'} fill={'none'} /> : 
-	    		<Bar stackId={groupId} dataKey={groupId + '-min'}> {sumstat.map((entry, index) => (
-	    			<Cell key={`cell-${index}`} fill={'none'} />
-    		))} </Bar>}
-	      <Bar stackId={groupId} dataKey={groupId + '-bottomBox'} fill={colorMapping[groupId] || defaultFill} />
-	      <Bar stackId={groupId} dataKey={groupId + '-bar'} shape={<HorizonBar />} />
-	      <Bar stackId={groupId} dataKey={groupId + '-topBox'} fill={colorMapping[groupId] || defaultFill} />
-	    </React.Fragment>
-		)
-	}
-
 	if (grouped) {
+		// return (
+		// 	<GroupedWhiskerPlot unit={unit} height={height || 500} sumstat={sumstat}/>
+		// )
+
 		return (
-			<GroupedWhiskerPlot unit={unit} height={height || 400} sumstat={sumstat}/>
+			<BoundedLinePlot unit={unit} height={height || 300} sumstat={sumstat}/>
 		)
 	}
-
 
 	return (
 		<BasicWhiskerPlot unit={unit} height={height || 400} sumstat={sumstat}/>

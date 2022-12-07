@@ -11,7 +11,7 @@ import { shadeColor } from '../../utils';
 
 const MOBILE_THRESHOLD = 500;
 
-export default function GroupedWhiskerPlot(props) {
+export default function BoundedLinePlot(props) {
 	const { sumstat, height, unit, ...kv } = props;
 
 	const [clientWidth, setClientWidth] = useState(undefined);
@@ -43,6 +43,9 @@ export default function GroupedWhiskerPlot(props) {
 	}
 
 	function renderChart(el, cWidth) {
+		// Lines with dots that focus and expand bars on tap
+		// plus a tool tip lol
+
 		const noPoints = 60;
 
 		const margin = {
@@ -53,25 +56,23 @@ export default function GroupedWhiskerPlot(props) {
 		}
 
 		if (cWidth < MOBILE_THRESHOLD) {
-			margin.left = 0;
-			margin.right = 0;
+			margin.left = 6;
+			margin.right = 6;
 			margin.bottom = 0;
 		}
 
 		const width = cWidth - margin.left - margin.right;
 
 		const xGroups = [... new Set(sumstat?.map(x => x.title))];
-		const xSubGroups = [... new Set(sumstat?.map(x => x.groupName))]
 
-		// append the svg object to the body of the page
 		const svg = d3.select(el)
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
 			.select("#chart-body")
 			.attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-		let top = Math.max(...sumstat?.map(x => x.max));
-		let bottom = Math.min(...sumstat?.map(x => x.min));
+		let top = Math.max(...sumstat?.map(x => x.topBox * 1.25));
+		let bottom = Math.min(...sumstat?.map(x => x.bottomBox * 1.25));
 
 		var y = d3.scaleLinear()
 			.domain([bottom, top])
@@ -82,17 +83,9 @@ export default function GroupedWhiskerPlot(props) {
 			.attr('font-size', '14px')
 			.style("font-weight", "600")
 
-		var x = d3.scaleBand()
-			.range([0, width])
+		var x = d3.scaleOrdinal()
+			.range([...Array(xGroups.length).keys()].map(x => x*(width/(xGroups.length-1))))
 			.domain(xGroups)
-			.padding(.1)
-
-		const xSubGroup = d3.scaleBand()
-			.domain(xSubGroups)
-			.range([0, x.bandwidth()])
-			.padding(.1);
-
-		const t = svg.transition().duration(750);
 
 		svg.select("#x-axis")
 			.attr("transform", "translate(0," + height + ")")
@@ -120,58 +113,71 @@ export default function GroupedWhiskerPlot(props) {
 			svg.select("#y-axis").style("stroke-width", 0)
 		}
 
+	  svg.selectAll(".gridLine")
+	  	.data(y.ticks(6))
+	  	.join("line")
+	  		.attr("class", "line gridline")
+	  		.attr("x1", (d) => (0))
+	  		.attr("x2", (d) => (width))
+	  		.attr("y1", (d) => (y(d)))
+	  		.attr("y2", (d) => (y(d)))
+				.attr("stroke-width", "1px")
+				.attr("stroke", "#cccccc");
+
 		svg.selectAll(".myVerts")
 			.data(sumstat)
 			.join("line")
 				.attr("class", "line myVerts")
-				.attr("x1", (d) => (x(d.title) + xSubGroup(d.groupName) + xSubGroup.bandwidth() / 2))
-				.attr("x2", (d) => (x(d.title) + xSubGroup(d.groupName) + xSubGroup.bandwidth() / 2))
-				.attr("y1", (d) => (y(d.bottomWhisker)))
-				.attr("y2", (d) => (y(d.topWhisker)))
-				.attr("stroke", (d) => (shadeColor(d.fill, -30)))
-				.attr("stroke-width", '2')
-
-		svg.selectAll(".myRect")
-			.data(sumstat)
-			.join(
-				enter => {
-					enter
-						.append("rect")
-						.attr("class", "rect myRect")
-						.attr("x", (d) => (x(d.title) + xSubGroup(d.groupName)))
-						.attr("y", (d) => (y(d.topBox)))
-						.attr("height", (d) => (Math.abs(y(d.topBox) - y(d.bottomBox))))
-						.attr("width", xSubGroup.bandwidth())
-						.attr('rx', 5)
-						.attr('ry', 5)
-						.attr("stroke", (d) => (shadeColor(d.fill, -30)))
-						.attr("stroke-width", '2')
-						.attr("fill", (d) => (d.fill))
-				},
-				update => {
-					update
-						.attr("x", (d) => (x(d.title) + xSubGroup(d.groupName)))
-						.attr("y", (d) => (y(d.topBox)))
-						.attr("height", (d) => (Math.abs(y(d.topBox) - y(d.bottomBox))))
-						.attr("width", xSubGroup.bandwidth())
-						.attr('rx', 5)
-						.attr('ry', 5)
-				},
-				exit => {
-					return exit.remove();
-				}
-			);
-
-		svg.selectAll(".medianLines")
-			.data(sumstat)
-			.join("line")
-				.attr("class", "line medianLines")
-				.attr("x1", (d) => (x(d.title) + xSubGroup(d.groupName)))
-				.attr("x2", (d) => (x(d.title) + xSubGroup(d.groupName) + xSubGroup.bandwidth()))
+				.attr("x1", (d) => (x(d.title)))
+				.attr("x2", (d) => (x(d.title)))
 				.attr("y1", (d) => (y(d.value)))
 				.attr("y2", (d) => (y(d.value)))
-				.attr("stroke", (d) => (shadeColor(d.fill, -30)))
+				.attr("stroke", (d) => (d.fill))
 				.attr("stroke-width", '2')
+
+		const gData = d3.group(sumstat, d => d.groupName);
+
+		function onLineClick(event, data) {
+			d3.selectAll(".myVerts")
+				.transition()
+				.attr("y1", (d) => (d.groupName === data[0] ? y(d.bottomBox) : y(d.value)))
+				.attr("y2", (d) => (d.groupName === data[0] ? y(d.topBox) : y(d.value)))
+		}
+
+		function onDotClick(event, data) {
+			d3.selectAll(".myVerts")
+				.transition()
+				.attr("y1", (d) => (d.groupName === data.groupName ? y(d.bottomBox) : y(d.value)))
+				.attr("y2", (d) => (d.groupName === data.groupName ? y(d.topBox) : y(d.value)))
+		}
+
+		svg.selectAll(".myLines")
+			.data(gData)
+			.join("path")
+				.attr("class", "line myLines")
+				.attr("fill", "none")
+				.attr("stroke", (d) => {return d[1][0]?.fill;})
+				.attr("stroke-width", 3)
+	      .attr("d", (d) => {
+	      	return d3.line()
+		        .x((d) => (x(d.title)))
+		        .y((d) => (y(d.value)))
+		        .curve(d3.curveCatmullRom)(d[1])
+	      })
+	      .on("click", onLineClick)
+
+	  svg.selectAll(".myDots")
+	  	.data(sumstat)
+	  	.join("circle")
+	  		.attr("class", "circle myDots")
+	  		.attr("fill", (d) => (d.fill))
+	  		.attr("cx", (d) => (x(d.title)))
+	  		.attr("cy", (d) => (y(d.value)))
+	  		.attr("r", 6)
+	      .on("click", onDotClick)
+
+
+
 	}
 
 	return (
@@ -184,5 +190,4 @@ export default function GroupedWhiskerPlot(props) {
 			</svg>
 		</Box>
 	)
-
 }

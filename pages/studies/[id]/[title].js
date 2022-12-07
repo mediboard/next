@@ -140,9 +140,9 @@ function Main(props) {
       </VStack>
 
       <Tabs w={['100%', '70%']} isLazy
-        variant='enclosed'
+        variant={['line', 'enclosed']}
         index={cat2index[section || 'overview']} onChange={handleChange}>
-        <TabList bg={['none','#CED4DB']} overflowX={['auto', 'visible']}>
+        <TabList bg={['none','#CED4DB']} overflowY='none' overflowX={['auto', 'visible']}>
           <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Overview'}</Tab>
           <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Participants'}</Tab>
           <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Results'}</Tab>

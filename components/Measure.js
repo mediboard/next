@@ -43,10 +43,10 @@ export default function Measure(props) {
  			<GroupsDeck groups={groupData} />
 
 			<Box ref={chartRef} h='100%'>
-				<OutcomeDataChart {...{
+				<OutcomeDataChart 
+				{...{
 					unit: measureData?.units,
 					borderRadius: 4,
-					chartH: 350,
 					outcomes: measureData?.outcomes, 
 					groups: groupData}} /> 
 			</Box>
