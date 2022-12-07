@@ -14,9 +14,13 @@ import {
 import {
 	Flex,
 	Heading,
+	HStack,
+	Hide,
+	Show,
 	Text,
 	Box,
-	Spacer
+	Spacer,
+	Switch
 } from '@chakra-ui/react';
 import GroupedWhiskerPlot from './GroupedWhiskerPlot';
 import BasicWhiskerPlot from './BasicWhiskerPlot';
@@ -201,14 +205,42 @@ export default function WhiskerPlot({
 	colorMapping,
 	defaultFill
 }) {
+	const [isLine, setIsLine] = useState(false);
+
+	function ChartSwitch() {
+		return (
+			<Flex w='100%' border='1px solid #cccccc' borderRadius={'4px'}>
+				<HStack w={['100%']} spacing={0}>
+					<Flex
+						borderRadius={'4px 0px 0px 4px'}
+						bg={isLine ? 'gray.300' : 'white'}
+						cursor='pointer'
+						onClick={() => setIsLine(true)}
+						w='50%' 
+						justifyContent='center' 
+						alignItems='center'>{'Line Chart'}</Flex>
+					<Flex 
+						borderRadius={'0px 4px 4px 0px'}
+						bg={!isLine ? 'gray.300' : 'white'}
+						cursor='pointer'
+						onClick={() => setIsLine(false)}
+						w='50%' 
+						justifyContent='center' 
+						alignItems='center'>{'Box Plot'}</Flex>
+				</HStack>
+			</Flex>
+		)
+	}
 
 	if (grouped) {
-		// return (
-		// 	<GroupedWhiskerPlot unit={unit} height={height || 500} sumstat={sumstat}/>
-		// )
-
 		return (
-			<BoundedLinePlot unit={unit} height={height || 300} sumstat={sumstat}/>
+			<>
+			<ChartSwitch />
+			<Box height={height || 300}>
+				{isLine && <BoundedLinePlot unit={unit} height={height || 300} sumstat={sumstat}/>}
+			 	{!isLine && <GroupedWhiskerPlot unit={unit} height={height || 300} sumstat={sumstat}/>}
+			</Box>
+			</>
 		)
 	}
 

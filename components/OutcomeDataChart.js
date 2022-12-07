@@ -1,5 +1,11 @@
 import WhiskerPlot from './charts/WhiskerPlot';
-import { Box } from '@chakra-ui/react';
+import { 
+	Box, 
+	Show,
+	Text,
+	Flex,
+	Spacer
+} from '@chakra-ui/react';
 import OutcomeBarChart from './charts/OutcomeBarChart';
 
 
@@ -82,7 +88,7 @@ export default function OutcomeDataChart({
 	
 
 	return (
-		<Box w='100%' h='100%' {...kv}>
+		<Box boxShadow='5px' w='100%' h='100%' {...kv}>
 		{ (outcomes?.[0]?.dispersion || outcomes?.[0]?.upper) ?
 			<WhiskerPlot
 				type='box'
@@ -91,12 +97,12 @@ export default function OutcomeDataChart({
 				unit={unit}
 				colorMapping={createGroupColorMapping(groups)}
 				grouped={ outcomes?.[0]?.title !== 'NA' }
-				sumstat={ outcomes?.map(x => normalizeData(addGroupProps(x, groups))) }/> :
+				sumstat={ outcomes?.map(x => normalizeData(x)) }/> :
 			<OutcomeBarChart
 				colorMapping={createGroupColorMapping(groups)}
 				unit={unit}
 				groupings={ outcomes?.[0]?.title !== 'NA' ? groups?.map(group => ({name: group.title, fill: group.color})) : [{name: 'value'}]}
-				data={outcomes?.map(x => normalizeData(addGroupProps(x, groups))) }/>
+				data={outcomes?.map(x => normalizeData(x)) }/>
 		}
 		</Box>
 	);

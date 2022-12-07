@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import * as d3 from 'd3'
 import { Box, HStack } from '@chakra-ui/react';
@@ -37,32 +37,29 @@ function getFill4Value(value) {
 
 export default function HeatMap({
 	sumstat,
-	width,
-	height,
 	margin,
-	setSelectedGroup,
-	setSelectedValue,
-	setSelectedVariable,
-	selectedGroup,
-	selectedVariable
 }) {
 	const svgRef = useRef(undefined);
+	const container = useRef(undefined);
+
+	const [clientWidth, setClientWidth] = useState(undefined);
+
+	let resizeObserver = undefined; 
 
 	useEffect(() => {
-		if (!sumstat) return;
-		// if (!selectedGroup?.name && !selectedVariable?.name) {
-		// 	const startingGroup = sumstat[0]?.outcomeGroupA;
-		// 	const startingVariable = sumstat[0]?.outcomeGroupB;
-		// 	const startingValue = sumstat[0]?.value;
+		resizeObserver = new ResizeObserver((entries) => {
+			setClientWidth(entries[0].contentRect.width);
+		});
 
-		// 	if (!startingGroup && !startingVariable) return;
+		if (container?.current) {
+			resizeObserver.observe(container.current);
+		}
+	}, [container])
 
-		// 	setSelectedGroup(startingGroup);
-		// 	setSelectedVariable(startingVariable);
-		// 	setSelectedValue(startingValue);
-		// }
-		
-		createHeatMap(sumstat);
+	useEffect(() => {
+		if (svgRef?.current && sumstat?.length && clientWidth) {
+			createHeatMap(sumstat);
+		}
 	});
 
 	function isRectSelected(d, group, variable) {
@@ -70,17 +67,20 @@ export default function HeatMap({
 	}
 
 	function createHeatMap(data) {
-		console.log(data);
 		const leftAxisWidth = 90;
 		const bottomAxisHeight = 20;
 
 		let groups = sumstat.map(x => x.group);
+
 		const group2Fill = {};
 		sumstat.forEach(ss => {
 			if (!group2Fill[ss.group]) {
 				group2Fill[ss.group] = ss.outcomeGroupA?.fill;
 			}
 		})
+
+		const width = clientWidth - margin.left - margin.right;
+		const height = width;
 
 		let variables = sumstat.map(x => x.variable);
 		let boxHeight = height - bottomAxisHeight;
@@ -139,19 +139,18 @@ export default function HeatMap({
 			.style("height", "100%")
 			.style("border", (d) => (`3px solid ${shadeColor(group2Fill[d], -30)}`))
 			.style("background", (d) => (group2Fill[d]))
-			.style("border-radius", "10px")
+			.style("border-radius", "4px")
 			.style("font-weight", "500")
 			.style("color", "white")
 			.style("font-family", "var(--chakra-fonts-body)")
-			.html(d => (d))
 
-	  var onClick = function(d, i) {
-	  	if (i.value === -1) return;
+	  // var onClick = function(d, i) {
+	  // 	if (i.value === -1) return;
 
-	    setSelectedValue(i.value);
-	    setSelectedGroup(i.outcomeGroupA);
-	    setSelectedVariable(i.outcomeGroupB);
-	  }
+	  //   setSelectedValue(i.value);
+	  //   setSelectedGroup(i.outcomeGroupA);
+	  //   setSelectedVariable(i.outcomeGroupB);
+	  // }
 
 	  svg.selectAll()
 	    .data(data, function(d) {return d.group+':'+d.variable;})
@@ -164,14 +163,14 @@ export default function HeatMap({
 	      .attr("width", x.bandwidth() )
 	      .attr("height", y.bandwidth() )
 	      .style("fill", function(d) { return getFill4Value(d.value)} )
-	      .style("cursor", (d) => (d.value === -1 ? 'not-allowed' : 'pointer'))
 	      .style("stroke-width", 4)
-	      .style("stroke", (d) => (isRectSelected(d, selectedGroup, selectedVariable) ? 'black' : 'none'))
-	      .style("opacity", (d) => (isRectSelected(d, selectedGroup, selectedVariable) ? 1 : .7))
-	    .on("click", onClick)
+	      .style("stroke", 'none')
+	      .style("opacity", .7)
 	}
 
 	return (
-		<svg ref={svgRef}  />
+		<Box w={[250, 350, 500]} ref={container}>
+			<svg ref={svgRef}  />
+		</Box>
 	);
 }

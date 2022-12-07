@@ -65,14 +65,73 @@ export default function BoundedLinePlot(props) {
 
 		const xGroups = [... new Set(sumstat?.map(x => x.title))];
 
+		function onLineClick(event, data) {
+			d3.selectAll(".myVerts")
+				.transition()
+				.attr("y1", (d) => (d.groupName === data[0] ? y(d.bottomBox) : y(d.value)))
+				.attr("y2", (d) => (d.groupName === data[0] ? y(d.topBox) : y(d.value)))
+
+			d3.selectAll(".myLines")
+				.transition()
+				.attr("stroke", (d) => (d[0] === data[0] ? d[1][0]?.fill : d[1][0]?.fill + fade_factor))
+
+		  svg.selectAll(".myDots")
+		  	.transition()
+		  	.attr("fill", (d) => (d.groupName === data[0] ? d.fill : d.fill + '00'))
+
+		  event.stopPropagation();
+		}
+
+		function onDotClick(event, data) {
+			d3.selectAll(".myVerts")
+				.transition()
+				.attr("y1", (d) => (d.groupName === data.groupName ? y(d.bottomBox) : y(d.value)))
+				.attr("y2", (d) => (d.groupName === data.groupName ? y(d.topBox) : y(d.value)))
+
+			d3.selectAll(".myLines")
+				.transition()
+				.attr("stroke", (d) => (d[0] === data.groupName ? d[1][0]?.fill : d[1][0]?.fill + fade_factor))
+
+		  svg.selectAll(".myDots")
+		  	.transition()
+		  	.attr("fill", (d) => (d.groupName === data.groupName ? d.fill : d.fill + '00'))
+
+		  event.stopPropagation();
+		}
+
+		function onBodyClick(event) {
+			// reset to normal
+			d3.selectAll(".myVerts")
+				.transition()
+				.attr("y1", (d) => (y(d.value)))
+				.attr("y2", (d) => (y(d.value)));
+
+			d3.selectAll(".myLines")
+				.transition()
+				.attr("stroke", (d) => (d[1][0]?.fill));
+
+		  svg.selectAll(".myDots")
+		  	.transition()
+		  	.attr("fill", (d) => (d.fill));
+		}
+
 		const svg = d3.select(el)
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
 			.select("#chart-body")
-			.attr("transform", `translate(${margin.left}, ${margin.top})`);
+			.attr("transform", `translate(${margin.left}, ${margin.top})`)
 
-		let top = Math.max(...sumstat?.map(x => x.topBox * 1.25));
-		let bottom = Math.min(...sumstat?.map(x => x.bottomBox * 1.25));
+		svg.selectAll(".background")
+			.data([1])
+			.join("rect")
+			.attr("class", "rect background")
+			.attr("height", height)
+			.attr("width", width)
+			.attr("fill", "#cccccc00")
+      .on("click", onBodyClick)
+
+		let top = Math.max(...sumstat?.map(x => x.topBox));
+		let bottom = Math.min(...sumstat?.map(x => x.bottomBox));
 
 		var y = d3.scaleLinear()
 			.domain([bottom, top])
@@ -116,7 +175,7 @@ export default function BoundedLinePlot(props) {
 	  svg.selectAll(".gridLine")
 	  	.data(y.ticks(6))
 	  	.join("line")
-	  		.attr("class", "line gridline")
+	  		.attr("class", "line gridLine")
 	  		.attr("x1", (d) => (0))
 	  		.attr("x2", (d) => (width))
 	  		.attr("y1", (d) => (y(d)))
@@ -137,19 +196,8 @@ export default function BoundedLinePlot(props) {
 
 		const gData = d3.group(sumstat, d => d.groupName);
 
-		function onLineClick(event, data) {
-			d3.selectAll(".myVerts")
-				.transition()
-				.attr("y1", (d) => (d.groupName === data[0] ? y(d.bottomBox) : y(d.value)))
-				.attr("y2", (d) => (d.groupName === data[0] ? y(d.topBox) : y(d.value)))
-		}
+		const fade_factor = '70';
 
-		function onDotClick(event, data) {
-			d3.selectAll(".myVerts")
-				.transition()
-				.attr("y1", (d) => (d.groupName === data.groupName ? y(d.bottomBox) : y(d.value)))
-				.attr("y2", (d) => (d.groupName === data.groupName ? y(d.topBox) : y(d.value)))
-		}
 
 		svg.selectAll(".myLines")
 			.data(gData)
@@ -158,6 +206,7 @@ export default function BoundedLinePlot(props) {
 				.attr("fill", "none")
 				.attr("stroke", (d) => {return d[1][0]?.fill;})
 				.attr("stroke-width", 3)
+	  		.style("cursor", "pointer")
 	      .attr("d", (d) => {
 	      	return d3.line()
 		        .x((d) => (x(d.title)))
@@ -174,10 +223,8 @@ export default function BoundedLinePlot(props) {
 	  		.attr("cx", (d) => (x(d.title)))
 	  		.attr("cy", (d) => (y(d.value)))
 	  		.attr("r", 6)
+	  		.style("cursor", "pointer")
 	      .on("click", onDotClick)
-
-
-
 	}
 
 	return (

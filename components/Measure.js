@@ -12,10 +12,21 @@ import { isAdminUser } from '../utils';
 import OutcomeDataChart from './OutcomeDataChart';
 import GroupsDeck from './GroupsDeck';
 import PowerHeatMap from './PowerHeatMap';
+import OutcomeTable from './OutcomeTable';
 import { parseMeasureType } from '../utils';
 import { toPng } from 'html-to-image';
 import download from 'downloadjs';
 
+
+function addGroupProps(outcome, groups) {
+	let group = groups.filter(x => x.id === outcome.group).pop();
+	return {
+		...outcome, 
+		xAxis: outcome.title === 'NA' ? group?.title : outcome.title,
+		groupName: group?.title,
+		fill: group?.color
+	};
+}
 
 export default function Measure(props) {
 	const { 
@@ -42,20 +53,24 @@ export default function Measure(props) {
 			{	isAdminUser(user?.username) && <Button onClick={onClick}>Download Chart</Button> }
  			<GroupsDeck groups={groupData} />
 
-			<Box ref={chartRef} h='100%'>
-				<OutcomeDataChart 
-				{...{
-					unit: measureData?.units,
-					borderRadius: 4,
-					outcomes: measureData?.outcomes, 
-					groups: groupData}} /> 
-			</Box>
-
 			{measureData?.analytics?.length && <PowerHeatMap
 				outcomeData={measureData?.outcomes}
 				groupData={groupData}
 				analyticsData={measureData?.analytics || []}/>
 			}
+
+			<Box ref={chartRef} h='100%'>
+				<OutcomeDataChart 
+				{...{
+					unit: measureData?.units,
+					borderRadius: 4,
+					outcomes: measureData?.outcomes?.map(x => (addGroupProps(x, groupData))), 
+					groups: groupData}} /> 
+				<OutcomeTable
+					borderRadius={4}
+					border='1px solid #cccccc'
+					outcomes={measureData?.outcomes?.map(x => (addGroupProps(x, groupData)))}/>
+			</Box>
 
 		</VStack>
 	);

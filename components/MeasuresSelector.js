@@ -47,7 +47,7 @@ export default function MeasuresSelector(props) {
 			w='100%' 
 			boxShadow='2px 3px 4px 4px rgb(129, 133, 255, .3)'
 			flexDirection='row'
-			borderRadius={'50px'}
+			borderRadius={4}
 			pl={5}
 			border='1px solid #cccccc'>
 				<Box p={2} mr={2} w={['80%', '93%']}>
@@ -58,7 +58,6 @@ export default function MeasuresSelector(props) {
 					h='auto'
 					w={['20%', '7%']}
 					bg='black'
-					borderRadius='0px 50px 50px 0px'
 					onClick={() => setIsOpen(true)} 
 					icon={<ChevronDownIcon />} />
 		</Flex>

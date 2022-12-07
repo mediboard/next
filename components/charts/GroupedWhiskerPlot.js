@@ -119,6 +119,17 @@ export default function GroupedWhiskerPlot(props) {
 			svg.select("#x-axis").style("stroke-width", 0)
 			svg.select("#y-axis").style("stroke-width", 0)
 		}
+		
+	  svg.selectAll(".gridLine")
+	  	.data(y.ticks(6))
+	  	.join("line")
+	  		.attr("class", "line gridLine")
+	  		.attr("x1", (d) => (0))
+	  		.attr("x2", (d) => (width))
+	  		.attr("y1", (d) => (y(d)))
+	  		.attr("y2", (d) => (y(d)))
+				.attr("stroke-width", "1px")
+				.attr("stroke", "#cccccc");
 
 		svg.selectAll(".myVerts")
 			.data(sumstat)

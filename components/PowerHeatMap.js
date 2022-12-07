@@ -124,21 +124,11 @@ function powerValueToSummary(value) {
 	return 'Insignificant Difference';
 }
 
-function getHeatmapHeight(numVars, maxHeight) {
-	return Math.min(150 + numVars*25, maxHeight);
-}
-
-function getHeatmapWidth(numGroups, maxWidth) {
-	return Math.min(150 + numGroups*25, maxWidth);
-}
 
 export default function PowerHeatMap({analyticsData, groupData, outcomeData, dispersion}) {
 	const [selectedValue, setSelectedValue] = useState(undefined);
 	const [selectedGroup, setSelectedGroup] = useState({});
 	const [selectedVariable, setSelectedVariable] = useState({});
-
-	const maxWidth = 500;
-	const maxHeight = 500;
 
 	function mapDataToHeatmapProps(heatmapData) {
 
@@ -147,11 +137,9 @@ export default function PowerHeatMap({analyticsData, groupData, outcomeData, dis
 
 		const heatmapProps = {
 			sumstat: heatmapData,
-			width: getHeatmapWidth(numGroups, maxWidth), 
-			height: getHeatmapWidth(numGroups, maxWidth),
 			margin: {
-				right: 100,
-				left: 200,
+				right: 10,
+				left: 40,
 				bottom: 40,
 				top: 10
 			},
@@ -302,9 +290,6 @@ export default function PowerHeatMap({analyticsData, groupData, outcomeData, dis
 				<HeatMap {...mapDataToHeatmapProps(transformData(addGroupNames(analyticsData, groupData)))}/>
 			</Center>
 			<Spacer />
-			<Center>
-				{renderComparisonDetails(selectedGroup, selectedVariable, selectedValue)}
-			</Center>
 		</Flex>
 	);
 }
