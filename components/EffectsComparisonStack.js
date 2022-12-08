@@ -4,6 +4,7 @@ import {
 	Spacer,
 	Box,
 	Text,
+	Heading,
 	VStack,
 	Show,
 	Hide,
@@ -73,22 +74,18 @@ export default function EffectsComparisonStack(props) {
 					<EffectLegendItem key={effectsGroups.name +'-legend'} effect={x}/>
 				))}
 				</Flex>
-				<Text>{'Frequency of Side Effect'}</Text>
-				<Spacer />
 			</Flex>
 			</Hide>
 
 			<Show below='md'>
 			<Flex w='100%' pl='20px' gap={2} pr='50px' alignItems='center' flexDirection='column'>
 				<Flex>
-					<Flex flexWrap='wrap' w='40%' gap={2}>
+					<Flex flexWrap='wrap' w='100%' gap={2}>
 					{effectsGroups?.map(x => (
 						<EffectLegendItem key={effectsGroups.name +'-legend'} effect={x}/>
 					))}
 					</Flex>
-					<Spacer />
 				</Flex>
-				<Text>{'Frequency of Side Effect'}</Text>
 			</Flex>
 			</Show>
 

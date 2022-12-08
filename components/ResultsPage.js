@@ -21,10 +21,12 @@ export default function ResultsPage(props) {
 	  ...kv } = props;
 
 	return (
-		<VStack w='100%' gap={5} align='stretch'>
+		<VStack w='100%' spacing={8} align='stretch'>
 			<StudySection header={'Highlights'}>
 				<InsightsDeck study_id={study?.id} type={'MEASURE'} />
 			</StudySection>
+			
+      <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
 			<MeasuresSelector
 				bg='white'

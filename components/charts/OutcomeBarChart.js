@@ -14,7 +14,9 @@ import {
 	Heading,
 	Text,
 	Box,
-	Spacer
+	Spacer,
+	Show,
+	Hide,
 } from '@chakra-ui/react';
 
 
@@ -105,14 +107,12 @@ export default function OutcomeBarChart(props) {
 	}
 
 	return (
-		<ResponsiveContainer aspect={3} w='99%' {...kv}>
+		<>
+		<Hide above='sm'>
+		<ResponsiveContainer aspect={1.5} w='99%' {...kv}>
 			<BarChart data={groupings?.length > 1 ? groupData(data) : data}>
-			  <CartesianGrid strokeDasharray="3 3" />
-			  <XAxis dataKey="xAxis" />
+			  <CartesianGrid vertical={false} />
 			  <Tooltip content={<CustomToolTip />}/>
-			  <YAxis>
-			  	<Label value={unit} angle={-90} position='insideLeft' style={{textAnchor: 'middle'}}/>
-			  </YAxis>
 			  {groupings?.map(grouping => (
 			  	<Bar key={'outcome-group-bar-'+grouping.name}
 			  		fill={grouping.fill}
@@ -120,5 +120,22 @@ export default function OutcomeBarChart(props) {
 		  	))}
 			</BarChart>
 		</ResponsiveContainer>
+		</Hide>
+
+		<Show above='sm'>
+		<ResponsiveContainer aspect={3} w='99%' {...kv}>
+			<BarChart data={groupings?.length > 1 ? groupData(data) : data}>
+			  <XAxis dataKey="xAxis" />
+			  <CartesianGrid vertical={false} />
+			  <Tooltip content={<CustomToolTip />}/>
+			  {groupings?.map(grouping => (
+			  	<Bar key={'outcome-group-bar-'+grouping.name}
+			  		fill={grouping.fill}
+			  		dataKey={grouping.name}/>
+		  	))}
+			</BarChart>
+		</ResponsiveContainer>
+		</Show>
+		</>
 	)
 }

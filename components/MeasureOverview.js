@@ -4,6 +4,7 @@ import {
 	Flex,
 } from '@chakra-ui/react';
 import AttributeSummaryCard from './AttributeSummaryCard';
+import StudySection from './StudySection';
 
 
 export default function MeasureOverview(props) {
@@ -17,7 +18,8 @@ export default function MeasureOverview(props) {
 
 	return (
 		<Flex flexDirection='column'>
-			<Flex mb={8}>
+			<StudySection header='Results Overview' mb={8}>
+			<Flex>
 				<Spacer />
 				<AttributeSummaryCard
 					shallow={true} text='See more results' color='purple.300'
@@ -25,8 +27,9 @@ export default function MeasureOverview(props) {
 					{no_measures}
 				</AttributeSummaryCard>
 			</Flex>
+			</StudySection>
 
-			<Measure measureData={measure} 
+			<Measure measureData={measure}
 				groupData={groups?.filter(group => measure?.outcomes?.map(out => out.group)?.includes(group.id))} />
 		</Flex>
 	)

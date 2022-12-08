@@ -30,6 +30,7 @@ import ResultsPage from '../../../components/ResultsPage';
 import EffectsPage from '../../../components/EffectsPage';
 import RelatedStudiesPage from '../../../components/RelatedStudiesPage';
 import PageBody from '../../../components/PageBody';
+import StudySection from '../../../components/StudySection';
 
 
 const groupColorWheel = [
@@ -125,7 +126,7 @@ function Main(props) {
       pb={5}
       bg='white'
       alignItems='stretch'>
-      <VStack w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
+      <VStack mb={[3, 0]} w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
         <StudySummary headingSx={{fontSize: '18px'}} {...props.study}/>
         <Flex flexDirection='column' display={section !== 'results' ? 'flex' : 'none'}>
 
@@ -157,10 +158,10 @@ function Main(props) {
 
         <TabPanels bg={['#CED4DB44', 'white']} w={['100%']} borderLeft={['none','1px solid #cccccc']}>
         <TabPanel w='100%'>
-          <VStack mt={5} spacing={10} w='100%' pl={[2,5]} pr={[2,5]} alignItems='stretch'>
-            <Box>
+          <VStack mt={5} spacing={8} w='100%' pl={[2,5]} pr={[2,5]} alignItems='stretch'>
+            <StudySection header='Highlights'>
               <InsightsDeck study_id={id} type={'STUDY'} />
-            </Box>
+            </StudySection>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box w='100%'>

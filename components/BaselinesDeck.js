@@ -8,6 +8,7 @@ import {
 	VStack } from '@chakra-ui/react';
 import AttributeSummaryCard from './AttributeSummaryCard';
 import BaselinesPage from './BaselinesPage';
+import StudySection from './StudySection';
 
 
 function groupBaselinesByBase(data) {
@@ -95,6 +96,7 @@ export default function BaselinesDeck(props) {
 	}
 
 	return (
+		<StudySection header='Participants'>
 		<VStack w='100%'>
 			<Flex w='100%'
 				flexWrap='wrap'
@@ -141,5 +143,6 @@ export default function BaselinesDeck(props) {
 				</Flex>	
 			</Flex>
 		</VStack>
+		</StudySection>
 	);
 }

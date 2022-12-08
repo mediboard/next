@@ -50,7 +50,11 @@ export default function Measure(props) {
 
 	return (
 		<VStack spacing={8} align='stretch' w='100%'>
-			{!hideTitle && <Text fontWeight='600' textAlign='center'>{measureData?.title}</Text>}
+			{!hideTitle && 
+			<StudySection header='Title'>
+				<Text fontWeight='600' textAlign='center'>{measureData?.title}</Text>
+			</StudySection>
+			}
 
 			{/*<Text textAlign='left' fontSize='13px' fontWeight='500'>{measureData?.description}</Text>*/}
 			<StudySection header='Description'>

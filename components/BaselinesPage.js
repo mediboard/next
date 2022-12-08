@@ -7,6 +7,7 @@ import {
 } from '@chakra-ui/react';
 import DemographicsChart from './charts/DemographicsChart';
 import InsightsDeck from './InsightsDeck';
+import StudySection from './StudySection';
 
 
 function reduceBaselines(baselines) {
@@ -33,12 +34,12 @@ export default function BaselinesPage(props) {
 
 	return (
 		<VStack w='100%' spacing={5}>
-			<Box w='100%'>
+			<StudySection w='100%' header='Highlights'>
 				<InsightsDeck study_id={studyId} type={'BASELINE'} />
-			</Box>
+			</StudySection>
 			<Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 			
-			<Box w='100%'>
+			<StudySection header='Demographics' w='100%'>
 				<Flex flexWrap='wrap' w='100%' rowGap={4} justifyContent='center'>
 				{baselines?.map(x => (
 					<Box w={['90%','40%']} key={x?.base}>
@@ -52,7 +53,7 @@ export default function BaselinesPage(props) {
 					</Box>
 				))}
 				</Flex>
-			</Box>
+			</StudySection>
 		</VStack>
 	);
 }
