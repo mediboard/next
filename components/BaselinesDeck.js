@@ -5,9 +5,12 @@ import {
 	Heading,
 	Text,
 	Flex,
+	Show,
+	Hide,
 	VStack } from '@chakra-ui/react';
 import AttributeSummaryCard from './AttributeSummaryCard';
 import BaselinesPage from './BaselinesPage';
+import StudySection from './StudySection';
 
 
 function groupBaselinesByBase(data) {
@@ -95,9 +98,10 @@ export default function BaselinesDeck(props) {
 	}
 
 	return (
-		<VStack w='100%'>
+		<StudySection header='Participants'>
 			<Flex w='100%'
 				flexWrap='wrap'
+				rowGap={5}
 				alignItems='center'
 				justifyContent='center'>
 				<Flex w={['70%', '31%']} mb={[4, 0]} h='100%' justifyContent='center' alignItems='center'>
@@ -107,13 +111,23 @@ export default function BaselinesDeck(props) {
 						color={'purple'} />
 				</Flex>
 				<Box w={['70%', '31%']}>
+					<Show below='md'>
+					<DemographicsChart 
+						name={'GENDER'}
+						colorWheel={colorWheel}
+						fill="#82ca9d"
+						aspect={1}
+						data={getGenderBaselines(groupBaselinesByBase(baselines))?.data} />
+					</Show>
+
+					<Hide below='md'>
 					<DemographicsChart 
 						name={'GENDER'}
 						colorWheel={colorWheel}
 						fill="#82ca9d"
 						aspect={1.3}
-						data={getGenderBaselines(groupBaselinesByBase(baselines))?.data}
-					/>
+						data={getGenderBaselines(groupBaselinesByBase(baselines))?.data} />
+					</Hide>
 				</Box>
 {/*				<Box w={['70%', '31%']}>
 					<DemographicsChart 
@@ -127,12 +141,14 @@ export default function BaselinesDeck(props) {
 */}			
 				<Flex flexDirection='column' gap={4} justifyContent='center'>	
 					<AttributeSummaryCard
+						w='100%'
 						shallow={true}
 						href={`/studies/${studyId}/${title}/?section=participants`}
 						text={'Demographic Measures: '}
 						color='purple.300'>{groupBaselinesByBase(baselines)?.length}
 					</AttributeSummaryCard>
 					<AttributeSummaryCard 
+						w='100%'
 						shallow={true}
 						href={`/studies/${studyId}/${title}/?section=participants`}
 						text={'Racial Data: '}
@@ -140,6 +156,6 @@ export default function BaselinesDeck(props) {
 					</AttributeSummaryCard>
 				</Flex>	
 			</Flex>
-		</VStack>
+		</StudySection>
 	);
 }

@@ -4,6 +4,7 @@ import {
 } from '@chakra-ui/react';
 import { ItemBadge } from './TreatmentCompareItem';
 import AttributeSummaryCard from './AttributeSummaryCard';
+import StudySection from './StudySection';
 
 
 function distinctEffects(effectGroups) {
@@ -14,7 +15,8 @@ export default function EffectsOverview(props) {
 	const { effectsGroups, studyId, title, ...kv } = props;
 
 	return (
-		<Flex flexDirection={['column', 'row']} gap={[4, 0]}>
+		<StudySection header='Adverse Effects'>
+		<Flex flexDirection={['column', 'row']} gap={[6, 0]}>
 		<SimpleGrid rows={[4,2]} columns={[1,2]} spacingY='20px' spacingX='20px' w={['100%', '60%']}>
 				<AttributeSummaryCard
 					shallow={true}
@@ -61,5 +63,6 @@ export default function EffectsOverview(props) {
 				textAlign='center'>{`+ ${distinctEffects(effectsGroups)?.length - 5} more`}</ItemBadge>}
 		</Flex>
 		</Flex>
+		</StudySection>
 	);
 }

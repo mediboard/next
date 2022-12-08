@@ -30,14 +30,15 @@ import ResultsPage from '../../../components/ResultsPage';
 import EffectsPage from '../../../components/EffectsPage';
 import RelatedStudiesPage from '../../../components/RelatedStudiesPage';
 import PageBody from '../../../components/PageBody';
+import StudySection from '../../../components/StudySection';
 
 
 const groupColorWheel = [
-'#E7DAF7', 
+'#ffbc80', 
 '#8185FF', 
-'#5C61FF', 
-'#0A12FF', 
-'#000593'];
+'#80c3ff', 
+'#bc80ff', 
+'#fb80ff'];
 
 export const cat2index = {
   'overview': 0,
@@ -118,55 +119,61 @@ function Main(props) {
   return (
     <PageBody mt={0} align='center' justifyContent='center' bg='#CED4DB'>
     <Flex minH='90vh' 
-      h='100%'
       flexDirection={['column', 'row']}
       w='100%'
       borderRadius={4}
-      m={'2.5%'}
+      m={['0%', '2.5%']}
       pb={5}
       bg='white'
-      alignItems='start'>
-      <VStack w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
-        <StudySummary headingSx={{fontSize: '18px'}} {...props.study}/>
+      alignItems='stretch'>
+      <VStack mb={[3, 0]} w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
+        <StudySummary rowGap={[1, 0]} headingSx={{fontSize: '18px'}} {...props.study}/>
         <Flex flexDirection='column' display={section !== 'results' ? 'flex' : 'none'}>
 
           <Hide below='md'>
-          <Text textAlign='left'>{'Summary: '}</Text>
           <Text textAlign='left' fontSize='13px' fontWeight='500'>{props.study?.description}</Text>
           <Link float='left' color='purple.300' href={`https://clinicaltrials.gov/ct2/show/${id}`}>{'see source'}</Link>
           <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
           </Hide>
 
         </Flex>
-
-        <Hide below='md'>
-        <Box display={section === 'results' ? 'default' : 'none'}>
-          <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} measures={props.measures}/>
-        </Box>
-        </Hide>
       </VStack>
 
       <Tabs w={['100%', '70%']} isLazy
-        variant='enclosed'
+        variant={['unstyled', 'enclosed']}
         index={cat2index[section || 'overview']} onChange={handleChange}>
-        <TabList bg={['none','#CED4DB']} /*overflowX='scroll'*/>
-          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Overview'}</Tab>
-          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Participants'}</Tab>
-          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Results'}</Tab>
-          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Adverse Effects'}</Tab>
-          <Tab borderBottom='1px solid rgb(226, 232, 240)' ml={[0,1]} bg='white'>{'Related Studies'}</Tab>
+        <TabList borderTop={['1px solid rgb(226, 232, 240)', 'none']} 
+          bg={['none','#CED4DB']}
+          overflowY='none'
+          overflowX={['auto', 'visible']}>
+          {['Overview', 'Participants', 'Results', 'Adverse Effects', 'Related Studies'].map(x => (
+            <Tab key={x +'-tab'}
+              border={['1px solid rgb(226, 232, 240)', 'none']}
+              borderBottom='1px solid rgb(226, 232, 240)' 
+              borderColor={[section === x.toLowerCase() ? 'purple.300' : 'rgb(226, 232, 240)', 'none']}
+              ml={[0,1]} 
+              bg='white'>{x}</Tab>
+          ))}
         </TabList>
 
-        <TabPanels w={['100%']} borderLeft={['none','1px solid #cccccc']}>
+        <TabPanels bg={['#CED4DB44', 'white']} w={['100%']} borderLeft={['none','1px solid #cccccc']}>
         <TabPanel w='100%'>
-          <VStack mt={5} spacing={10} w='100%' pl={[2,5]} pr={[2,5]} alignItems='stretch'>
-            <Box>
+          <VStack mt={5} spacing={8} w='100%' pl={[2,5]} pr={[2,5]} alignItems='stretch'>
+            <StudySection header='Highlights'>
               <InsightsDeck study_id={id} type={'STUDY'} />
-            </Box>
+            </StudySection>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box w='100%'>
               <BaselinesDeck {...{studyId: id, title: title, baselines: props.baselines}}/>
+            </Box>
+            <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
+
+            <Box>
+              <EffectsOverview
+                title={title}
+                studyId={id}
+                effectsGroups={props.effects}/>
             </Box>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
@@ -177,14 +184,6 @@ function Main(props) {
                 studyId={id}
                 groups={props.groups}
                 measure={props.measures[0]}/>
-            </Box>
-            <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
-
-            <Box>
-              <EffectsOverview
-                title={title}
-                studyId={id}
-                effectsGroups={props.effects}/>
             </Box>
           </VStack>
         </TabPanel>
@@ -198,13 +197,12 @@ function Main(props) {
         </TabPanel>  
 
         <TabPanel>
-          <VStack>
-            <ResultsPage study={props.study} selectedMeasure={selectedMeasure} groups={props.groups}/>
-
-            <Hide above='sm'>
-            <MeasuresSideDeck selectedMeasure={selectedMeasure} setSelectedMeasure={setSelectedMeasure} measures={props.measures}/>
-            </Hide>
-          </VStack>
+          <ResultsPage 
+            study={props.study}
+            measures={props.measures}
+            selectedMeasure={selectedMeasure}
+            setSelectedMeasure={setSelectedMeasure}
+            groups={props.groups}/>
         </TabPanel>  
 
         <TabPanel>

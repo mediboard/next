@@ -8,9 +8,11 @@ export const ExpandableText = forwardRef(({ children, noOfLines, ...rest }, ref)
 	const [isClicked, setIsClicked] = useState(false);
 	const [isTextClamped, setIsTextClamped] = useState(false);
 
-	const handleToggle = () => {
+	const handleToggle = (e) => {
 		setIsClicked(true);
 		setExpandedCount(expandedCount ? undefined : noOfLines);
+
+		e.stopPropagation();
 	};
 
 	const inputRef = useRef(null);
@@ -27,7 +29,6 @@ export const ExpandableText = forwardRef(({ children, noOfLines, ...rest }, ref)
 				{children}
 			</Box>
 			<Button
-				display={isTextClamped ? 'block' : 'none'}
 				size="sm"
 				variant="link"
 				onClick={handleToggle}>

@@ -3,15 +3,16 @@ import * as d3 from 'd3';
 import { 
 	useRef, 
 	useLayoutEffect,
-	useCallback,
 	useState,
 	useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import { shadeColor } from '../../utils';
 
 
+const MOBILE_THRESHOLD = 500;
+
 export default function GroupedWhiskerPlot(props) {
-	const { sumstat, height, ...kv } = props;
+	const { sumstat, height, unit, ...kv } = props;
 
 	const [clientWidth, setClientWidth] = useState(undefined);
 
@@ -50,6 +51,13 @@ export default function GroupedWhiskerPlot(props) {
 			top: 10,
 			bottom: 50
 		}
+
+		if (cWidth < MOBILE_THRESHOLD) {
+			margin.left = 0;
+			margin.right = 0;
+			margin.bottom = 0;
+		}
+
 		const width = cWidth - margin.left - margin.right;
 
 		const xGroups = [... new Set(sumstat?.map(x => x.title))];
@@ -89,11 +97,42 @@ export default function GroupedWhiskerPlot(props) {
 		svg.select("#x-axis")
 			.attr("transform", "translate(0," + height + ")")
 			.call(d3.axisBottom(x))
+			.attr('stroke-width', 0)
 			.selectAll(".tick text")
+			.attr('font-size', '0px')
+			// .selectAll(".tick text")
+			// .attr('font-size', '14px')
+			// .style("font-weight", "600")
+			// .style("text-anchor", "end")
+			// .attr("transform", "rotate(-10)");
+
+		svg.append("text")
+			.attr('class', "text yLabel")
+			.attr("text-anchor", "middle")
+			.attr("transform", "rotate(-90)")
+	    .attr("y", -margin.left+10)
+	    .attr("x", 0 - (height / 2))
 			.attr('font-size', '14px')
 			.style("font-weight", "600")
-			.style("text-anchor", "end")
-			.attr("transform", "rotate(-10)");
+			.text(unit);
+
+		if (cWidth < MOBILE_THRESHOLD) {
+			svg.selectAll('.tick').remove();
+			svg.selectAll('text').remove();
+			svg.select("#x-axis").style("stroke-width", 0)
+			svg.select("#y-axis").style("stroke-width", 0)
+		}
+
+	  svg.selectAll(".gridLine")
+	  	.data(y.ticks(6))
+	  	.join("line")
+	  		.attr("class", "line gridLine")
+	  		.attr("x1", (d) => (0))
+	  		.attr("x2", (d) => (width))
+	  		.attr("y1", (d) => (y(d)))
+	  		.attr("y2", (d) => (y(d)))
+				.attr("stroke-width", "1px")
+				.attr("stroke", "#cccccc");
 
 		svg.selectAll(".myVerts")
 			.data(sumstat)

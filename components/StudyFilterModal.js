@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
 	Modal,
@@ -21,12 +22,12 @@ import ConditionMultiSelect from './ConditionMultiSelect';
 
 export default function StudyFilterModal(props) {
 	const { 
-		setSearchString,
 		setConditions,
-		setTreatments,
 		isOpen,
 		onClose,
 		...kv } = props;
+
+	const router = useRouter();
 
 	const [internalTreatments, setInternalTreatments] = useState([]);
 	const [internalConditions, setInternalConditions] = useState([]);
@@ -40,8 +41,11 @@ export default function StudyFilterModal(props) {
 
 	function onSearch() {
 		setConditions(internalConditions);
-		setTreatments(internalTreatments);
-		setSearchString(internalSearchString);
+
+		const treats = internalTreatments.join(',');
+		const conditions = internalConditions.join(',');
+
+		router.push(`/studies/browse/?treatments=${treats}&conditions=${conditions}&q=${internalSearchString || ''}`, undefined, { shallow: true });
 
 		onClose();
 	}
@@ -67,8 +71,8 @@ export default function StudyFilterModal(props) {
 							<ConditionMultiSelect 
 								borderRadius={'50px'}
 								border='1px solid #cccccc'
-								setConditions={setInternalConditions} 
-								conditions={internalConditions}/>
+								setConditionNames={setInternalConditions} 
+								conditionNames={internalConditions}/>
 						</Box>
 
 						<Box w='100%'>
@@ -76,8 +80,8 @@ export default function StudyFilterModal(props) {
 							<TreatmentMultiSelect 
 								borderRadius={'50px'}
 								border='1px solid #cccccc'
-								setTreatments={setInternalTreatments} 
-								treatments={internalTreatments}/>
+								setTreatmentNames={setInternalTreatments} 
+								treatmentNames={internalTreatments}/>
 						</Box>
 
 						<Box w='100%'>

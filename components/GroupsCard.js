@@ -74,7 +74,7 @@ export default function GroupsCard({groupData, index}) {
 	return (
 		<Card 
 			w='100%'
-			p='20px'
+			p={['8px', '20px']}
 			h='100%'
 			skStyles={{'height': '100%'}}
 			gap={0}
@@ -101,7 +101,7 @@ export default function GroupsCard({groupData, index}) {
 				mt='6px'
       	textAlign='center'
 				fontWeight='500'
-				fontSize='16px'
+				fontSize='14px'
 				mb={3}
 				whiteSpace='normal'>{groupData.title}</Text>
 			<Flex gap={2} flexWrap='wrap' justifyContent='center' w='100%'>

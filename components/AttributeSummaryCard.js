@@ -29,10 +29,10 @@ export default function AttributeSummaryCard(props) {
 				</LinkOverlay>
 			</NextLink>
 
+			<Spacer />
 			<Flex justifyContent='center' bg='white' p={1} pr={0} borderRadius={4} alignItems='center'>
 				<Text fontSize={['18px','22px']} fontWeight='550' color={color}>{children}</Text>
 			</Flex>
-			<Spacer />
 			<ChevronRightIcon color='#888888' w={6} h={7}/>
 		</LinkBox>
 	);

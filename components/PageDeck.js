@@ -25,12 +25,12 @@ export default function PageDeck(props) {
 			w='100%'
 			overflow='scroll' 
 			{...kv}>
-			<Flex w='100%' gap={2} flexDirection={['column','row']}>
-				<VStack w='100%'>
+			<Flex w='100%' gap={[5, 2]} flexDirection={['column','row']}>
+				<VStack w='100%' spacing={[5, 2]}>
 				{arrOne.map(x => (x))}
 				</VStack>
 
-				<VStack w='100%'>
+				<VStack w='100%' spacing={[5, 2]}>
 				{arrTwo.map(x => (x))}
 				</VStack>
 			</Flex>

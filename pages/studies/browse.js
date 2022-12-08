@@ -32,14 +32,14 @@ export default function StudyBrowse(props) {
 function Main(props) {
 	return (
 		<PageBody mt={0} bg='#CED4DB'>
-			<Flex direction={'column'} m={'2.5%'} borderRadius={4} p={10} bg='white' w='100%' gap={5}>
-				<Flex w='100%'>
+			<Flex direction={'column'} m={['0', '2.5%']} borderRadius={4} p={[0, 10]} bg='white' w='100%' gap={5}>
+				<Flex w='100%' pt={[5, 0]} pl={[5, 0]}>
 					<Heading fontSize='18px'>{'Trending Studies: '}</Heading>
 					<Spacer />
 				</Flex>
 				<FeaturedStudiesDeck studies={props.featuredStudies}/>
 
-				<Flex flexDirection='column' w='100%' gap={5}>
+				<Flex flexDirection='column' w='100%' p={[5, 0]} gap={5}>
 					<StudySearchBar />
 					<StudiesLandingDeck />
 				</Flex>

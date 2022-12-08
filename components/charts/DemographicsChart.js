@@ -76,7 +76,7 @@ export default function DemographicsChart(props) {
 		<ResponsiveContainer w='100%' aspect={props.aspect || 1}>
 		{filterDemoData(data).length === 0 ? EmptyPieChart(name) : 
 			<PieChart>
-				<Legend />
+				<Legend align='left' />
 			  <Pie
 			  	activeIndex={activeIndex}
 			  	activeShape={<PieChartNameLabel text={name} />}

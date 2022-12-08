@@ -25,7 +25,7 @@ export default function FeaturedStudiesDeck(props) {
 
 		<Hide above='sm'>
 		<Flex overflowX='scroll' pl={6} pr={6} gap={3}>
-		{ studies?.slice(0,3)?.map((x,i) => (<StudyVCard key={x.id} {...x} minW='75%'/> )) }
+		{ studies?.slice(0,3)?.map((x,i) => (<StudyVCard key={x.id} {...x} minW='90%'/> )) }
 		</Flex>
 		</Hide>
 		</>
