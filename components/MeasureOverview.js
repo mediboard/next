@@ -17,10 +17,7 @@ export default function MeasureOverview(props) {
 
 	return (
 		<Flex flexDirection='column'>
-			<Measure measureData={measure} 
-				groupData={groups?.filter(group => measure?.outcomes?.map(out => out.group)?.includes(group.id))} />
-
-			<Flex mt={8}>
+			<Flex mb={8}>
 				<Spacer />
 				<AttributeSummaryCard
 					shallow={true} text='See more results' color='purple.300'
@@ -28,6 +25,9 @@ export default function MeasureOverview(props) {
 					{no_measures}
 				</AttributeSummaryCard>
 			</Flex>
+
+			<Measure measureData={measure} 
+				groupData={groups?.filter(group => measure?.outcomes?.map(out => out.group)?.includes(group.id))} />
 		</Flex>
 	)
 }

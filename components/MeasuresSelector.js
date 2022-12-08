@@ -49,8 +49,9 @@ export default function MeasuresSelector(props) {
 			flexDirection='row'
 			borderRadius={4}
 			pl={5}
+			{...kv}
 			border='1px solid #cccccc'>
-				<Box p={2} mr={2} w={['80%', '93%']}>
+				<Box p={2} mr={2} w={['80%', '93%']} cursor='pointer' onClick={() => setIsOpen(true)}>
 					<Text fontWeight='600' textAlign='center'>{selectedMeasure?.title}</Text>
 				</Box>
 

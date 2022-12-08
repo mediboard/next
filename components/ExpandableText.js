@@ -27,7 +27,6 @@ export const ExpandableText = forwardRef(({ children, noOfLines, ...rest }, ref)
 				{children}
 			</Box>
 			<Button
-				display={isTextClamped ? 'block' : 'none'}
 				size="sm"
 				variant="link"
 				onClick={handleToggle}>

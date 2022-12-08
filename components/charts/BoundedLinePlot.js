@@ -149,8 +149,9 @@ export default function BoundedLinePlot(props) {
 		svg.select("#x-axis")
 			.attr("transform", "translate(0," + height + ")")
 			.call(d3.axisBottom(x))
+			.attr('stroke-width', 0)
 			.selectAll(".tick text")
-			.attr('font-size', '14px')
+			.attr('font-size', '0px')
 			.style("font-weight", "600")
 			.style("text-anchor", "end")
 			.attr("transform", "rotate(-10)");

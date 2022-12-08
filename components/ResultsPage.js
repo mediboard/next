@@ -6,6 +6,7 @@ import {
 	Divider
 } from '@chakra-ui/react';
 import Measure from './Measure';
+import StudySection from './StudySection'
 import MeasuresSelector from './MeasuresSelector';
 import InsightsDeck from './InsightsDeck';
 
@@ -21,13 +22,12 @@ export default function ResultsPage(props) {
 
 	return (
 		<VStack w='100%' gap={5} align='stretch'>
-			<Box>
-				<Text textAlign='left' mb={3}>{'Key Insights:'}</Text>
+			<StudySection header={'Highlights'}>
 				<InsightsDeck study_id={study?.id} type={'MEASURE'} />
-			</Box>
-			<Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
+			</StudySection>
 
-			<MeasuresSelector 
+			<MeasuresSelector
+				bg='white'
 				setSelectedMeasure={setSelectedMeasure}
 				selectedMeasure={selectedMeasure}
 				measures={measures} />

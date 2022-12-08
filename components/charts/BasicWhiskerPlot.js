@@ -9,6 +9,8 @@ import { Box } from '@chakra-ui/react';
 import { shadeColor } from '../../utils';
 
 
+const MOBILE_THRESHOLD = 500;
+
 export default function BasicWhiskerPlot(props) {
 	const { sumstat, height, unit, ...kv } = props;
 
@@ -77,8 +79,9 @@ export default function BasicWhiskerPlot(props) {
 		svg.select("#x-axis")
 			.attr("transform", "translate(0," + height + ")")
 			.call(d3.axisBottom(x))
+			.attr('stroke-width', 0)
 			.selectAll(".tick text")
-			.attr('font-size', '14px')
+			.attr('font-size', '0px')
 			.style("font-weight", "600")
 
 		svg.append("text")
@@ -90,6 +93,25 @@ export default function BasicWhiskerPlot(props) {
 			.attr('font-size', '14px')
 			.style("font-weight", "600")
 			.text(unit);
+
+		if (cWidth < MOBILE_THRESHOLD) {
+			svg.selectAll('.tick').remove();
+			svg.selectAll('text').remove();
+			svg.select("#x-axis").style("stroke-width", 0)
+			svg.select("#y-axis").style("stroke-width", 0)
+		}
+
+	  svg.selectAll(".gridLine")
+	  	.data(y.ticks(6))
+	  	.join("line")
+	  		.attr("class", "line gridLine")
+	  		.attr("x1", (d) => (0))
+	  		.attr("x2", (d) => (width))
+	  		.attr("y1", (d) => (y(d)))
+	  		.attr("y2", (d) => (y(d)))
+				.attr("stroke-width", "1px")
+				.attr("stroke", "#cccccc");
+
 
 		svg.selectAll(".myVerts")
 			.data(sumstat)

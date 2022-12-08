@@ -277,7 +277,7 @@ export default function PowerHeatMap({analyticsData, groupData, outcomeData, dis
 			pl='1%'
 			pr='1%'>
 			<Center pt='3' flexDirection='column'>
-				<Flex alignItems='center' columnGap={3}>
+				<Flex flexWrap='wrap' alignItems='center' columnGap={3} rowGap={3}>
 					<Box bg='gray.300' w={10} h={10} borderRadius={4}/>
 					<Text>{'Not Available'}</Text>
 

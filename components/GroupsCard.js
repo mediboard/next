@@ -74,7 +74,7 @@ export default function GroupsCard({groupData, index}) {
 	return (
 		<Card 
 			w='100%'
-			p='20px'
+			p={['8px', '20px']}
 			h='100%'
 			skStyles={{'height': '100%'}}
 			gap={0}

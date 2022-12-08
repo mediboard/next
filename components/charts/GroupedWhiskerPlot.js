@@ -97,11 +97,14 @@ export default function GroupedWhiskerPlot(props) {
 		svg.select("#x-axis")
 			.attr("transform", "translate(0," + height + ")")
 			.call(d3.axisBottom(x))
+			.attr('stroke-width', 0)
 			.selectAll(".tick text")
-			.attr('font-size', '14px')
-			.style("font-weight", "600")
-			.style("text-anchor", "end")
-			.attr("transform", "rotate(-10)");
+			.attr('font-size', '0px')
+			// .selectAll(".tick text")
+			// .attr('font-size', '14px')
+			// .style("font-weight", "600")
+			// .style("text-anchor", "end")
+			// .attr("transform", "rotate(-10)");
 
 		svg.append("text")
 			.attr('class', "text yLabel")
@@ -119,7 +122,7 @@ export default function GroupedWhiskerPlot(props) {
 			svg.select("#x-axis").style("stroke-width", 0)
 			svg.select("#y-axis").style("stroke-width", 0)
 		}
-		
+
 	  svg.selectAll(".gridLine")
 	  	.data(y.ticks(6))
 	  	.join("line")
