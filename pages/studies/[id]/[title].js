@@ -56,7 +56,17 @@ export const index2cat = [
   'related studies'
 ]
 
-export async function getServerSideProps(context) {
+export async function getStaticPaths() {
+  return {
+    paths: [{params: {
+      title: 'simulated_driving_study_in_restless_legs_syndrome',
+      id: 'NCT01332318'
+    }}],
+    fallback: false 
+  }
+}
+
+export async function getStaticProps(context) {
   const { title, id, ...rest } = context.params;
 
   const studyRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}`);
@@ -88,6 +98,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Study(props) {
+  console.log(props.study?.short_title);
   return (
     <>
       <Head>
