@@ -34,11 +34,11 @@ import StudySection from '../../../components/StudySection';
 
 
 const groupColorWheel = [
-'#E7DAF7', 
+'#ffbc80', 
 '#8185FF', 
-'#5C61FF', 
-'#0A12FF', 
-'#000593'];
+'#80c3ff', 
+'#bc80ff', 
+'#fb80ff'];
 
 export const cat2index = {
   'overview': 0,
@@ -127,7 +127,7 @@ function Main(props) {
       bg='white'
       alignItems='stretch'>
       <VStack mb={[3, 0]} w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
-        <StudySummary headingSx={{fontSize: '18px'}} {...props.study}/>
+        <StudySummary rowGap={[1, 0]} headingSx={{fontSize: '18px'}} {...props.study}/>
         <Flex flexDirection='column' display={section !== 'results' ? 'flex' : 'none'}>
 
           <Hide below='md'>

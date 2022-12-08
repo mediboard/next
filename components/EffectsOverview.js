@@ -16,7 +16,7 @@ export default function EffectsOverview(props) {
 
 	return (
 		<StudySection header='Adverse Effects'>
-		<Flex flexDirection={['column', 'row']} gap={[4, 0]}>
+		<Flex flexDirection={['column', 'row']} gap={[6, 0]}>
 		<SimpleGrid rows={[4,2]} columns={[1,2]} spacingY='20px' spacingX='20px' w={['100%', '60%']}>
 				<AttributeSummaryCard
 					shallow={true}

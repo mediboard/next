@@ -46,6 +46,13 @@ export default function BasicWhiskerPlot(props) {
 			top: 10,
 			bottom: 50
 		}
+
+		if (cWidth < MOBILE_THRESHOLD) {
+			margin.left = 0;
+			margin.right = 0;
+			margin.bottom = 0;
+		}
+		
 		const width = cWidth - margin.left - margin.right;
 
 		const xGroups = [... new Set(sumstat?.map(x => x.groupName))];

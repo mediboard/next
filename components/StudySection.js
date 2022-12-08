@@ -15,7 +15,7 @@ export default function StudySection(props) {
 			boxShadow='0 0 8px #eee, 1px 0 3px #0000001a, -1px 0 3px #0000001a'
 			{...kv}>
 			<Heading fontSize='18px' textAlign='left'>{header}</Heading>
-			<Box pl={1} mt={5}>
+			<Box pl={1} mt={header ? 5 : 0}>
 			{children}
 			</Box>
 		</Flex>

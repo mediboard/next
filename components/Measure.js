@@ -51,8 +51,8 @@ export default function Measure(props) {
 	return (
 		<VStack spacing={8} align='stretch' w='100%'>
 			{!hideTitle && 
-			<StudySection header='Title'>
-				<Text fontWeight='600' textAlign='center'>{measureData?.title}</Text>
+			<StudySection>
+				<Text fontWeight='600' fontSize={['14px']} textAlign='center'>{measureData?.title}</Text>
 			</StudySection>
 			}
 
@@ -77,6 +77,7 @@ export default function Measure(props) {
 
 			<StudySection header='Data'>
 				<Box ref={chartRef} h='100%'>
+					<Text textAlign='center'>{measureData?.title}</Text>
 					<OutcomeDataChart 
 					{...{
 						unit: measureData?.units,

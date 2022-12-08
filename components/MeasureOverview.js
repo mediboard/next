@@ -22,7 +22,7 @@ export default function MeasureOverview(props) {
 			<Flex>
 				<Spacer />
 				<AttributeSummaryCard
-					shallow={true} text='See more results' color='purple.300'
+					shallow={true} text='See more results' color='purple.300' w='100%'
 					href={`/studies/${studyId}/${title}/?section=results&result=${measure?.id}`}>
 					{no_measures}
 				</AttributeSummaryCard>

@@ -14,6 +14,7 @@ export default function OutcomeTable(props) {
 	const { outcomes, ...kv } = props;
 
 	const grouped = () => (outcomes?.[0]?.title !== 'NA');
+	const dispersed = () => (outcomes?.[0]?.dispersion != null);
 
 	return (
 		<Box {...kv}>
@@ -22,16 +23,16 @@ export default function OutcomeTable(props) {
 		    <Thead>
 		      <Tr>
 		        <Th isNumeric>{"Value"}</Th>
-		        <Th isNumeric>{"Dispersion"}</Th>
-		        {grouped && <Th>{"Title"}</Th>}
+		        {dispersed() && <Th isNumeric>{"Dispersion"}</Th>}
+		        {grouped() && <Th>{"Title"}</Th>}
 		      </Tr>
 		    </Thead>
         <Tbody>
         {outcomes?.map(outcome => (
 		      <Tr key={outcome.id} bg={outcome.fill + '60'}>
 		        <Td isNumeric>{outcome.value}</Td>
-		        <Td isNumeric>{outcome.dispersion}</Td>
-		        {grouped && <Td>{outcome.title}</Td>}
+		        {dispersed() && <Td isNumeric>{outcome.dispersion}</Td>}
+		        {grouped() && <Td>{outcome.title}</Td>}
 		      </Tr>
       	))}
 		    </Tbody>

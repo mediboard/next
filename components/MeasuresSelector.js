@@ -28,6 +28,12 @@ export default function MeasuresSelector(props) {
 	const { result } = router.query;
 
 	useEffect(() => {
+		if (!selectedMeasure && !result && measures.length) {
+			selectMeasure(measures[0]?.id);
+		}
+	}, [measures?.length])
+
+	useEffect(() => {
 		if (result && measures?.length) {
 			setSelectedMeasure(measures?.filter(measure => measure.id == result)[0]);
 		}

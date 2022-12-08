@@ -211,14 +211,6 @@ export default function WhiskerPlot({
 		return (
 			<Flex w='100%' border='1px solid #cccccc' borderRadius={'4px'}>
 				<HStack w={['100%']} spacing={0}>
-					<Flex
-						borderRadius={'4px 0px 0px 4px'}
-						bg={isLine ? 'gray.300' : 'white'}
-						cursor='pointer'
-						onClick={() => setIsLine(true)}
-						w='50%' 
-						justifyContent='center' 
-						alignItems='center'>{'Line Chart'}</Flex>
 					<Flex 
 						borderRadius={'0px 4px 4px 0px'}
 						bg={!isLine ? 'gray.300' : 'white'}
@@ -227,6 +219,14 @@ export default function WhiskerPlot({
 						w='50%' 
 						justifyContent='center' 
 						alignItems='center'>{'Box Plot'}</Flex>
+					<Flex
+						borderRadius={'4px 0px 0px 4px'}
+						bg={isLine ? 'gray.300' : 'white'}
+						cursor='pointer'
+						onClick={() => setIsLine(true)}
+						w='50%' 
+						justifyContent='center' 
+						alignItems='center'>{'Line Chart'}</Flex>
 				</HStack>
 			</Flex>
 		)
