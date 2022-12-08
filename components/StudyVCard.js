@@ -10,6 +10,8 @@ import {
 	Badge,
 	Show,
 	Hide,
+	LinkOverlay,
+	LinkBox,
 	Link
 } from '@chakra-ui/react';
 import Tile from './Tile';
@@ -40,19 +42,22 @@ export default function StudyVCard(props) {
 
 	return (
 		<Tile {...kv} textAlign='left' p={0} >
+		<LinkBox>
 			<AspectRatio ratio={1.8} w={'100%'}>
 				<Image src={`https://treats-public-resources.s3.us-west-2.amazonaws.com/${id}/thumbnail.png`}
 					objectFit='fill !important'/>
 			</AspectRatio>
 
-			<Flex flexDirection='column' gap={1} p={3} w={'100%'} h='100%'>
+			<Flex flexDirection='column' gap={1} p={3} w={'100%'}>
 				<ExpandableText
 					display='flex' 
 					justifyContent='center'
 					flexDirection='column'
 					noOfLines={2} 
 					ref={expandRef}>
-					<Heading fontSize='16px'>{short_title}</Heading>
+					<LinkOverlay href={`/studies/${id}/${short_title.toLowerCase().replaceAll(' ', '_')}`}>
+						<Heading fontSize='16px'>{short_title}</Heading>
+					</LinkOverlay>
 				</ExpandableText>
 
 				<ExpandableDeck columnGap={2} rowGap={1}>
@@ -78,7 +83,7 @@ export default function StudyVCard(props) {
 						<EffectsSummary color='orange.700' no_effects={effects?.length}/>
 					</Box>
 				</Flex>
-
+{/*
 				<Flex alignItems='center'>
 					<Link
 						textDecoration='underline'
@@ -93,7 +98,8 @@ export default function StudyVCard(props) {
 						<Text fontSize='13px' color='orange.600'>{'Summarized'}</Text>
 					</Box>
 				</Flex>
-			</Flex>
+*/}			</Flex>
+		</LinkBox>
 		</Tile>
 	)
 }

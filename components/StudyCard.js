@@ -46,7 +46,8 @@ export default function StudyCard(props) {
 	} = props;
 
 	return (
-		<Tile {...kv} textAlign='left'>
+		<Tile border='1px solid #0000002a' {...kv} 
+			textAlign='left'>
 			<StudySummary {...props}/>
 		</Tile>
 	)

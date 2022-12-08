@@ -8,9 +8,11 @@ export const ExpandableText = forwardRef(({ children, noOfLines, ...rest }, ref)
 	const [isClicked, setIsClicked] = useState(false);
 	const [isTextClamped, setIsTextClamped] = useState(false);
 
-	const handleToggle = () => {
+	const handleToggle = (e) => {
 		setIsClicked(true);
 		setExpandedCount(expandedCount ? undefined : noOfLines);
+
+		e.stopPropagation();
 	};
 
 	const inputRef = useRef(null);

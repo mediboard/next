@@ -100,6 +100,7 @@ export default function StudySearchBar(props) {
 					setConditions={setConditionNames}
 					setTreatments={setTreatmentNames}
 					isOpen={isModalOpen} 
+					onSearchClick={onSearchClick}
 					onClose={() => setIsModalOpen(false)} />
 			</Show>
 		</Flex>
