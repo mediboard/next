@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { 
   ColorModeScript,
@@ -30,6 +29,7 @@ export default function StudyBrowse(props) {
 }
 
 function Main(props) {
+
 	return (
 		<PageBody mt={0} bg='#CED4DB'>
 			<Flex direction={'column'} m={['0', '2.5%']} borderRadius={4} p={[0, 10]} bg='white' w='100%' gap={5}>

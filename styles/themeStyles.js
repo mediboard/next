@@ -22,10 +22,9 @@ export const Button = {
       pl: '10px'
   	},
     outlined: {
-      borderRadius: 20,
       bg: "white",
-      color: "#1E1E1E",
-      border: "2px",
+      color: "purple.400",
+      border: "1px",
       borderColor: "purple.400"
     },
     small: {
