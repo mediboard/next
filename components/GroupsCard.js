@@ -4,6 +4,7 @@ import {
 	Text, 
 	Badge,
 	VStack,
+	HStack,
 	Flex,
 	Heading, 
 	IconButton,
@@ -14,6 +15,7 @@ import Card from './Card';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import TreatmentSelect from './TreatmentSelect';
 import { isAdminUser } from '../utils';
+import InfoPopover from './InfoPopover';
 
 
 function TreatmentCard(props) {
@@ -95,15 +97,20 @@ export default function GroupsCard({groupData, index}) {
         	{index + 1}
         </Text>
       </Flex>
-*/}			
-			<Text
-				w='100%'
-				mt='6px'
-      	textAlign='center'
-				fontWeight='500'
-				fontSize='14px'
-				mb={3}
-				whiteSpace='normal'>{groupData.title}</Text>
+*/}		
+			<Flex alignItems='center'>
+				<Text
+					w='100%'
+					mt='6px'
+	      	textAlign='center'
+					fontWeight='500'
+					fontSize='14px'
+					mb={3}
+					whiteSpace='normal'>{groupData.title}</Text>
+					<InfoPopover color={groupData.color} header={groupData.title}>
+						<Text>{groupData.description}</Text>
+					</InfoPopover>
+			</Flex>
 			<Flex gap={2} flexWrap='wrap' justifyContent='center' w='100%'>
 			{currentTreatments.map(x => (
 				<TreatmentCard key={x.id}

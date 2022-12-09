@@ -55,7 +55,7 @@ export default function StudyVCard(props) {
 					flexDirection='column'
 					noOfLines={2} 
 					ref={expandRef}>
-					<LinkOverlay href={`/studies/${id}/${short_title.toLowerCase().replaceAll(' ', '_')}`}>
+					<LinkOverlay href={`/studies/${id}`}>
 						<Heading fontSize='16px'>{short_title}</Heading>
 					</LinkOverlay>
 				</ExpandableText>

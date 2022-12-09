@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { 
@@ -18,19 +18,19 @@ import {
   HStack,
   Text,
   Heading } from '@chakra-ui/react'
-import { theme } from '../../_app';
-import StudySummary from '../../../components/StudySummary';
-import MeasuresSideDeck from '../../../components/MeasuresSideDeck';
-import InsightsDeck from '../../../components/InsightsDeck';
-import BaselinesDeck from '../../../components/BaselinesDeck';
-import SectionHeader from '../../../components/SectionHeader';
-import EffectsOverview from '../../../components/EffectsOverview';
-import MeasureOverview from '../../../components/MeasureOverview';
-import ResultsPage from '../../../components/ResultsPage';
-import EffectsPage from '../../../components/EffectsPage';
-import RelatedStudiesPage from '../../../components/RelatedStudiesPage';
-import PageBody from '../../../components/PageBody';
-import StudySection from '../../../components/StudySection';
+import { theme } from '../_app';
+import StudySummary from '../../components/StudySummary';
+import MeasuresSideDeck from '../../components/MeasuresSideDeck';
+import InsightsDeck from '../../components/InsightsDeck';
+import BaselinesDeck from '../../components/BaselinesDeck';
+import SectionHeader from '../../components/SectionHeader';
+import EffectsOverview from '../../components/EffectsOverview';
+import MeasureOverview from '../../components/MeasureOverview';
+import ResultsPage from '../../components/ResultsPage';
+import EffectsPage from '../../components/EffectsPage';
+import RelatedStudiesPage from '../../components/RelatedStudiesPage';
+import PageBody from '../../components/PageBody';
+import StudySection from '../../components/StudySection';
 
 
 const groupColorWheel = [
@@ -56,8 +56,25 @@ export const index2cat = [
   'related studies'
 ]
 
-export async function getServerSideProps(context) {
-  const { title, id, ...rest } = context.params;
+export async function getStaticPaths() {
+  // const jsonDirectory = path.join(process.cwd(), 'data');
+
+  // const staticRoutes = JSON.parse(await fs.readFile(jsonDirectory + '/static_routes.json', 'utf8'));
+  const staticRoutes = {study_routes: [
+    {id: 'NCT01332318'},
+    {id: 'NCT01014533'},
+    {id: 'NCT00392041'},
+    {id: 'NCT00386334'},
+  ]}
+
+  return {
+    paths: staticRoutes.study_routes.map(x => ({params: x})),
+    fallback: 'blocking' 
+  }
+}
+
+export async function getStaticProps(context) {
+  const { id, ...rest } = context.params;
 
   const studyRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}`);
   const studyData = await studyRes.json();
@@ -80,10 +97,9 @@ export async function getServerSideProps(context) {
     effects: effectsData?.effects.map((effectGroup, i) => ({
       name: effectGroup.title,
       effects: effectGroup.effects,
-      fill: groupColorWheel[i] 
+      fill: groupColorWheel[i % groupColorWheel.length] 
     })),
     baselines: baselinesData?.baselines,
-    measures: measuresData?.measures
   }};
 }
 
@@ -105,9 +121,27 @@ export default function Study(props) {
 
 function Main(props) {
   const router = useRouter();
-  const { title, id, section } = router.query;
+  const { id, section } = router.query;
 
   const [selectedMeasure, setSelectedMeasure] = useState(undefined);
+
+  const [measures, setMeasures] = useState([]);
+  const [measuresIsLoading, setMeasuresIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Load the measures on the client
+    setMeasuresIsLoading(true);
+    fetchMeasures();
+  }, [id])
+
+  async function fetchMeasures() {
+    const measuresRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/measures`);
+    const measuresData = await measuresRes.json();
+
+    setMeasures(measuresData?.measures);
+
+    if (measuresData) { setMeasuresIsLoading(false); }
+  }
 
   function handleChange(index) {
     const cat = index2cat[index];
@@ -165,13 +199,12 @@ function Main(props) {
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box w='100%'>
-              <BaselinesDeck {...{studyId: id, title: title, baselines: props.baselines}}/>
+              <BaselinesDeck {...{studyId: id, baselines: props.baselines}}/>
             </Box>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box>
               <EffectsOverview
-                title={title}
                 studyId={id}
                 effectsGroups={props.effects}/>
             </Box>
@@ -179,11 +212,11 @@ function Main(props) {
 
             <Box>
               <MeasureOverview 
-                no_measures={props.measures?.length}
-                title={title}
+                no_measures={measures?.length}
+                isLoading={measuresIsLoading}
                 studyId={id}
                 groups={props.groups}
-                measure={props.measures[0]}/>
+                measure={measures?.[0]}/>
             </Box>
           </VStack>
         </TabPanel>
@@ -199,7 +232,8 @@ function Main(props) {
         <TabPanel>
           <ResultsPage 
             study={props.study}
-            measures={props.measures}
+            measures={measures}
+            isLoading={measuresIsLoading}
             selectedMeasure={selectedMeasure}
             setSelectedMeasure={setSelectedMeasure}
             groups={props.groups}/>

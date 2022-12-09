@@ -12,7 +12,7 @@ function distinctEffects(effectGroups) {
 }
 
 export default function EffectsOverview(props) {
-	const { effectsGroups, studyId, title, ...kv } = props;
+	const { effectsGroups, studyId, ...kv } = props;
 
 	return (
 		<StudySection header='Adverse Effects'>
@@ -20,28 +20,28 @@ export default function EffectsOverview(props) {
 		<SimpleGrid rows={[4,2]} columns={[1,2]} spacingY='20px' spacingX='20px' w={['100%', '60%']}>
 				<AttributeSummaryCard
 					shallow={true}
-					href={`/studies/${studyId}/${title}/?section=adverse effects`}
+					href={`/studies/${studyId}/?section=adverse effects`}
 					w='100%' color='orange.700' text='Adverse Effects'>
 					{distinctEffects(effectsGroups)?.length}
 				</AttributeSummaryCard>
 
 				<AttributeSummaryCard 
 					shallow={true}
-					href={`/studies/${studyId}/${title}/?section=adverse effects`}
+					href={`/studies/${studyId}/?section=adverse effects`}
 					w='100%' color='purple.300' text='Full Distribution'>
 					{'Available'}
 				</AttributeSummaryCard>
 
 				<AttributeSummaryCard 
 					shallow={true}
-					href={`/studies/${studyId}/${title}/?section=adverse effects`}
+					href={`/studies/${studyId}/?section=adverse effects`}
 					w='100%' color='orange.700' text='Serious Effects'>
 					{'Unavailable'}
 				</AttributeSummaryCard>
 
 				<AttributeSummaryCard
 					shallow={true}
-					href={`/studies/${studyId}/${title}/?section=adverse effects`}
+					href={`/studies/${studyId}/?section=adverse effects`}
 					w='100%' color='purple.300' text='Treatments Tested'>
 					{effectsGroups?.length}
 				</AttributeSummaryCard>

@@ -14,7 +14,7 @@ import studyHttpClient from '../../services/clientapis/StudyHttpClient';
 import { theme } from '../_app';
 
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
 	const featuredStudies = await studyHttpClient.getBannerStudies();
 
 	return {props: { featuredStudies: featuredStudies?.studies }};
