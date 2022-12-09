@@ -18,19 +18,21 @@ import {
   HStack,
   Text,
   Heading } from '@chakra-ui/react'
-import { theme } from '../../_app';
-import StudySummary from '../../../components/StudySummary';
-import MeasuresSideDeck from '../../../components/MeasuresSideDeck';
-import InsightsDeck from '../../../components/InsightsDeck';
-import BaselinesDeck from '../../../components/BaselinesDeck';
-import SectionHeader from '../../../components/SectionHeader';
-import EffectsOverview from '../../../components/EffectsOverview';
-import MeasureOverview from '../../../components/MeasureOverview';
-import ResultsPage from '../../../components/ResultsPage';
-import EffectsPage from '../../../components/EffectsPage';
-import RelatedStudiesPage from '../../../components/RelatedStudiesPage';
-import PageBody from '../../../components/PageBody';
-import StudySection from '../../../components/StudySection';
+import { theme } from '../_app';
+import StudySummary from '../../components/StudySummary';
+import MeasuresSideDeck from '../../components/MeasuresSideDeck';
+import InsightsDeck from '../../components/InsightsDeck';
+import BaselinesDeck from '../../components/BaselinesDeck';
+import SectionHeader from '../../components/SectionHeader';
+import EffectsOverview from '../../components/EffectsOverview';
+import MeasureOverview from '../../components/MeasureOverview';
+import ResultsPage from '../../components/ResultsPage';
+import EffectsPage from '../../components/EffectsPage';
+import RelatedStudiesPage from '../../components/RelatedStudiesPage';
+import PageBody from '../../components/PageBody';
+import StudySection from '../../components/StudySection';
+import path from 'path';
+import { promises as fs } from 'fs';
 
 
 const groupColorWheel = [
@@ -57,17 +59,18 @@ export const index2cat = [
 ]
 
 export async function getStaticPaths() {
+  const jsonDirectory = path.join(process.cwd(), 'data');
+
+  const staticRoutes = JSON.parse(await fs.readFile(jsonDirectory + '/static_routes.json', 'utf8'));
+
   return {
-    paths: [{params: {
-      title: 'simulated_driving_study_in_restless_legs_syndrome',
-      id: 'NCT01332318'
-    }}],
+    paths: staticRoutes.study_routes.map(x => ({params: x})),
     fallback: false 
   }
 }
 
 export async function getStaticProps(context) {
-  const { title, id, ...rest } = context.params;
+  const { id, ...rest } = context.params;
 
   const studyRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}`);
   const studyData = await studyRes.json();
@@ -90,7 +93,7 @@ export async function getStaticProps(context) {
     effects: effectsData?.effects.map((effectGroup, i) => ({
       name: effectGroup.title,
       effects: effectGroup.effects,
-      fill: groupColorWheel[i] 
+      fill: groupColorWheel[i % groupColorWheel.length] 
     })),
     baselines: baselinesData?.baselines,
     measures: measuresData?.measures
@@ -98,7 +101,6 @@ export async function getStaticProps(context) {
 }
 
 export default function Study(props) {
-  console.log(props.study?.short_title);
   return (
     <>
       <Head>
@@ -116,7 +118,7 @@ export default function Study(props) {
 
 function Main(props) {
   const router = useRouter();
-  const { title, id, section } = router.query;
+  const { id, section } = router.query;
 
   const [selectedMeasure, setSelectedMeasure] = useState(undefined);
 
@@ -176,13 +178,12 @@ function Main(props) {
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box w='100%'>
-              <BaselinesDeck {...{studyId: id, title: title, baselines: props.baselines}}/>
+              <BaselinesDeck {...{studyId: id, baselines: props.baselines}}/>
             </Box>
             <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
 
             <Box>
               <EffectsOverview
-                title={title}
                 studyId={id}
                 effectsGroups={props.effects}/>
             </Box>
@@ -191,7 +192,6 @@ function Main(props) {
             <Box>
               <MeasureOverview 
                 no_measures={props.measures?.length}
-                title={title}
                 studyId={id}
                 groups={props.groups}
                 measure={props.measures[0]}/>

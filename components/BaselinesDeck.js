@@ -91,7 +91,7 @@ let colorWheel = [
 ];
 
 export default function BaselinesDeck(props) {
-	const { studyId, title, fullPage, baselines, ...kv } = props;
+	const { studyId, fullPage, baselines, ...kv } = props;
 
 	if (fullPage) {
 		return <BaselinesPage studyId={studyId} baselines={groupBaselinesByBase(baselines)} />
@@ -143,14 +143,14 @@ export default function BaselinesDeck(props) {
 					<AttributeSummaryCard
 						w='100%'
 						shallow={true}
-						href={`/studies/${studyId}/${title}/?section=participants`}
+						href={`/studies/${studyId}/?section=participants`}
 						text={'Demographic Measures: '}
 						color='purple.300'>{groupBaselinesByBase(baselines)?.length}
 					</AttributeSummaryCard>
 					<AttributeSummaryCard 
 						w='100%'
 						shallow={true}
-						href={`/studies/${studyId}/${title}/?section=participants`}
+						href={`/studies/${studyId}/?section=participants`}
 						text={'Racial Data: '}
 						color='purple.300'>{getRaceBaselines(groupBaselinesByBase(baselines))?.data ? 'Available' : 'No'}
 					</AttributeSummaryCard>
