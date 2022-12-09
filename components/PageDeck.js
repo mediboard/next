@@ -35,7 +35,7 @@ export function PageButton(props) {
 export default function PageDeck(props) {
 	const { children, no_pages, page_no, onPageClick, ...kv } = props;
 
-	const noButtons = useBreakpointValue({ base: 4, lg: 6 });
+	const noButtons = useBreakpointValue({ base: 4, md:7, lg: 10 });
 
 	let arrOne = children.filter((x,i) => i % 2 === 0);
 	let arrTwo = children.filter((x,i) => i % 2 != 0);
@@ -57,13 +57,13 @@ export default function PageDeck(props) {
 				<VStack w='100%' spacing={[5, 2]}>
 				{arrTwo.map(x => (x))}
 				</VStack>
-
-				<HStack w='100%' alignItems='stretch' spacing={1}>
+			</Flex>
+			<HStack w='100%' mt={10} alignItems='stretch' spacing={1}>
 				<Button variant={'outlined'}
-					w='20%' 
+					w={['20%', '10%']} 
 					onClick={() => {if (page_no > 1) { onPageClick(page_no-1); }}}>{'Prev'}</Button>
 
-				<Flex w='60%' alignItems='stretch'>
+				<Flex w={['60%', '80%']} alignItems='stretch'>
 				{[... new Array(no_pages).keys()].slice((page_no-1), (page_no-1) + noButtons)?.map((x, i) => {
 					if (i === (noButtons - 2) && no_pages >= noButtons) {
 						return (
@@ -92,10 +92,8 @@ export default function PageDeck(props) {
 				})}
 				</Flex>
 
-				<Button w='20%' m={0} onClick={() => {if(page_no < no_pages) { onPageClick(page_no+1)}}}>{'Next'}</Button>
-				</HStack>
-
-			</Flex>
+				<Button w={['20%', '10%']} m={0} onClick={() => {if(page_no < no_pages) { onPageClick(page_no+1)}}}>{'Next'}</Button>
+			</HStack>
 		</Flex>
 	);
 }
