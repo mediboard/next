@@ -13,6 +13,7 @@ import {
 	Text,
 	useBreakpointValue
 } from '@chakra-ui/react'
+import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 
 
 export function PageButton(props) {
@@ -58,7 +59,9 @@ export default function PageDeck(props) {
 				</VStack>
 
 				<HStack w='100%' alignItems='stretch' spacing={1}>
-				<Button variant={'outlined'} w='20%' m={0}>{'Prev'}</Button>
+				<Button variant={'outlined'}
+					w='20%' 
+					onClick={() => {if (page_no > 1) { onPageClick(page_no-1); }}}>{'Prev'}</Button>
 
 				<Flex w='60%' alignItems='stretch'>
 				{[... new Array(no_pages).keys()].slice((page_no-1), (page_no-1) + noButtons)?.map((x, i) => {
@@ -89,7 +92,7 @@ export default function PageDeck(props) {
 				})}
 				</Flex>
 
-				<Button w='20%' m={0}>{'Next'}</Button>
+				<Button w='20%' m={0} onClick={() => {if(page_no < no_pages) { onPageClick(page_no+1)}}}>{'Next'}</Button>
 				</HStack>
 
 			</Flex>
