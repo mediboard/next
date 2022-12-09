@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { 
@@ -31,8 +31,6 @@ import EffectsPage from '../../components/EffectsPage';
 import RelatedStudiesPage from '../../components/RelatedStudiesPage';
 import PageBody from '../../components/PageBody';
 import StudySection from '../../components/StudySection';
-import path from 'path';
-import { promises as fs } from 'fs';
 
 
 const groupColorWheel = [
@@ -59,13 +57,19 @@ export const index2cat = [
 ]
 
 export async function getStaticPaths() {
-  const jsonDirectory = path.join(process.cwd(), 'data');
+  // const jsonDirectory = path.join(process.cwd(), 'data');
 
-  const staticRoutes = JSON.parse(await fs.readFile(jsonDirectory + '/static_routes.json', 'utf8'));
+  // const staticRoutes = JSON.parse(await fs.readFile(jsonDirectory + '/static_routes.json', 'utf8'));
+  const staticRoutes = {study_routes: [
+    {id: 'NCT01332318'},
+    {id: 'NCT01014533'},
+    {id: 'NCT00392041'},
+    {id: 'NCT00386334'},
+  ]}
 
   return {
     paths: staticRoutes.study_routes.map(x => ({params: x})),
-    fallback: false 
+    fallback: 'blocking' 
   }
 }
 
@@ -96,7 +100,6 @@ export async function getStaticProps(context) {
       fill: groupColorWheel[i % groupColorWheel.length] 
     })),
     baselines: baselinesData?.baselines,
-    measures: measuresData?.measures
   }};
 }
 
@@ -121,6 +124,24 @@ function Main(props) {
   const { id, section } = router.query;
 
   const [selectedMeasure, setSelectedMeasure] = useState(undefined);
+
+  const [measures, setMeasures] = useState([]);
+  const [measuresIsLoading, setMeasuresIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Load the measures on the client
+    setMeasuresIsLoading(true);
+    fetchMeasures();
+  }, [id])
+
+  async function fetchMeasures() {
+    const measuresRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/measures`);
+    const measuresData = await measuresRes.json();
+
+    setMeasures(measuresData?.measures);
+
+    if (measuresData) { setMeasuresIsLoading(false); }
+  }
 
   function handleChange(index) {
     const cat = index2cat[index];
@@ -191,10 +212,11 @@ function Main(props) {
 
             <Box>
               <MeasureOverview 
-                no_measures={props.measures?.length}
+                no_measures={measures?.length}
+                isLoading={measuresIsLoading}
                 studyId={id}
                 groups={props.groups}
-                measure={props.measures[0]}/>
+                measure={measures?.[0]}/>
             </Box>
           </VStack>
         </TabPanel>
@@ -210,7 +232,8 @@ function Main(props) {
         <TabPanel>
           <ResultsPage 
             study={props.study}
-            measures={props.measures}
+            measures={measures}
+            isLoading={measuresIsLoading}
             selectedMeasure={selectedMeasure}
             setSelectedMeasure={setSelectedMeasure}
             groups={props.groups}/>
