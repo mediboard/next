@@ -53,10 +53,7 @@ function flattenData(effectsGroups) {
 }
 
 export default function EffectsComparisonStack(props) {
-	const {
-		effectsGroups,
-		colGap,
-		...kv }  = props;
+	const {effectsGroups, ...kv }  = props;
 
 	const [isExpanded, setIsExpanded] = useState(false);
 
