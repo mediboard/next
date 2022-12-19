@@ -58,9 +58,9 @@ export default function MeasureGroupCard(props) {
         key={`${treatment.name}-measure-wrapper`}
         measures={measures[treatment.name]}
         setMeasures={(vals) => {
-          const newMeasures = {...measures};
+          const newMeasures = {};
           newMeasures[treatment.name] = vals;
-          setMeasures(newMeasures);
+          setMeasures((prev) => ({...prev, ...newMeasures}));
         }}
         conditionId={conditionId}
         groupName={group}

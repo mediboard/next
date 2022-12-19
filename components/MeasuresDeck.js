@@ -22,52 +22,20 @@ export default function MeasuresDeck(props) {
 	const [measureGroupsIsLoading, setMeasureGroupsIsLoading] = useState(true);
 	const [measureGroups, setMeasureGroups] = useState([]);
 
-	const [measures, setMeasures] = useState([]);
-	const [measuresIsLoading, setMeasuresIsLoading] = useState(false);
-
-	// useEffect(async () => {
-	// 	if (treatments?.length && conditionId) {
-	// 		setMeasures(await Promise.all(treatments?.map(async treat => {
-	// 			return {
-	// 				measures: await fetchMeasures(treat.id, conditionId),
-	// 				treatName: treat.name,
-	// 				fill: treat.fill
-	// 			}
-	// 		})));
-	// 	}
-	// }, [treatments, conditionId])
-	// Add a new measuree group by selection
-
 	useEffect(() => {
 		if (router.query.groups) {
 			setMeasureGroups(router.query.groups?.split(','))
 		}
 	}, [router.query.groups])
 
-	useEffect(() => {
-		if (conditionId) {
-			fetchMesureGroups(conditionId);
-		}
-	}, [conditionId])
-
-	async function fetchMeasures(treatmentId, conditionId) {
-		return (await treatmentHttpClient.getPlaceboMeasureGroups(treatmentId, conditionId))?.measures
-	}
-
-	async function fetchMesureGroups(conditionId) {
-		setMeasureGroupsIsLoading(true);
-		conditionsHttpClient.getMeasureGroups(conditionId).then(data => {
-			setMeasureGroups(data?.groups);
-		}).catch(error => {
-			console.log(error);
-		}).finally(() => {
-			setMeasureGroupsIsLoading(false);
-		})
+	function updateMeasureGroups(values) {
+		router.query.groups = values?.join(',');
+		router.push(router, undefined, { shallow: true });
 	}
 
 	return (
 		<VStack w='100%'>
-			<MeasureGroupsCreator setGroup={(value) => {setMeasureGroups([value, ...measureGroups])}} w='100%' alignItems='center'/>
+			<MeasureGroupsCreator setGroup={(value) => {updateMeasureGroups([value, ...measureGroups])}} w='100%' alignItems='center'/>
 
 			{measureGroups.map(group => (
 			<MeasureGroupCard 
