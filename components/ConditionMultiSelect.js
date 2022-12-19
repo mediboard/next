@@ -1,13 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Select } from 'chakra-react-select';
 import conditionsHttpClient from '../services/clientapis/ConditionsHttpClient';
 import { Box } from '@chakra-ui/react';
 
 
 export default function ConditionMultiSelect(props) {
-	const { conditionNames, setConditionNames, ...kv } = props;
+	const { conditions, setConditions, initialNames, ...kv } = props;
 
 	const [options, setOptions] = useState([]);
+
+	useEffect(() => {
+		if (initialNames?.length && initialNames?.length !== conditions?.length) {
+			preLoadConditions();
+		}
+	}, [initialNames?.length])
 
 	async function searchConditions(query) {
 		if (query === '' || query == null) { return; }
@@ -17,6 +23,23 @@ export default function ConditionMultiSelect(props) {
 		}).catch(error => {
 			console.log(error);
 		})
+	}
+
+	async function preLoadConditions() {
+		//Fill in existing conditions
+		const existingConditions = conditions?.filter(x => initialNames?.includes(x.name));
+		const diffedNames = initialNames.filter(x => !existingConditions.map(c => c.name).includes(x));
+
+		const newConditions = await fetchConditions(diffedNames);
+		setConditions([...conditions, ...newConditions]);
+	}
+
+	async function fetchConditions(names) {
+		const newConditions = await Promise.all(names.map(async name => (
+			await conditionsHttpClient.getCondition(name)
+		)));
+
+		return await newConditions;
 	}
 
 	return (
@@ -42,10 +65,10 @@ export default function ConditionMultiSelect(props) {
 					})
 				}}
 				borderColor='purple.300'
-				value={conditionNames?.map(x => ({label: x, value: x}))}
+				value={conditions?.map(x => ({label: x.name, value: x}))}
 				onInputChange={(value) => { searchConditions(value) }}
-				onChange={(values) => { setConditionNames(values?.map(x => x.value.name.toLowerCase())); }}
-				options={options?.map(x => ({label: x.name, value: {...x}}))} {...kv} />
+				onChange={(values) => { setConditions(values.map(x => x.value)); }}
+				options={options?.map(x => ({label: x.name, value: x}))} {...kv} />
 		</Box>
 	);
 }

@@ -16,6 +16,7 @@ import {
 } from 'recharts';
 import Tile from './Tile';
 import treatmentHttpClient from '../services/clientapis/TreatmentHttpClient';
+import MeasuresTreatmentWrapper from './MeasuresTreatmentWrapper';
 
 
 function prepOutcomes4Chart(measureData, index) {
@@ -26,52 +27,51 @@ function prepOutcomes4Chart(measureData, index) {
   }));
 }
 
-export default function MeasureGroupCard(props) {
-	const { group, title, conditionId, treatments, ...kv } = props;
-
-  const [measures, setMeasures] = useState([]);
-  const [measuresIsLoading, setMeasuresIsLoading] = useState(true);
-
-  useEffect(async () => {
-    setMeasures(await Promise.all(treatments?.map(async treat => {
-      return {
-        treatId: treat.id,
-        treatName: treat.name,
-        fill: treat.fill,
-        analytics: await fetchMeasureValues(treat?.id, conditionId, group?.id)
-      }
-    })));
-  }, [treatments])
-
-  async function fetchMeasureValues(treatmentId, conditionId, measureGroupId) {
-    return (await treatmentHttpClient.getDValues(treatmentId, conditionId, measureGroupId)).outcomes;
-  }
-
-  const CustomTooltip = ({ active, payload }) => {
-    if (!active) {
-      return null;
-    }
-
-    if (payload[0]){
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${payload[0].payload.measure_title}`}</p>
-          <p className="label">{`${payload[0].payload.study}`}</p>
-          <p className="label">{`${payload[0].payload.fill}`}</p>
-        </div>
-      )
-    }
+const CustomTooltip = ({ active, payload }) => {
+  if (!active) {
     return null;
   }
 
+  if (payload[0]){
+    return (
+      <div className="custom-tooltip">
+        <p className="label">{`${payload[0].payload.measure_title}`}</p>
+        <p className="label">{`${payload[0].payload.study}`}</p>
+        <p className="label">{`${payload[0].payload.fill}`}</p>
+      </div>
+    )
+  }
+
+  return null;
+}
+
+export default function MeasureGroupCard(props) {
+	const { group, conditionId, treatments, ...kv } = props;
+
+  const [measures, setMeasures] = useState({});
+  const [measuresIsLoading, setMeasuresIsLoading] = useState(true);
+
 	return (
 		<Tile {...kv}>
-			<Text>{title}</Text>
+    {treatments?.map(treatment => (
+      <MeasuresTreatmentWrapper 
+        key={`${treatment.name}-measure-wrapper`}
+        measures={measures[treatment.name]}
+        setMeasures={(vals) => {
+          const newMeasures = {...measures};
+          newMeasures[treatment.name] = vals;
+          setMeasures(newMeasures);
+        }}
+        conditionId={conditionId}
+        groupName={group}
+        treatmentName={treatment?.name} />
+    ))}
+			<Text>{group}</Text>
       <ScatterChart width={1100} height={250}
         margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
         <XAxis type="number" dataKey="cohen_d" domain={[-1,2]}/>
         <YAxis type="number" dataKey="cat" range={[0,3]} name="name" />
-        {measures?.map((data, i) => (
+        {Object.keys(measures)?.map((data, i) => (
 	        <Scatter key={i + '-scatter'}
             data={prepOutcomes4Chart(data, i)} />
       	))}

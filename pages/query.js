@@ -40,58 +40,6 @@ function Main() {
 
 	const router = useRouter();
 
-	useEffect(() => {
-		if (router.query.treatments) {
-			const oldTreatmentNames = treatments?.map(x => x.name);
-
-			const treatmentsToAdd = router.query.treatments?.split(',')?.filter(x => !oldTreatmentNames.includes(x))
-			const treatmentsToRemove = oldTreatmentNames.filter(x => router.query.treatments?.split(',').includes(x))
-
-			if (treatmentsToAdd.length) {
-				addTreatments(treatmentsToAdd);
-				return;
-			}
-
-			if (treatmentsToRemove.length) {
-				setTreatments(treatments?.filter(x => !treatmentsToRemove.includes(x.name)));
-				return;
-			}
-		}
-	}, [router.query.treatments])
-
-	async function addTreatments(treatmentNames) {
-		setTreatments([
-			...treatments,
-			...(await Promise.all(treatmentNames.map(async x => (treatmentHttpClient.getTreatment(x)))))
-		]);
-	}
-
-	useEffect(() => {
-		if (router.query.conditions) {
-			const oldConditionNames = conditions?.map(x => x.name);
-
-			const conditionsToAdd = router.query.conditions?.split(',')?.filter(x => !oldConditionNames.includes(x))
-			const conditionsToRemove = oldConditionNames.filter(x => router.query.conditions?.split(',').includes(x))
-
-			if (conditionsToAdd.length) {
-				addConditions(conditionsToAdd);
-				return;
-			}
-
-			if (conditionsToRemove.length) {
-				setConditions(conditions?.filter(x => !conditionsToRemove.includes(x.name)));
-				return;
-			}
-		}
-	}, [router.query.conditions])
-
-	async function addConditions(conditionNames) {
-		setConditions([
-			...conditions,
-			...(await Promise.all(conditionNames.map(async x => (conditionsHttpClient.getCondition(x)))))
-		]);
-	}
-
 	return (
 		<PageBody pr={0} pl={0} mt={0}>
       <Box w={'100%'}>
@@ -107,11 +55,9 @@ function Main() {
       			justifyContent='center'>
       			<Heading fontSize={['22px','32px']}>{'COMPARE TREATMENTS'}</Heading>
 	      		<ConditionMultiSelect
-	      			conditionNames={[conditions?.map(x => x.name)]} 
-	      			setConditionNames={(name) => {
-	      				router.query.conditions = [...router.query.conditions?.split(','), name]?.join(',');
-								router.push(router, undefined, { shallow: true });
-	      			}}/>
+	      			conditions={conditions}
+	      			initialNames={router.query.conditions?.split(',')}
+	      			setConditions={setConditions}/>
 						<ComparisonSelectors
 							setSelectedTreatments={setTreatments}
 							selectedTreatments={treatments}
@@ -119,12 +65,11 @@ function Main() {
       		</Flex>
 
 					<VStack gap={2} mt={5} w={['100%', '80%']} align='stretch'>
-
 						<EffectsDataWrapper treatments={treatments} />
 
-						<DemosComparisonStack treatments={treatments}/>
-
 						<MeasuresComparisonStack condition={conditions[0]} treatments={treatments}/>
+
+						<DemosComparisonStack treatments={treatments}/>
 					</VStack>
       	</Flex>
 			</Box>

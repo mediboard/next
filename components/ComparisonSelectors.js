@@ -16,9 +16,11 @@ import conditionsHttpClient from '../services/clientapis/ConditionsHttpClient';
 
 
 const treatmentsColorWheel = [
-  "#818BEE",
-  "#002779",
-  "#D65108"
+	'#ffbc80', 
+	'#8185FF', 
+	'#80c3ff', 
+	'#bc80ff', 
+	'#fb80ff'
 ];
 
 export default function ComparisonSelectors(props) {
@@ -47,7 +49,7 @@ export default function ComparisonSelectors(props) {
 	}, [router.query.treatments, treatments?.length])
 
 	function addTreatments(treatmentNames) {
-		router.query.treatments = [...router.query.treatments?.split(','), ...treatmentNames]?.join(',');
+		router.query.treatments = [...(router.query.treatments?.split(',') || []), ...treatmentNames]?.join(',');
 		router.push(router, undefined, { shallow: true });
 	}
 
