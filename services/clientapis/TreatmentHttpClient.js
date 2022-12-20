@@ -369,6 +369,21 @@ class TreatmentHttpClient {
 		return data?.measure;
 	}
 
+	async getMeasureData(treatmentId, measureIds) {
+		let config = { url: this.base + '/treatments/' + treatmentId + '/measures/' + measureIds.join(',') + '/data' };
+
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to get measures data, status: " + response.status);
+		}
+
+		const data = await response.data;
+
+		return data?.outcomes;
+	}
+
 	async getDValues(treatmentId, conditionId, measureGroupId) {
 		let config = {
 			url: this.base + `/treatments/${treatmentId}/condition/${conditionId}/measuregroup/${measureGroupId}/dvalues`
