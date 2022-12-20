@@ -336,6 +336,54 @@ class TreatmentHttpClient {
 		return data;
 	}
 
+	async searchMeasures(treatmentName, conditionId, query) {
+		let config = {
+			url: this.base + '/treatments/'+treatmentName+'/condition/'+conditionId+'/measures',
+			params: { q: query, limit: 10 }
+		}
+
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to search measures, status: " + response.status);
+		}
+
+		const data = await response.data;
+
+		return data;
+	}
+
+	async getMeasure(measureId) {
+		let config = { url: this.base + '/treatments/measures/' + measureId };
+
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to get measure, status: " + response.status);
+		}
+
+		const data = await response.data;
+
+		return data?.measure;
+	}
+
+	async getMeasureData(treatmentId, measureIds) {
+		let config = { url: this.base + '/treatments/' + treatmentId + '/measures/' + measureIds.join(',') + '/data' };
+
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to get measures data, status: " + response.status);
+		}
+
+		const data = await response.data;
+
+		return data?.outcomes;
+	}
+
 	async getDValues(treatmentId, conditionId, measureGroupId) {
 		let config = {
 			url: this.base + `/treatments/${treatmentId}/condition/${conditionId}/measuregroup/${measureGroupId}/dvalues`
