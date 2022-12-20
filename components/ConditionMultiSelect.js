@@ -68,7 +68,7 @@ export default function ConditionMultiSelect(props) {
 				value={conditions?.map(x => ({label: x.name, value: x}))}
 				onInputChange={(value) => { searchConditions(value) }}
 				onChange={(values) => { setConditions(values.map(x => x.value)); }}
-				options={options?.map(x => ({label: x.name, value: x}))} {...kv} />
+				options={options?.map(x => ({label: x.name, value: x})) || []} {...kv} />
 		</Box>
 	);
 }
