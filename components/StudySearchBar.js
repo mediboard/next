@@ -64,7 +64,7 @@ export default function StudySearchBar(props) {
 					<ConditionMultiSelect
 						setConditions={setConditions}
 						conditions={conditions} 
-						initialNames={router.query.conditions?.split(',')}/>
+						initialNames={router.query.conditions && router.query.conditions?.split(',')}/>
 				</Box>
 				<Box h='100%' w='1px' bg='#cccccc'/>
 
@@ -72,7 +72,7 @@ export default function StudySearchBar(props) {
 					<Text ml={4} fontWeight='500'>{'Treatments'}</Text>
 					<TreatmentMultiSelect
 						setTreatments={setTreatments}
-						initialNames={router.query.treatments?.split(',')}
+						initialNames={router.query.treatments && router.query.treatments?.split(',')}
 						treatments={treatments}/>
 				</Box>
 				<Box h='100%' w='1px' bg='#cccccc'/>
@@ -100,7 +100,7 @@ export default function StudySearchBar(props) {
 					<ConditionMultiSelect w='100%'
 						setConditions={setConditions}
 						condtions={conditions}
-						initialNames={router.query.conditions?.split(',')}/>
+						initialNames={router.query.conditions && router.query.conditions?.split(',')}/>
 				</Box>
 				<IconButton bg='black' onClick={onFilterClick} icon={<FilterIcon fill='white' />} />
 

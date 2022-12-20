@@ -10,7 +10,8 @@ export default function TreatmentMultiSelect(props) {
 	const [options, setOptions] = useState([]);
 
 	useEffect(() => {
-		if (initialNames?.length && initialNames?.length !== treatments?.length) {
+		if (initialNames?.length && (initialNames?.length !== treatments?.length)) {
+			console.log(initialNames);
 			preLoadTreatments();
 		}
 	}, [initialNames?.length])
@@ -30,6 +31,7 @@ export default function TreatmentMultiSelect(props) {
 		const existingTreatments = treatments?.filter(x => initialNames?.includes(x.name));
 		const diffedNames = initialNames.filter(x => !existingTreatments.map(c => c.name).includes(x));
 
+		console.log(diffedNames + 'initialNames: ' + initialNames);
 		const newTreatments = await fetchTreatments(diffedNames);
 		setTreatments([...treatments, ...newTreatments]);
 	}
@@ -69,7 +71,7 @@ export default function TreatmentMultiSelect(props) {
 				value={treatments?.map(x => ({label: x.name, value: x}))}
 				onInputChange={(value) => { searchTreatments(value) }}
 				onChange={(values) => { setTreatments(values?.map(x => x.value)); }}
-				options={options?.map(x => ({label: x.name, value: {...x}}))} {...kv} />
+				options={options?.map(x => ({label: x.name, value: {...x}})) || []} {...kv} />
 		</Box>
 	);
 }
