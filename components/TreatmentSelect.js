@@ -8,6 +8,7 @@ export default function TreatmentSelect(props) {
 	const {
 		setSelectedTreatment,
 		selectedTreatment,
+		creatable,
 		disabled,
 		...kv
 	} = props;
@@ -19,10 +20,49 @@ export default function TreatmentSelect(props) {
 		}
 
 		treatmentHttpClient.search(query).then(response => {
-			setTreatments(response);
+			setTreatments((prev) => {
+				let toAdd = [...response];
+
+				const createOption = prev.filter(x => x.type === 'new')?.[0]
+				if (createOption) {
+					toAdd.push(createOption);
+				}
+
+				return toAdd;
+			});
+
 		}).catch(error => {
 			console.log(error);
 		})
+	}
+
+	async function createNewTreatment(name) {
+		treatmentHttpClient.createTreatment({
+			'name': name,
+			'description': '',
+			'from_study': false,
+			'no_studies': -1,
+			'no_prescriptions': -1
+		}).then(data => {
+			setSelectedTreatment(data?.treatment);
+		}).catch(error => {
+			console.log(error);
+		})
+	}
+
+	function onChange(value) {
+		if (value?.type === 'new') {
+			createNewTreatment(value.name);
+			return;
+		}
+
+		setSelectedTreatment(value);
+	}
+
+	function onInputChange(value) {
+		searchTreatments(value);
+
+		setTreatments(prev => ([...prev, {name: value, type: 'new'}]))
 	}
 
 	return (
@@ -32,8 +72,8 @@ export default function TreatmentSelect(props) {
   		size='md'
   		borderColor='purple.300'
   		value={selectedTreatment}
-			onInputChange={(value) => { searchTreatments(value) }}
-			onChange={(value) => { setSelectedTreatment(value?.value) }}
+			onInputChange={(value) => { onInputChange(value) }}
+			onChange={(value) => { onChange(value?.value) }}
 			options={treatments.map(x => ({label: x.name, value: {...x}}))} />
 		</Box>
 	);

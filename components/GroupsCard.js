@@ -66,6 +66,7 @@ export default function GroupsCard({groupData, index}) {
 		studyHttpClient.addAdmin({
 			treatment: treatment?.id,
 			group: groupData?.id,
+      annotated: true,
 			description: ''
 		}).then(data => {
 			const newAdmin = data?.admin;

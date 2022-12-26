@@ -27,7 +27,6 @@ export default function TreatmentMultiSelect(props) {
 	}
 
 	async function preLoadTreatments() {
-		//Fill in existing treatments
 		const existingTreatments = treatments?.filter(x => initialNames?.includes(x.name));
 		const diffedNames = initialNames.filter(x => !existingTreatments.map(c => c.name).includes(x));
 

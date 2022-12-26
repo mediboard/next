@@ -399,6 +399,21 @@ class TreatmentHttpClient {
 
 		return data;
 	}
+
+	async createTreatment(treatmentData) {
+		let config ={ url: this.base + '/treatments/new' }
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.post(uri, treatmentData);
+		if (response.status !== 200) {
+			throw new Error("Failed to create new treatment, status: " + response.status);
+		}
+
+		const data = await response.data;
+
+		return data;
+
+	}
 }
 
 export default new TreatmentHttpClient(cache, AppConfig.api_url);
