@@ -54,7 +54,7 @@ export default function ComparisonSelectors(props) {
 	}
 
 	function removeTreatment(treatmentName) {
-		router.query.treatments = router.query.treatments?.split(',')?.filter(x => x !== treatmentName);
+		router.query.treatments = router.query.treatments?.split(',')?.filter(x => x !== treatmentName).join(',');
 		router.push(router, undefined, { shallow: true });
 	}
 
@@ -75,7 +75,7 @@ export default function ComparisonSelectors(props) {
 	}
 
 	function onClick(treatmentName) {
-		if (location?.search?.includes(treatmentName?.replaceAll(' ', '+'))) {
+		if (router.query.treatments?.includes(treatmentName?.replaceAll(' ', '+'))) {
 			removeTreatment(treatmentName);
 			return;
 		}

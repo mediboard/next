@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { 
-	Box, 
-	Text, 
+	Box,
+  Button,
+	Text,
 	Badge,
 	VStack,
 	HStack,
 	Flex,
-	Heading, 
+	Heading,
 	IconButton,
 	Divider } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
@@ -43,6 +44,30 @@ function TreatmentCard(props) {
 				icon={<CloseIcon color='purple.300' />} />
 		</Flex>
 	);
+}
+
+
+function ApproveButton(props) {
+  const { groupId, annotated, ...kv } = props;
+
+  const [isDisabled, setIsDisabled] = useState(annotated);
+
+  function onClick() {
+    studyHttpClient.updateGroup(groupId, { annotated: true }).then(data => {
+      setIsDisabled(true);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+
+  return (
+    <Button 
+      isDisabled={isDisabled}
+      onClick={onClick}
+      bg='green.300'>
+    {'Approve'}
+    </Button>
+  );
 }
 
 
@@ -84,21 +109,6 @@ export default function GroupsCard({groupData, index}) {
 			flexDirection='column'
 			border={'4px solid '+groupData.color} 
 			overflowWrap='breakWord'>
-{/*      <Flex 
-        bg={groupData.color}
-        w={10}
-        h={10}
-        alignItems='center'
-        justifyContent='center'
-        borderRadius='50%'>
-        <Text
-        	fontWeight='600'
-        	fontSize='18px'
-        	color='white'>
-        	{index + 1}
-        </Text>
-      </Flex>
-*/}		
 			<Flex alignItems='center'>
 				<Text
 					w='100%'
@@ -120,6 +130,7 @@ export default function GroupsCard({groupData, index}) {
 					onCloseClick={isAdminUser(user?.username) ? () => onCloseClick(x.admin_id) : undefined}/>
 			))}
 			{	isAdminUser(user?.username) && <TreatmentSelect w='100%' setSelectedTreatment={onSelect} /> }
+      { isAdminUser(user?.username) && <ApproveButton groupId={groupData.id} annotated={groupData.annotated} /> }
 			</Flex>
 			{/*<Text whiteSpace='normal' fontWeight='400'>{groupData.description}</Text>*/}
 		</Card>
