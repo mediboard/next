@@ -4,6 +4,7 @@ import { ColorModeScript } from '@chakra-ui/react';
 import { theme } from './_app';
 import SlideBody from '../components/slides/SlideBody';
 import Title from '../components/slides/Title';
+import Team from '../components/slides/Team';
 
 
 export default function Demo() {
@@ -26,6 +27,7 @@ function Main() {
 	return (
 		<SlideBody p={10}>
 		{ (page === '1' || !page) && <Title /> }
+		{ (page === '2') && <Team /> }
 
 		</SlideBody>
 	);
