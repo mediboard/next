@@ -11,7 +11,7 @@ import {
 export default function Team() {
 	return (
 		<Flex alignItems='center' justifyContent='center' w='100%'>
-			<Image src='/TeamSlide.svg' width='1200' height='600' />
+			<Image src='/TeamSlide.svg' width='1600' height='600' />
 		</Flex>
 	);
 

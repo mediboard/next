@@ -24,7 +24,6 @@ const treatments = [
   }
 ];
 
-
 export default function Results() {
   return (
     <Flex flexDirection='column' rowGap={10} alignItems='center' w='100%'>
