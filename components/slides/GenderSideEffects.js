@@ -3,9 +3,11 @@ import {
   Switch,
   FormControl,
   FormLabel,
+  Heading,
   Flex
 } from '@chakra-ui/react';
 import EffectsDataWrapper from '../EffectsDataWrapper';
+import RadioGroup from '../RadioGroup';
 
 
 const treatments = [
@@ -17,20 +19,20 @@ const treatments = [
 ];
 
 export default function GenderSideEffects() {
-  const [isFemaleOnly, setIsFemaleOnly] = useState(false);
+  const [genderFilter, setGenderFilter] = useState('ALL');
 
   return (
-    <Flex flexDirection='column' w='100%'>
-      <FormControl display='flex' alignItems='center'>
-        <FormLabel>{'Is female only'}</FormLabel>
-        <Switch
-          isChecked={isFemaleOnly} 
-          onChange={() => setIsFemaleOnly(!isFemaleOnly)}/>
-      </FormControl>
+    <Flex flexDirection='column' w='100%' rowGap={10} alignItems='center'>
+      <Heading>{'Side effects differ by gender'}</Heading>
+      <RadioGroup
+        name={'gender'}
+        onChange={setGenderFilter}
+        defaultValue={'ALL'}
+        options={['MALE', 'ALL', 'FEMALE']}/>
 
       <EffectsDataWrapper
         treatments={treatments}
-        filters={isFemaleOnly ? {gender: 'FEMALE'} : undefined} />
+        filters={genderFilter ? {gender: genderFilter} : undefined} />
     </Flex>
   );
 }

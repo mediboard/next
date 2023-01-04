@@ -1,7 +1,9 @@
 import {
-  Flex
+  Flex,
+  Heading
 } from '@chakra-ui/react';
 import FixedMeasuresDeck from '../FixedMeasuresDeck';
+import {EffectLegendItem} from '../EffectsComparisonStack';
 
 
 const conditionInfo = {
@@ -25,7 +27,13 @@ const treatments = [
 
 export default function Results() {
   return (
-    <Flex>
+    <Flex flexDirection='column' rowGap={10} alignItems='center' w='100%'>
+      <Heading>{'Comparing Insomnia Treatments'}</Heading>
+      <Flex columnGap={3}>
+      {treatments?.map(treatment => (
+        <EffectLegendItem key={treatment?.id} effect={treatment} />
+      ))}
+      </Flex>
       <FixedMeasuresDeck 
         conditionId={conditionInfo.id}
         treatments={treatments}/>

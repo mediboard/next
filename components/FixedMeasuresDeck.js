@@ -52,7 +52,10 @@ export default function FixedMeasuresDeck(props) {
 
   return (
     <VStack>
-    {measureGroups.map(group => (
+    {measureGroups?.filter(group => ![
+      'Irrelevant', 
+      'Quality of Sleep', 
+      'Adverse Events'].includes(group.name))?.map(group => (
       <FixedMeasureGroupCard 
         title={group.name}
         group={group}

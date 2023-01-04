@@ -66,8 +66,6 @@ export default function FixedMeasureGroupCard(props) {
       return (
         <div className="custom-tooltip">
           <p className="label">{`${payload[0].payload.measure_title}`}</p>
-          <p className="label">{`${payload[0].payload.study}`}</p>
-          <p className="label">{`${payload[0].payload.fill}`}</p>
         </div>
       )
     }
