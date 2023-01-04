@@ -11,7 +11,8 @@ import {
   YAxis, 
   ZAxis,
   Tooltip,
-  ResponsiveContainer, 
+  ResponsiveContainer,
+  Cell,
   Label,
 } from 'recharts';
 import Tile from './Tile';
@@ -81,7 +82,13 @@ export default function FixedMeasureGroupCard(props) {
         <YAxis type="number" dataKey="cat" range={[0,3]} name="name" />
         {measures?.map((data, i) => (
           <Scatter key={i + '-scatter'}
-            data={prepOutcomes4Chart(data, i)} />
+            data={prepOutcomes4Chart(data, i)}>
+            {prepOutcomes4Chart(data, i)?.map((point, index) => (
+              <Cell key={index}
+                cursor='pointer'
+                onClick={() => {window.open(`/studies/${point.study}`)}}/>
+            ))}
+          </Scatter>
         ))}
         <Tooltip content={CustomTooltip} cursor={{ strokeDasharray: '3 3' }} wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }} />
       </ScatterChart>
