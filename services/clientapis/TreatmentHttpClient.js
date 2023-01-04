@@ -56,16 +56,14 @@ class TreatmentHttpClient {
 		return finalData;
 	}
 
-	async getEffects(drug, limit=0) {
+	async getEffects(drug, limit=20, args=undefined) {
 		let config = {
 			url: this.base + '/treatments/'+drug+'/effects',
 			params: { limit: limit }
 		};
-		let uri = this.instance.getUri(config);
+		if (args) config.params = { ...config.params, ...args };
 
-		if (this.checkCache(uri)) {
-			return this.checkCache(uri);
-		}
+		let uri = this.instance.getUri(config);
 
 		const response = await axios.get(uri);
 		if (response.status !== 200) {

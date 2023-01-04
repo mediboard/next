@@ -6,6 +6,7 @@ import SlideBody from '../components/slides/SlideBody';
 import Title from '../components/slides/Title';
 import Team from '../components/slides/Team';
 import SideEffects from '../components/slides/SideEffects';
+import GenderSideEffects from '../components/slides/GenderSideEffects';
 import Results from '../components/slides/Results';
 
 
@@ -31,7 +32,8 @@ function Main() {
 		{ (page === '1' || !page) && <Title /> }
 		{ (page === '2') && <Team /> }
 		{ (page === '3') && <SideEffects /> }
-		{ (page === '4') && <Results /> }
+		{ (page === '4') && <GenderSideEffects /> }
+		{ (page === '5') && <Results /> }
 		</SlideBody>
 	);
 }

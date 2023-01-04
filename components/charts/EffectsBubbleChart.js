@@ -70,7 +70,7 @@ export default function EffectsBubbleChart(props) {
 		if (vizAnchor && data?.length && clientWidth) {
 			renderChart(vizAnchor.current, clientWidth);
 		}
-	}, [vizAnchor, data?.length, clientWidth])
+	}, [vizAnchor, data, clientWidth])
 
 	function renderChart(el, clientWidth) {
 		const minMaxs = createMinMaxs(data);
