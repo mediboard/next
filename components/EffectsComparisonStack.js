@@ -37,7 +37,7 @@ function flattenData(effectsGroups) {
 				fill: group.fill,
 				effectName: capitalizeEachWord(effect.name),
 				noStudies: 4,
-				freq: Math.round((effect.no_effected / effect.no_at_risk) * 1000) /10,
+				freq: Math.round((effect.no_effected / effect.at_risk) * 1000) /10,
 				key: effect.name + '-' + group.name
 			})),
 			...disjointEffects.map(effect => ({

@@ -14,13 +14,6 @@ export default function SlideBody(props) {
 	}
 
 	useEffect(() => {
-		if (!router.query.page) {
-			router.query.page = '1';
-			router.push(router, undefined, { shallow: true });
-		}
-	}, [router.query.page])
-
-	useEffect(() => {
 		document.addEventListener('keydown', onKeydown);
 
 		return () => {
@@ -29,11 +22,23 @@ export default function SlideBody(props) {
 	}, [])
 
 	function pageUp() {
+		if (!router.query.page) {
+			router.query.page = '2' 
+			router.push(router, undefined, { shallow: true });
+			return;
+		}
+
 		router.query.page = (parseInt(router.query.page) + 1).toString();
 		router.push(router, undefined, { shallow: true });
 	}
 
 	function pageDown() {
+		if (!router.query.page) {
+			router.query.page = '1' 
+			router.push(router, undefined, { shallow: true });
+			return;
+		}
+		
 		router.query.page = (parseInt(router.query.page) - 1).toString();
 		router.push(router, undefined, { shallow: true });
 	}

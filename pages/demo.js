@@ -5,6 +5,7 @@ import { theme } from './_app';
 import SlideBody from '../components/slides/SlideBody';
 import Title from '../components/slides/Title';
 import Team from '../components/slides/Team';
+import SideEffects from '../components/slides/SideEffects';
 
 
 export default function Demo() {
@@ -28,7 +29,7 @@ function Main() {
 		<SlideBody p={10}>
 		{ (page === '1' || !page) && <Title /> }
 		{ (page === '2') && <Team /> }
-
+		{ (page === '3') && <SideEffects /> }
 		</SlideBody>
 	);
 }
