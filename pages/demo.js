@@ -40,22 +40,22 @@ function Main() {
 	
 	return (
 		<SlideBody p={10}>
-		{ (page === '1' || !page) && <Title /> }
-		{ (page === '2') && <Team /> }
-		{ (page === '3') && <Problem /> }
-		{ (page === '4') && <Inspiration /> }
-		{ (page === '5') && <Platform /> }
-		{ (page === '6') && <Accessible /> }
-		{ (page === '7') && <Transparent /> }
-		{ (page === '8') && <Relevant /> }
-		{ (page === '9') && <SideEffects /> }
-		{ (page === '10') && <GenderSideEffects /> }
-		{ (page === '11') && <Results /> }
-		{ (page === '12') && <Data /> }
-		{ (page === '13') && <Competition /> }
-		{ (page === '14') && <Partners /> }
-		{ (page === '15') && <Ask /> }
-		{ (page === '16') && <Timeline /> }
+		{ (page === '0' || !page) && <Title /> }
+		{ (page === '1') && <Team /> }
+		{ (page === '2') && <Problem /> }
+		{ (page === '3') && <Inspiration /> }
+		{ (page === '4') && <Platform /> }
+		{ (page === '5') && <Accessible /> }
+		{ (page === '6') && <Transparent /> }
+		{ (page === '7') && <Relevant /> }
+		{ (page === '8') && <SideEffects /> }
+		{ (page === '9') && <GenderSideEffects /> }
+		{ (page === '10') && <Results /> }
+		{ (page === '11') && <Data /> }
+		{ (page === '12') && <Competition /> }
+		{ (page === '13') && <Partners /> }
+		{ (page === '14') && <Ask /> }
+		{ (page === '15') && <Timeline /> }
 		</SlideBody>
 	);
 }
