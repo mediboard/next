@@ -15,7 +15,7 @@ import { capitalizeEachWord } from '../utils';
 import SectionHeader from './SectionHeader';
 
 
-function EffectLegendItem({effect}) {
+export function EffectLegendItem({effect}) {
 	return (
 		<Flex border={`2px solid ${effect?.fill}`} pr={2} alignItems='center' borderRadius={15}>
 			<Box h={5} w={5} mr={2} bg={effect?.fill} borderRadius='50%'/>
@@ -87,7 +87,7 @@ export default function EffectsComparisonStack(props) {
 			</Show>
 
 			<Flex justifyContent='center' w={'100%'} maxH={isExpanded ? '100%' : '650px'} overflow='hidden'>
-				{effectsGroups.every(x=>x.effects)? <EffectsBubbleChart data={flattenData(effectsGroups)} 
+				{effectsGroups?.every(x=>x.effects)? <EffectsBubbleChart data={flattenData(effectsGroups)} 
 						showStudies={false}
 						groups={effectsGroups.map(x => ({treatName: x.name, fill: x.fill}))}
 						margin={{left: 20, top: 20, right: 50, bottom: 20}}/> : <Spacer/>}

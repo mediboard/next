@@ -56,16 +56,14 @@ class TreatmentHttpClient {
 		return finalData;
 	}
 
-	async getEffects(drug, limit=0) {
+	async getEffects(drug, limit=20, args=undefined) {
 		let config = {
 			url: this.base + '/treatments/'+drug+'/effects',
 			params: { limit: limit }
 		};
-		let uri = this.instance.getUri(config);
+		if (args) config.params = { ...config.params, ...args };
 
-		if (this.checkCache(uri)) {
-			return this.checkCache(uri);
-		}
+		let uri = this.instance.getUri(config);
 
 		const response = await axios.get(uri);
 		if (response.status !== 200) {
@@ -398,6 +396,21 @@ class TreatmentHttpClient {
 		const data = await response.data;
 
 		return data;
+	}
+
+	async createTreatment(treatmentData) {
+		let config ={ url: this.base + '/treatments/new' }
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.post(uri, treatmentData);
+		if (response.status !== 200) {
+			throw new Error("Failed to create new treatment, status: " + response.status);
+		}
+
+		const data = await response.data;
+
+		return data;
+
 	}
 }
 

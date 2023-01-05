@@ -26,8 +26,8 @@ export default function StudySearchBar(props) {
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const [conditionNames, setConditionNames] = useState([]);
-	const [treatmentNames, setTreatmentNames] = useState([]);
+	const [conditions, setConditions] = useState([]);
+	const [treatments, setTreatments] = useState([]);
 	const [query, setQuery] = useState(undefined);
 
 	function onFilterClick() {
@@ -35,10 +35,10 @@ export default function StudySearchBar(props) {
 	}
 
 	function onSearchClick() {
-		const treats = treatmentNames.join(',');
-		const conditions = conditionNames.join(',');
+		const treats = treatments?.map(x => x.name).join(',');
+		const conditionNames = conditions?.map(x => x.name).join(',');
 
-		router.push(`/studies/browse/?treatments=${treats}&conditions=${conditions}&q=${query || ''}`, undefined, { shallow: true });
+		router.push(`/studies/browse/?treatments=${treats}&conditions=${conditionNames}&q=${query || ''}`, undefined, { shallow: true });
 	}
 
 	return (
@@ -61,13 +61,19 @@ export default function StudySearchBar(props) {
 			<Flex alignItems='center' w='50%'>
 				<Box w='100%'>
 					<Text ml={4} fontWeight='500'>{'Conditions'}</Text>
-					<ConditionMultiSelect setConditionNames={setConditionNames} conditionNames={conditionNames}/>
+					<ConditionMultiSelect
+						setConditions={setConditions}
+						conditions={conditions} 
+						initialNames={router.query.conditions && router.query.conditions?.split(',')}/>
 				</Box>
 				<Box h='100%' w='1px' bg='#cccccc'/>
 
 				<Box w='100%'>
 					<Text ml={4} fontWeight='500'>{'Treatments'}</Text>
-					<TreatmentMultiSelect setTreatmentNames={setTreatmentNames} treatmentNames={treatmentNames}/>
+					<TreatmentMultiSelect
+						setTreatments={setTreatments}
+						initialNames={router.query.treatments && router.query.treatments?.split(',')}
+						treatments={treatments}/>
 				</Box>
 				<Box h='100%' w='1px' bg='#cccccc'/>
 			</Flex>
@@ -91,14 +97,17 @@ export default function StudySearchBar(props) {
 			<Show below='md'>
 				<Box w='100%'>
 					<Text fontWeight='500' fontSize='15px' ml={4} textAlign='left'>{'Conditions'}</Text>
-					<ConditionMultiSelect w='100%' setConditionNames={setConditionNames} conditionNames={conditionNames}/>
+					<ConditionMultiSelect w='100%'
+						setConditions={setConditions}
+						condtions={conditions}
+						initialNames={router.query.conditions && router.query.conditions?.split(',')}/>
 				</Box>
 				<IconButton bg='black' onClick={onFilterClick} icon={<FilterIcon fill='white' />} />
 
 				<StudyFilterModal
 					setSearchString={setQuery}
-					setConditions={setConditionNames}
-					setTreatments={setTreatmentNames}
+					setConditions={setConditions}
+					setTreatments={setTreatments}
 					isOpen={isModalOpen} 
 					onSearchClick={onSearchClick}
 					onClose={() => setIsModalOpen(false)} />

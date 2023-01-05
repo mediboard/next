@@ -70,7 +70,7 @@ export default function EffectsBubbleChart(props) {
 		if (vizAnchor && data?.length && clientWidth) {
 			renderChart(vizAnchor.current, clientWidth);
 		}
-	}, [vizAnchor, data?.length, clientWidth])
+	}, [vizAnchor, data, clientWidth])
 
 	function renderChart(el, clientWidth) {
 		const minMaxs = createMinMaxs(data);
@@ -110,6 +110,8 @@ export default function EffectsBubbleChart(props) {
 			.domain([0, Math.min(maxVal+5, 100)])
 			.range([ 0, width]);
 
+		const t = svg.transition().duration(750);
+
 		svg.select("#x-axis")
 			.call(d3.axisTop(x).ticks(noXTicks).tickFormat(d => d + '%'))
 			.attr("stroke-width", "0px")
@@ -127,7 +129,7 @@ export default function EffectsBubbleChart(props) {
 			.attr('y1', 0)
 			.attr('y2', height)
 			.attr("stroke-width", "1px")
-			.attr("stroke", "#cccccc");
+			.attr("stroke", "#cccccc")
 
 		svg.select("#x-axis")
 			.selectAll(".tick")
@@ -142,7 +144,6 @@ export default function EffectsBubbleChart(props) {
 			.call(d3.axisLeft(y).tickFormat(() => ""))
 			.attr("stroke-width", "0px");
 
-		const t = svg.transition().duration(750);
 
 		svg.selectAll(".coolLine")
 			.data(minMaxs)

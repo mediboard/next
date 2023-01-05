@@ -128,6 +128,16 @@ class StudyHttpClient {
 		return data;
 	}
 
+	async updateGroup(groupId, group) {
+		const response = await axios.put(AppConfig.api_url+'/studies/groups/'+groupId, group);
+		if (response.status !== 200) {
+			throw new Error("Failed to update group, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
 	async addInsight(study_id, insight) {
 		const response = await axios.post(AppConfig.api_url+'/studies/'+study_id+'/insights', insight);
 		if (response.status !== 200) {

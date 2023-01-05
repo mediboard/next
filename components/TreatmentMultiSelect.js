@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Select } from 'chakra-react-select';
 import treatmentHttpClient from '../services/clientapis/TreatmentHttpClient';
 import { Box } from '@chakra-ui/react';
 
 
 export default function TreatmentMultiSelect(props) {
-	const { treatmentNames, setTreatmentNames, ...kv } = props;
+	const { treatments, setTreatments, initialNames, ...kv } = props;
 
 	const [options, setOptions] = useState([]);
+
+	useEffect(() => {
+		if (initialNames?.length && (initialNames?.length !== treatments?.length)) {
+			console.log(initialNames);
+			preLoadTreatments();
+		}
+	}, [initialNames?.length])
 
 	async function searchTreatments(query) {
 		if (query === '' || query == null) { return; }
@@ -18,6 +25,24 @@ export default function TreatmentMultiSelect(props) {
 			console.log(error);
 		})
 	}
+
+	async function preLoadTreatments() {
+		const existingTreatments = treatments?.filter(x => initialNames?.includes(x.name));
+		const diffedNames = initialNames.filter(x => !existingTreatments.map(c => c.name).includes(x));
+
+		console.log(diffedNames + 'initialNames: ' + initialNames);
+		const newTreatments = await fetchTreatments(diffedNames);
+		setTreatments([...treatments, ...newTreatments]);
+	}
+
+	async function fetchTreatments(names) {
+		const newTreatments = await Promise.all(names.map(async name => (
+			await treatmentHttpClient.getTreatment(name)
+		)));
+
+		return await newTreatments;
+	}
+
 
 	return (
 		<Box w='100%'>
@@ -42,10 +67,10 @@ export default function TreatmentMultiSelect(props) {
 				}}
 				size='md'
 				borderColor='purple.300'
-				value={treatmentNames?.map(x => ({label: x, value: x}))}
+				value={treatments?.map(x => ({label: x.name, value: x}))}
 				onInputChange={(value) => { searchTreatments(value) }}
-				onChange={(values) => { setTreatmentNames(values?.map(x => x.value.name.toLowerCase())); }}
-				options={options?.map(x => ({label: x.name, value: {...x}}))} {...kv} />
+				onChange={(values) => { setTreatments(values?.map(x => x.value)); }}
+				options={options?.map(x => ({label: x.name, value: {...x}})) || []} {...kv} />
 		</Box>
 	);
 }
