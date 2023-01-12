@@ -18,6 +18,7 @@ import Data from '../components/slides/Data';
 import Competition from '../components/slides/Competition';
 import Partners from '../components/slides/Partners';
 import Ask from '../components/slides/Ask';
+import Growth from '../components/slides/Growth';
 import Timeline from '../components/slides/Timeline';
 
 
@@ -48,14 +49,15 @@ function Main() {
 		{ (page === '5') && <Accessible /> }
 		{ (page === '6') && <Transparent /> }
 		{ (page === '7') && <Relevant /> }
-		{ (page === '8') && <SideEffects /> }
-		{ (page === '9') && <GenderSideEffects /> }
-		{ (page === '10') && <Results /> }
-		{ (page === '11') && <Data /> }
+		{ (page === '8') && <Data /> }
+		{ (page === '9') && <SideEffects /> }
+		{ (page === '10') && <GenderSideEffects /> }
+		{ (page === '11') && <Results /> }
 		{ (page === '12') && <Competition /> }
 		{ (page === '13') && <Partners /> }
-		{ (page === '14') && <Ask /> }
+		{ (page === '14') && <Growth /> }
 		{ (page === '15') && <Timeline /> }
+		{ (page === '16') && <Ask /> }
 		</SlideBody>
 	);
 }

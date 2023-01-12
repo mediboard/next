@@ -104,8 +104,8 @@ function addGroupNames(analyticsData, groupData) {
 	return analyticsData?.map(analytic => {
 		analytic.groups = analytic.groups.map(group => ({
 			...group,
-			name: groupData.find(x => x.id === group.group)?.title,
-			fill: groupData.find(x => x.id === group.group)?.color
+			name: groupData.find(x => x.id === group.id)?.title,
+			fill: groupData.find(x => x.id === group.id)?.color
 		}));
 
 		return analytic;

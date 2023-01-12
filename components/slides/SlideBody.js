@@ -50,7 +50,7 @@ export default function SlideBody(props) {
 			return;
 		}
 
-		router.query.page = ((parseInt(router.query.page) + 1) % 16).toString();
+		router.query.page = ((parseInt(router.query.page) + 1) % 17).toString();
 		router.push(router, undefined, { shallow: true });
 	}
 
@@ -67,7 +67,7 @@ export default function SlideBody(props) {
 			return;
 		}
 		
-		router.query.page = ((parseInt(router.query.page) - 1) % 16).toString();
+		router.query.page = ((parseInt(router.query.page) - 1) % 17).toString();
 		router.push(router, undefined, { shallow: true });
 	}
 
