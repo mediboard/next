@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import VerticalTextCard from './VerticalTextCard';
 import DemographicsChart from './charts/DemographicsChart';
 import { 
@@ -5,12 +6,17 @@ import {
 	Heading,
 	Text,
 	Flex,
+	Button,
 	Show,
 	Hide,
 	VStack } from '@chakra-ui/react';
 import AttributeSummaryCard from './AttributeSummaryCard';
 import BaselinesPage from './BaselinesPage';
 import StudySection from './StudySection';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { isAdminUser } from '../utils';
+import { toPng } from 'html-to-image';
+import download from 'downloadjs';
 
 
 function groupBaselinesByBase(data) {
@@ -93,12 +99,25 @@ let colorWheel = [
 export default function BaselinesDeck(props) {
 	const { studyId, fullPage, baselines, ...kv } = props;
 
+  const { user } = useAuthenticator((context) => [context.user]);
+
+	const chartRef = useRef(undefined);
+
 	if (fullPage) {
 		return <BaselinesPage studyId={studyId} baselines={groupBaselinesByBase(baselines)} />
 	}
 
+	function onClick() {
+		toPng(chartRef.current).then(function (dataUrl) {
+			download(dataUrl, 'my-node.png');
+		});
+	}
+
 	return (
+		<>
+		{	isAdminUser(user?.username) && <Button onClick={onClick}>Download Chart</Button> }
 		<StudySection header='Participants'>
+		<Box ref={chartRef}>
 			<Flex w='100%'
 				flexWrap='wrap'
 				rowGap={5}
@@ -156,6 +175,8 @@ export default function BaselinesDeck(props) {
 					</AttributeSummaryCard>
 				</Flex>	
 			</Flex>
+		</Box>
 		</StudySection>
+		</>
 	);
 }
