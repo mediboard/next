@@ -1,18 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
 	Flex,
 	Spacer,
 	Box,
 	Text,
 	Heading,
+	Button,
 	VStack,
 	Show,
 	Hide,
 	Skeleton
 } from '@chakra-ui/react';
 import EffectsBubbleChart from './charts/EffectsBubbleChart';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import { capitalizeEachWord } from '../utils';
+import { isAdminUser } from '../utils';
 import SectionHeader from './SectionHeader';
+import { toPng } from 'html-to-image';
+import download from 'downloadjs';
 
 
 export function EffectLegendItem({effect}) {
@@ -56,15 +61,24 @@ export default function EffectsComparisonStack(props) {
 	const {effectsGroups, ...kv }  = props;
 
 	const [isExpanded, setIsExpanded] = useState(false);
+	const chartRef = useRef(undefined);
 
+  const { user } = useAuthenticator((context) => [context.user]);
 
 	function onExpandClick() {
 		setIsExpanded(!isExpanded);
 	}
 
+	function onClick() {
+		toPng(chartRef.current).then(function (dataUrl) {
+			download(dataUrl, 'my-node.png');
+		});
+	}
+
 	return (
 		<Flex flexDirection='column' gap={5} w='100%'>
 			<Hide below='md'>
+			{	isAdminUser(user?.username) && <Button onClick={onClick}>Download Chart</Button> }
 			<Flex w='100%' pl='20px' pr='50px' alignItems='center'>
 				<Flex flexWrap='wrap' w='40%' gap={2}>
 				{effectsGroups?.map(x => (
@@ -86,7 +100,7 @@ export default function EffectsComparisonStack(props) {
 			</Flex>
 			</Show>
 
-			<Flex justifyContent='center' w={'100%'} maxH={isExpanded ? '100%' : '650px'} overflow='hidden'>
+			<Flex ref={chartRef} justifyContent='center' w={'100%'} maxH={isExpanded ? '100%' : '650px'} overflow='hidden'>
 				{effectsGroups?.every(x=>x.effects)? <EffectsBubbleChart data={flattenData(effectsGroups)} 
 						showStudies={false}
 						groups={effectsGroups.map(x => ({treatName: x.name, fill: x.fill}))}

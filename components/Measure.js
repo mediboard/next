@@ -60,7 +60,6 @@ export default function Measure(props) {
 			<StudySection header='Description'>
 				<ExpandableText ref={expandRef} textAlign='center' noOfLines={2}><Text>{measureData?.description}</Text></ExpandableText>
 			</StudySection>
-			{	isAdminUser(user?.username) && <Button onClick={onClick}>Download Chart</Button> }
 
 			<StudySection header='Groups'>
 	 			<GroupsDeck groups={groupData} />
@@ -76,6 +75,7 @@ export default function Measure(props) {
 			}
 
 			<StudySection header='Data'>
+			{	isAdminUser(user?.username) && <Button onClick={onClick}>Download Chart</Button> }
 				<Box ref={chartRef} h='100%'>
 					<Text textAlign='center'>{measureData?.title}</Text>
 					<OutcomeDataChart 
@@ -84,12 +84,12 @@ export default function Measure(props) {
 						borderRadius: 4,
 						outcomes: measureData?.outcomes?.map(x => (addGroupProps(x, groupData))), 
 						groups: groupData}} /> 
-					<OutcomeTable
-						mt={[0, 7]}
-						borderRadius={4}
-						border='1px solid #cccccc'
-						outcomes={measureData?.outcomes?.map(x => (addGroupProps(x, groupData)))}/>
 				</Box>
+				<OutcomeTable
+					mt={[0, 7]}
+					borderRadius={4}
+					border='1px solid #cccccc'
+					outcomes={measureData?.outcomes?.map(x => (addGroupProps(x, groupData)))}/>
 			</StudySection>
 
 		</VStack>
