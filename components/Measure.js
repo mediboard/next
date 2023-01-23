@@ -62,7 +62,7 @@ export default function Measure(props) {
 			</StudySection>
 
 			<StudySection header='Groups'>
-	 			<GroupsDeck groups={groupData} />
+	 			<GroupsDeck groups={groupData || []} />
 			</StudySection>
 
 			{measureData?.analytics?.length && 

@@ -37,14 +37,16 @@ export default function Search() {
 
   return (
     <PageBody>
-      <Flex>
-        <Input onChange={(e) => setInput(e.target.value)}/>
-        <IconButton onClick={onSearchClick} icon={<SearchIcon />}/>
-      </Flex>
-      <Flex flexDirection='column'>
-      {measures?.map(measure => (
-        <MeasuresTile measure={measure}/>
-      ))}
+      <Flex flexDirection='column' p={8} pl={'10%'} pr={'10%'} w='100%'>
+        <Flex>
+          <Input onChange={(e) => setInput(e.target.value)}/>
+          <IconButton onClick={onSearchClick} icon={<SearchIcon />}/>
+        </Flex>
+        <Flex flexDirection='column' mt={8}>
+        {measures?.map(measure => (
+          <MeasuresTile key={measure.id} measure={measure} variant='expandable'/>
+        ))}
+        </Flex>
       </Flex>
     </PageBody>
   )
