@@ -76,8 +76,8 @@ export default function GroupsCard({groupData, index}) {
   const { user } = useAuthenticator((context) => [context.user]);
 
 	useEffect(() => {
-		if (groupData?.administrations?.length > 0) {
-			setCurrentTreatments(groupData?.administrations);
+		if ((groupData?.administrations?.length > 0) || (groupData?.treatments?.length > 0)) {
+			setCurrentTreatments(groupData?.administrations || groupData?.treatments);
 		}
 	}, [groupData?.administrations?.length])
 
@@ -132,7 +132,6 @@ export default function GroupsCard({groupData, index}) {
 			{	isAdminUser(user?.username) && <TreatmentSelect w='100%' setSelectedTreatment={onSelect} /> }
       { isAdminUser(user?.username) && <ApproveButton groupId={groupData.id} annotated={groupData.annotated} /> }
 			</Flex>
-			{/*<Text whiteSpace='normal' fontWeight='400'>{groupData.description}</Text>*/}
 		</Card>
 	);
 }
