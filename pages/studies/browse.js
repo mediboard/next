@@ -13,11 +13,11 @@ import studyHttpClient from '../../services/clientapis/StudyHttpClient';
 import { theme } from '../_app';
 
 
-export async function getStaticProps(context) {
-	const featuredStudies = await studyHttpClient.getBannerStudies();
+// export async function getStaticProps(context) {
+// 	const featuredStudies = await studyHttpClient.getBannerStudies();
 
-	return {props: { featuredStudies: featuredStudies?.studies }};
-}
+// 	return {props: { featuredStudies: featuredStudies?.studies }};
+// }
 
 export default function StudyBrowse(props) {
 	return (
@@ -37,7 +37,7 @@ function Main(props) {
 					<Heading fontSize='18px'>{'Trending Studies: '}</Heading>
 					<Spacer />
 				</Flex>
-				<FeaturedStudiesDeck studies={props.featuredStudies}/>
+				{/*<FeaturedStudiesDeck studies={props.featuredStudies}/>*/}
 
 				<Flex flexDirection='column' w='100%' p={[5, 0]} gap={5}>
 					<StudySearchBar />
