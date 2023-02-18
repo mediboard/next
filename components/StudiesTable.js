@@ -11,8 +11,10 @@ import {
   Box,
   Text
 } from '@chakra-ui/react'
+import FilterModal from './FilterModal';
 import StudyTableRow from './StudyTableRow';
 import ExpandableDeck from './ExpandableDeck';
+import CheckableMenu from './CheckableMenu';
 import { ItemBadge } from './TreatmentCompareItem';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import {
@@ -23,25 +25,6 @@ import {
   flexRender,
 } from '@tanstack/react-table'
 
-
-const availableItems = [
-  'id',
-  'external ids',
-  'completed date',
-  'title',
-  'description',
-  'sponsor',
-  'phase',
-  'purpose',
-  'intervention type',
-  'age group',
-  'gender',
-  'has results',
-  'stopped reason',
-  'status',
-  'conditions',
-  'treatments'
-]
 
 function wrapText(text) {
   return (
@@ -97,32 +80,39 @@ function ConditionsDeck(props) {
 
 const StudyColumns = [
   {
+    id: 'id',
     accessorKey: 'id',
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    isVisible: true
   },
   {
     id: 'external ids',
     accessorFn: row => row.nct_id,
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    isVisible: true
   },
   {
+    id: 'conditions',
     accessorKey: 'conditions',
     cell: info => <ConditionsDeck>{info.getValue()}</ConditionsDeck>,
     footer: props => props.column.id,
+    isVisible: true
   },
   {
     id: 'completed date',
     accessorFn: row => row.completion_date,
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    isVisible: true
   },
   {
     id: 'title',
     accessorFn: row => row.short_title,
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    isVisible: true
   },
   {
     id: 'description',
@@ -131,21 +121,25 @@ const StudyColumns = [
     footer: props => props.column.id,
   },
   {
+    id: 'sponsor',
     accessorKey: 'sponsor',
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    isVisible: true
   },
   {
     id: 'phase',
     accessorFn: row => convertPhase(row.phase || 'PHASE_1'),
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    isVisible: true
   },
   {
     id: 'purpose',
     accessorFn: row => normalCase(row.purpose),
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    isVisible: true
   }
 ]
 
@@ -154,7 +148,6 @@ export default function StudiesTable(props) {
 
   const [studies, setStudies] = useState(() => []);
   const [noPages, setNoPages] = useState(undefined);
-  const [visibleItems, setVisibleItems] = useState(availableItems);
 
   const router = useRouter();
 
@@ -186,20 +179,23 @@ export default function StudiesTable(props) {
   }
 
   const [data, setData] = useState(() => [])
-  const [columns] = useState(() => [...StudyColumns])
+  const [columns, setColumns] = useState([...StudyColumns])
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columns.filter(col => col.isVisible),
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
   })
 
   return (
-    <Box borderWidth='1px' borderRadius='12px' overflowX='scroll' w='100%'>
+    <Box borderWidth='1px' maxW='100%' borderRadius='12px' overflowX='scroll' w='100%'>
+    <CheckableMenu
+      options={[...StudyColumns].map(x => ({...x, label: x.id}))}
+      onOptionToggle={(colId) => setColumns(columns.map(
+        col => (col.id == colId ? {...col, isVisible: !col.isVisible} : col)
+      ))}
+      selectedOptions={columns.filter(col => col.isVisible).map(x => x.id)}/>
     <Table w={table?.getCenterTotalSize()}>
       <Thead>
       {table.getHeaderGroups()?.map(headerGroup => (
@@ -225,6 +221,7 @@ export default function StudiesTable(props) {
               cursor='col-resize'
               background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
               opacity={header.column.getIsResizing() ? 1 : .5} />
+            <FilterModal columnId={'test'} name={'text'} type={'String'}/>
           </Th>
         ))}
         </Tr>
@@ -248,27 +245,4 @@ export default function StudiesTable(props) {
     </Table> 
     </Box>
   )
-
-  // return (
-  //   <TableContainer>
-  //     <Table variant='simple'>
-  //       <Thead>
-  //         <Tr>
-  //         {visibleItems.map(x => (
-  //           <Th key={x+'-key'}>
-  //           {x}
-  //           </Th>
-  //         ))}
-  //         </Tr>
-  //       </Thead>
-  //       <Tbody>
-  //       {studies.map(study => (
-  //         <StudyTableRow key={study.id+'-row'} 
-  //           study={study}
-  //           visibleItems={visibleItems}/>
-  //       ))}
-  //       </Tbody>
-  //     </Table>
-  //   </TableContainer>
-  // );
 }
