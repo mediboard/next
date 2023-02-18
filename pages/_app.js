@@ -15,6 +15,8 @@ import VerificationProvider from '../components/VerificationProvider';
 import AppLayout from '../components/AppLayout';
 import awsExports from '../aws-exports';
 
+import '../table.css'
+
 
 export const theme = extendTheme({
   colors: {
