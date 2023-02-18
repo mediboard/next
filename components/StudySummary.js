@@ -81,6 +81,7 @@ export default function StudySummary(props) {
 				mb={2}>
 				{conditions?.map(x => (
 					<ItemBadge 
+						key={x.id}
 						color='purpleHover.100' 
 						w='fit-content'
 						textAlign='center'>{x.name}</ItemBadge>

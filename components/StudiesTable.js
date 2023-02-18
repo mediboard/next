@@ -12,6 +12,8 @@ import {
   Text
 } from '@chakra-ui/react'
 import StudyTableRow from './StudyTableRow';
+import ExpandableDeck from './ExpandableDeck';
+import { ItemBadge } from './TreatmentCompareItem';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import {
   useReactTable,
@@ -73,6 +75,26 @@ function convertPhase(str) {
   return words.join(' ');
 }
 
+function ConditionsDeck(props) {
+  const { children, ...kv } = props;
+
+  return (
+    <ExpandableDeck
+      columnGap={2}
+      rowGap={1}
+      mt={2}
+      mb={2}>
+      {children?.map(x => (
+        <ItemBadge 
+          key={x.id}
+          color='purpleHover.100' 
+          w='fit-content'
+          textAlign='center'>{x.name}</ItemBadge>
+      ))}
+    </ExpandableDeck>
+  )
+}
+
 const StudyColumns = [
   {
     accessorKey: 'id',
@@ -83,6 +105,11 @@ const StudyColumns = [
     id: 'external ids',
     accessorFn: row => row.nct_id,
     cell: info => info.getValue(),
+    footer: props => props.column.id,
+  },
+  {
+    accessorKey: 'conditions',
+    cell: info => <ConditionsDeck>{info.getValue()}</ConditionsDeck>,
     footer: props => props.column.id,
   },
   {
@@ -120,85 +147,6 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
   }
-]
-
-const defaultData = [
-  {
-    firstName: 'tanner',
-    lastName: 'linsley',
-    age: 24,
-    visits: 100,
-    status: 'In Relationship',
-    progress: 50,
-  },
-  {
-    firstName: 'tandy',
-    lastName: 'miller',
-    age: 40,
-    visits: 40,
-    status: 'Single',
-    progress: 80,
-  },
-  {
-    firstName: 'joe',
-    lastName: 'dirte',
-    age: 45,
-    visits: 20,
-    status: 'Complicated',
-    progress: 10,
-  },
-]
-
-const defaultColumns = [
-  {
-    header: 'Name',
-    footer: props => props.column.id,
-    columns: [
-      {
-        accessorKey: 'firstName',
-        cell: info => info.getValue(),
-        footer: props => props.column.id,
-      },
-      {
-        accessorFn: row => row.lastName,
-        id: 'lastName',
-        cell: info => info.getValue(),
-        header: () => <span>Last Name</span>,
-        footer: props => props.column.id,
-      },
-    ],
-  },
-  {
-    header: 'Info',
-    footer: props => props.column.id,
-    columns: [
-      {
-        accessorKey: 'age',
-        header: () => 'Age',
-        footer: props => props.column.id,
-      },
-      {
-        header: 'More Info',
-        columns: [
-          {
-            accessorKey: 'visits',
-            header: () => <span>Visits</span>,
-            footer: props => props.column.id,
-          },
-          {
-            accessorKey: 'status',
-            header: 'Status',
-            footer: props => props.column.id,
-          },
-          {
-            accessorKey: 'progress',
-            header: 'Profile Progress',
-            footer: props => props.column.id,
-          },
-        ],
-      },
-    ],
-  },
 ]
 
 export default function StudiesTable(props) {
@@ -251,60 +199,54 @@ export default function StudiesTable(props) {
   })
 
   return (
-    <Table
-      {...{
-        style: {
-          border: '1px solid lightgray',
-          width: table?.getCenterTotalSize(),
-        },
-      }}>
+    <Box borderWidth='1px' borderRadius='12px' overflowX='scroll' w='100%'>
+    <Table w={table?.getCenterTotalSize()}>
       <Thead>
-        {table.getHeaderGroups()?.map(headerGroup => (
-          <Tr key={headerGroup.id}>
-          {headerGroup.headers?.map(header => (
-            <Th
-              {...{
-                key: header.id,
-                colSpan: header.colSpan,
-                style: {
-                  width: header.getSize(),
-                },
-              }}>
-              {header.isPlaceholder
-                ? null
-                : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-              <div
-                {...{
-                  onMouseDown: header.getResizeHandler(),
-                  onTouchStart: header.getResizeHandler(),
-                  className: `resizer ${
-                    header.column.getIsResizing() ? 'isResizing' : ''
-                  }`
-                }}/>
-            </Th>
-          ))}
-          </Tr>
+      {table.getHeaderGroups()?.map(headerGroup => (
+        <Tr key={headerGroup.id}>
+        {headerGroup.headers?.map(header => (
+          <Th
+            position='relative'
+            key={header.id}
+            w={header.getSize()}
+            colSpan={header.colSpan}>
+            {header.isPlaceholder
+              ? null
+              : flexRender(header.column.columnDef.header, header.getContext()
+            )}
+            <Box
+              onMouseDown={header.getResizeHandler()}
+              onTouchStart={header.getResizeHandler()}
+              position='absolute'
+              right={0}
+              top={0}
+              height='100%'
+              width='5px'
+              cursor='col-resize'
+              background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
+              opacity={header.column.getIsResizing() ? 1 : .5} />
+          </Th>
         ))}
+        </Tr>
+      ))}
       </Thead>
       <Tbody>
-        {table.getRowModel()?.rows?.map(row => (
-          <Tr key={row.id}>
-            {row.getVisibleCells().map((cell) => {
-              const meta = cell.column.columnDef.meta;
+      {table.getRowModel()?.rows?.map(row => (
+        <Tr key={row.id}>
+        {row.getVisibleCells().map((cell) => {
+          const meta = cell.column.columnDef.meta;
 
-              return (
-                <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Td>
-              );
-            })}
-          </Tr>
-        ))}
+          return (
+            <Td key={cell.id} isNumeric={meta?.isNumeric}>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </Td>
+          );
+        })}
+        </Tr>
+      ))}
       </Tbody>
     </Table> 
+    </Box>
   )
 
   // return (
