@@ -33,12 +33,11 @@ export default function FilterModal(props) {
   // Set the value in the url on close 
 
   function setStringUrl() {
-    const queryVal = {};
-    queryVal[columnId] = stringValue;
+    router.query[columnId] = stringValue;
 
     router.push({
       pathname: router.pathname,
-      query: queryVal
+      query: router.query 
     })
   }
 
@@ -62,10 +61,9 @@ export default function FilterModal(props) {
         <ModalHeader>Modal Title</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-        {(type === 'String') && <StringBody setValue={setStringValue} value={stringValue}/>}
+          {(type === 'String') && <StringBody setValue={setStringValue} value={stringValue}/>}
+          <Button onClick={onClose}>{'Search'}</Button>
         </ModalBody>
-
-        <Button onClick={onClose}>{'Search'}</Button>
       </ModalContent>
     </Modal>
     </>

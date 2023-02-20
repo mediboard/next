@@ -78,6 +78,7 @@ function ConditionsDeck(props) {
   )
 }
 
+//ids have to map to study fields
 const StudyColumns = [
   {
     id: 'id',
@@ -87,7 +88,7 @@ const StudyColumns = [
     isVisible: true
   },
   {
-    id: 'external ids',
+    id: 'external_ids',
     accessorFn: row => row.nct_id,
     cell: info => info.getValue(),
     footer: props => props.column.id,
@@ -101,14 +102,14 @@ const StudyColumns = [
     isVisible: true
   },
   {
-    id: 'completed date',
+    id: 'completion_date',
     accessorFn: row => row.completion_date,
     cell: info => info.getValue(),
     footer: props => props.column.id,
     isVisible: true
   },
   {
-    id: 'title',
+    id: 'short_title',
     accessorFn: row => row.short_title,
     cell: info => info.getValue(),
     footer: props => props.column.id,
@@ -155,17 +156,10 @@ export default function StudiesTable(props) {
 
   useEffect(() => {
     fetchStudiesFromQuery();
-  }, [treatments, conditions, q, page])
+  }, [router.query])
 
   async function fetchStudiesFromQuery(hardRefresh=false) {
-    const params = {
-      'q': q,
-      'conditions': conditions,
-      'treatments': treatments,
-      'gender': gender,
-    }
-
-    studyHttpClient.search(page || 1, params).then(data => {
+    studyHttpClient.search(page || 1, router.query).then(data => {
       let studiesToAdd = data['studies'];
 
       setData(() => studiesToAdd);
@@ -221,7 +215,7 @@ export default function StudiesTable(props) {
               cursor='col-resize'
               background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
               opacity={header.column.getIsResizing() ? 1 : .5} />
-            <FilterModal columnId={'test'} name={'text'} type={'String'}/>
+            <FilterModal columnId={header?.id} name={'text'} type={'String'}/>
           </Th>
         ))}
         </Tr>
