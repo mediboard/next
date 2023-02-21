@@ -85,6 +85,7 @@ const StudyColumns = [
     accessorKey: 'id',
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    type: 'String',
     isVisible: true
   },
   {
@@ -92,6 +93,7 @@ const StudyColumns = [
     accessorFn: row => row.nct_id,
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    type: 'String',
     isVisible: true
   },
   {
@@ -99,6 +101,7 @@ const StudyColumns = [
     accessorKey: 'conditions',
     cell: info => <ConditionsDeck>{info.getValue()}</ConditionsDeck>,
     footer: props => props.column.id,
+    type: 'Select',
     isVisible: true
   },
   {
@@ -106,6 +109,7 @@ const StudyColumns = [
     accessorFn: row => row.completion_date,
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    type: 'Date',
     isVisible: true
   },
   {
@@ -113,12 +117,14 @@ const StudyColumns = [
     accessorFn: row => row.short_title,
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    type: 'String',
     isVisible: true
   },
   {
     id: 'description',
     accessorFn: row => row.description,
     cell: info => <Text>{info.getValue()}</Text>,
+    type: 'String',
     footer: props => props.column.id,
   },
   {
@@ -126,6 +132,7 @@ const StudyColumns = [
     accessorKey: 'sponsor',
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    type: 'Select',
     isVisible: true
   },
   {
@@ -133,6 +140,7 @@ const StudyColumns = [
     accessorFn: row => convertPhase(row.phase || 'PHASE_1'),
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    type: 'Values',
     isVisible: true
   },
   {
@@ -140,9 +148,12 @@ const StudyColumns = [
     accessorFn: row => normalCase(row.purpose),
     cell: info => info.getValue(),
     footer: props => props.column.id,
+    type: 'Values',
     isVisible: true
   }
 ]
+
+const id2Type = (id) => ([...StudyColumns].filter(col => col.id === id)?.[0].type)
 
 export default function StudiesTable(props) {
   const { ...kv } = props;
@@ -155,7 +166,10 @@ export default function StudiesTable(props) {
   const { treatments, conditions, q, gender, page } = router.query;
 
   useEffect(() => {
-    fetchStudiesFromQuery();
+    // Mutliple calls, order is as expected but completion is not
+    if (router.isReady) {
+      fetchStudiesFromQuery();
+    }
   }, [router.query])
 
   async function fetchStudiesFromQuery(hardRefresh=false) {
@@ -215,7 +229,7 @@ export default function StudiesTable(props) {
               cursor='col-resize'
               background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
               opacity={header.column.getIsResizing() ? 1 : .5} />
-            <FilterModal columnId={header?.id} name={'text'} type={'String'}/>
+            <FilterModal columnId={header?.id} name={'text'} type={id2Type(header?.id)}/>
           </Th>
         ))}
         </Tr>

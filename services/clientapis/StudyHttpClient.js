@@ -65,6 +65,24 @@ class StudyHttpClient {
 
 	}
 
+	async listValues(value) {
+		let config = {
+			url: `${this.base}/studies/${value}/values`,
+			params: { limit: 10 }
+		}
+
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to collect study values, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+
+	}
+
 	async getCriteria(study_id) {
 		const response = await axios.get(AppConfig.api_url+'/studies/'+study_id+'/criteria');
 		if (response.status !== 200) {
