@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import {
   Button,
+  Box,
   Modal,
   ModalOverlay,
+  ModalFooter,
   ModalContent,
   ModalHeader,
   ModalBody,
@@ -13,6 +15,7 @@ import {
   Checkbox,
   MenuItem,
   VStack,
+  Spacer,
   Input
 } from "@chakra-ui/react";
 import MultiSelect from './MultiSelect';
@@ -20,6 +23,7 @@ import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import ConditionMultiSelect from './ConditionMultiSelect';
 import TreatmentMultiSelect from './TreatmentMultiSelect';
 import CheckableMenu from './CheckableMenu';
+import DatePicker from "react-datepicker";
 
 
 const StringBody = ({value, setValue}) => (
@@ -27,6 +31,24 @@ const StringBody = ({value, setValue}) => (
     placeholder="search string"
     value={value}
     onChange={(e) => setValue(e.target.value)}/>
+)
+
+const DateBody = ({startDate, setStartDate, endDate, setEndDate}) => (
+  <Flex>
+    <Box border='1px solid grey' borderRadius={4} p={1}>
+      <DatePicker
+        showYearDropdown
+        selected={startDate}
+        onChange={(date) => setStartDate(date)} />
+    </Box>
+    <Spacer />
+    <Box border='1px solid grey' borderRadius={4} p={1}>
+      <DatePicker
+        showYearDropdown
+        selected={endDate}
+        onChange={(date) => setEndDate(date)} />
+    </Box>
+  </Flex>
 )
 
 const ValuesBody = ({selectedValues, setSelectedValues, valueType}) => {
@@ -76,6 +98,8 @@ const SelectBody = ({options, setOptions, optionsType}) => (
 )
 
 
+const DEFUALT_DATE = '1970-01-01T00:00:00Z';
+
 export default function FilterModal(props) {
   const { type, name, columnId, ...kv } = props;
   // Type: Date, String, Values, Select Values
@@ -86,6 +110,8 @@ export default function FilterModal(props) {
 
   const [stringValue, setStringValue] = useState('');
   const [values, setValues] = useState([]);
+  const [startDate, setStartDate] = useState(new Date(DEFUALT_DATE));
+  const [endDate, setEndDate] = useState(new Date(DEFUALT_DATE));
 
   useEffect(() => {
     if (router.isReady && type?.length) {
@@ -105,6 +131,17 @@ export default function FilterModal(props) {
 
     case 'Select':
       setValues(router.query[columnId]?.split(',') || []);
+      break;
+
+    case 'Date':
+      const urlStart = router.query[columnId+'_start'];
+      const defaultStart = urlStart ? new Date(urlStart + 'T00:00:00Z') : new Date(DEFUALT_DATE);
+      setStartDate(defaultStart);
+
+      const urlEnd = router.query[columnId+'_end'];
+      const defaultEnd = urlEnd ? new Date(urlEnd + 'T00:00:00Z') : new Date(DEFUALT_DATE);
+      setEndDate(defaultEnd);
+
       break;
     }
   }
@@ -144,6 +181,36 @@ export default function FilterModal(props) {
     })
   }
 
+  function setDatesUrl() {
+    const startStr = startDate.toISOString().substr(0, 10);
+    if ((router.query[columnId+'_start'] == startStr) || (!startStr?.length && !router.query[columnId+'_start'])) {
+      return;
+    }
+
+    const endStr = endDate.toISOString().substr(0, 10);
+    if ((router.query[columnId+'_end'] == endStr) || (!endStr?.length && !router.query[columnId+'_end'])) {
+      return;
+    }
+
+    console.log(startStr)
+    console.log(endStr)
+
+    router.query[columnId+'_start'] = startStr;
+    if (!startStr || (startStr == DEFUALT_DATE.substr(0,10))) {
+      delete router.query[columnId+'_start'];
+    }
+
+    router.query[columnId+'_end'] = endStr;
+    if (!endStr || (endStr == DEFUALT_DATE.substr(0,10))) {
+      delete router.query[columnId+'_end'];
+    }
+
+    router.push({
+      pathname: router.pathname,
+      query: router.query
+    })
+  }
+
   function onClose() {
     switch (type) {
     case 'String':
@@ -156,6 +223,10 @@ export default function FilterModal(props) {
 
     case 'Select':
       setValuesUrl();
+      break;
+
+    case 'Date':
+      setDatesUrl();
       break;
     }
 
@@ -173,6 +244,11 @@ export default function FilterModal(props) {
         <ModalCloseButton />
         <ModalBody>
           {(type === 'String') && <StringBody setValue={setStringValue} value={stringValue}/>}
+          {(type === 'Date') && <DateBody
+            endDate={endDate}
+            setEndDate={setEndDate}
+            setStartDate={setStartDate}
+            startDate={startDate}/>}
           {(type === 'Values') && <ValuesBody 
             setSelectedValues={setValues}
             valueType={columnId}
@@ -181,8 +257,10 @@ export default function FilterModal(props) {
             setOptions={setValues}
             optionsType={columnId}
             options={values}/>}
-          <Button onClick={onClose}>{'Search'}</Button>
         </ModalBody>
+        <ModalFooter>
+          <Button onClick={onClose}>{'Search'}</Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
     </>
