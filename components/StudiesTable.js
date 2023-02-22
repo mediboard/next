@@ -15,6 +15,7 @@ import FilterModal from './FilterModal';
 import StudyTableRow from './StudyTableRow';
 import ExpandableDeck from './ExpandableDeck';
 import CheckableMenu from './CheckableMenu';
+import PagesNavigator from './PagesNavigator';
 import { ItemBadge } from './TreatmentCompareItem';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import {
@@ -196,6 +197,11 @@ export default function StudiesTable(props) {
     getCoreRowModel: getCoreRowModel(),
   })
 
+  function onPageClick(page) {
+    router.query.page = page;
+    router.push(router, undefined, { shallow: true });
+  }
+
   return (
     <Box borderWidth='1px' maxW='100%' borderRadius='12px' overflowX='scroll' w='100%'>
     <CheckableMenu
@@ -251,6 +257,11 @@ export default function StudiesTable(props) {
       ))}
       </Tbody>
     </Table> 
+
+    <PagesNavigator
+      no_pages={noPages}
+      page_no={parseInt(page) || 1}
+      onPageClick={onPageClick}/>
     </Box>
   )
 }
