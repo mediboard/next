@@ -2,15 +2,19 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
   Table,
+  Spacer,
   TableContainer,
   Thead,
+  Heading,
   Tbody,
   Tr,
   Th,
+  Flex,
   Td,
   Box,
   Text
 } from '@chakra-ui/react'
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import FilterModal from './FilterModal';
 import StudyTableRow from './StudyTableRow';
 import ExpandableDeck from './ExpandableDeck';
@@ -161,6 +165,7 @@ export default function StudiesTable(props) {
 
   const [studies, setStudies] = useState(() => []);
   const [noPages, setNoPages] = useState(undefined);
+  const [noStudies, setNoStudies] = useState(0);
 
   const router = useRouter();
 
@@ -178,7 +183,7 @@ export default function StudiesTable(props) {
       let studiesToAdd = data['studies'];
 
       setData(() => studiesToAdd);
-      setNoPages(Math.ceil(data['total'] / 10))
+      setNoStudies(data['total']);
     })
   }
 
@@ -203,65 +208,88 @@ export default function StudiesTable(props) {
   }
 
   return (
-    <Box borderWidth='1px' maxW='100%' borderRadius='12px' overflowX='scroll' w='100%'>
-    <CheckableMenu
-      options={[...StudyColumns].map(x => ({...x, label: x.id}))}
-      onOptionToggle={(colId) => setColumns(columns.map(
-        col => (col.id == colId ? {...col, isVisible: !col.isVisible} : col)
-      ))}
-      selectedOptions={columns.filter(col => col.isVisible).map(x => x.id)}/>
-    <Table w={table?.getCenterTotalSize()}>
-      <Thead>
-      {table.getHeaderGroups()?.map(headerGroup => (
-        <Tr key={headerGroup.id}>
-        {headerGroup.headers?.map(header => (
-          <Th
-            position='relative'
-            key={header.id}
-            w={header.getSize()}
-            colSpan={header.colSpan}>
-            {header.isPlaceholder
-              ? null
-              : flexRender(header.column.columnDef.header, header.getContext()
-            )}
-            <Box
-              onMouseDown={header.getResizeHandler()}
-              onTouchStart={header.getResizeHandler()}
-              position='absolute'
-              right={0}
-              top={0}
-              height='100%'
-              width='5px'
-              cursor='col-resize'
-              background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
-              opacity={header.column.getIsResizing() ? 1 : .5} />
-            <FilterModal columnId={header?.id} name={'text'} type={id2Type(header?.id)}/>
-          </Th>
-        ))}
-        </Tr>
-      ))}
-      </Thead>
-      <Tbody>
-      {table.getRowModel()?.rows?.map(row => (
-        <Tr key={row.id}>
-        {row.getVisibleCells().map((cell) => {
-          const meta = cell.column.columnDef.meta;
+    <Box>
+      <Flex 
+        borderTop='1px'
+        borderBottom='1px'
+        borderColor='gray.200'
+        alignItems='center'
+        pt={3} pb={3}
+        pl={5} pr={5}>
+        <Heading size='md'>{noStudies + ' Trials'}</Heading>
+        <Text ml={3} fontWeight='500' color='gray.600'>
+          {`${[...Object.keys(router.query)].filter(x => x != 'page').length} Filters applied`}
+        </Text>
+        <Spacer />
+        <CheckableMenu
+          variant='outlined'
+          options={[...StudyColumns].map(x => ({...x, label: x.id}))}
+          onOptionToggle={(colId) => setColumns(columns.map(
+            col => (col.id == colId ? {...col, isVisible: !col.isVisible} : col)
+          ))}
+          rightIcon={<ChevronDownIcon />}
+          selectedOptions={columns.filter(col => col.isVisible).map(x => x.id)}>
+          {`${columns.filter(col => !col.isVisible).length} Columns Hidden`}
+        </CheckableMenu>
+      </Flex>
 
-          return (
-            <Td key={cell.id} isNumeric={meta?.isNumeric}>
-              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-            </Td>
-          );
-        })}
-        </Tr>
-      ))}
-      </Tbody>
-    </Table> 
+      <Box p={5} bg={'gray.100'}>
+        <Box borderWidth='1px' bg='white' maxW='100%'
+          borderRadius='12px' overflowX='scroll' w='100%'>
+        <Table w={table?.getCenterTotalSize()}>
+          <Thead>
+          {table.getHeaderGroups()?.map(headerGroup => (
+            <Tr key={headerGroup.id}>
+            {headerGroup.headers?.map(header => (
+              <Th
+                position='relative'
+                key={header.id}
+                w={header.getSize()}
+                colSpan={header.colSpan}>
+                <FilterModal columnId={header?.id} name={'text'} type={id2Type(header?.id)}/>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext()
+                )}
+                <Box
+                  onMouseDown={header.getResizeHandler()}
+                  onTouchStart={header.getResizeHandler()}
+                  position='absolute'
+                  right={0}
+                  top={0}
+                  height='100%'
+                  width='5px'
+                  cursor='col-resize'
+                  background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
+                  opacity={header.column.getIsResizing() ? 1 : .5} />
+              </Th>
+            ))}
+            </Tr>
+          ))}
+          </Thead>
+          <Tbody>
+          {table.getRowModel()?.rows?.map(row => (
+            <Tr key={row.id}>
+            {row.getVisibleCells().map((cell) => {
+              const meta = cell.column.columnDef.meta;
 
-    <PagesNavigator
-      no_pages={noPages}
-      page_no={parseInt(page) || 1}
-      onPageClick={onPageClick}/>
+              return (
+                <Td key={cell.id} isNumeric={meta?.isNumeric}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Td>
+              );
+            })}
+            </Tr>
+          ))}
+          </Tbody>
+        </Table> 
+        </Box>
+      </Box>
+
+      <PagesNavigator
+        no_pages={Math.ceil(noStudies / 10)}
+        page_no={parseInt(page) || 1}
+        onPageClick={onPageClick}/>
     </Box>
   )
 }

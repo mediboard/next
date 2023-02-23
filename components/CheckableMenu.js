@@ -20,11 +20,11 @@ const CheckableMenuItem = ({ label, isChecked, onToggle }) => {
 
 
 export default function CheckableMenu(props) {
-  const { options, selectedOptions, onOptionToggle, ...kv } = props;
+  const { children, options, selectedOptions, onOptionToggle, ...kv } = props;
 
   return (
     <Menu closeOnSelect={false}>
-      <MenuButton as={Button}>Select Options</MenuButton>
+      <MenuButton as={Button} {...kv}>{children}</MenuButton>
       <MenuList>
       {options.map((option) => (
         <CheckableMenuItem

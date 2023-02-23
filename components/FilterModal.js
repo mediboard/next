@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import {
   Button,
+  IconButton,
   Box,
   Modal,
   ModalOverlay,
@@ -24,6 +25,8 @@ import ConditionMultiSelect from './ConditionMultiSelect';
 import TreatmentMultiSelect from './TreatmentMultiSelect';
 import CheckableMenu from './CheckableMenu';
 import DatePicker from "react-datepicker";
+import FunnelIcon from './icons/FunnelIcon';
+import FunnelOutlineIcon from './icons/FunnelOutlineIcon';
 
 
 const StringBody = ({value, setValue}) => (
@@ -112,6 +115,14 @@ export default function FilterModal(props) {
   const [values, setValues] = useState([]);
   const [startDate, setStartDate] = useState(new Date(DEFUALT_DATE));
   const [endDate, setEndDate] = useState(new Date(DEFUALT_DATE));
+
+  const isSelected = () => {
+    if (type == 'Date') {
+      return router.query[columnId+'_start'] || router.query[columnId+'_end'];
+    }
+
+    return router.query[columnId] || false;
+  }
 
   useEffect(() => {
     if (router.isReady && type?.length) {
@@ -235,7 +246,12 @@ export default function FilterModal(props) {
 
   return (
     <>
-    <Button onClick={() => setIsOpen(!isOpen)}>{'Filter'}</Button>
+    <IconButton
+      w='fit-content'
+      h='fit-content'
+      bg='none'
+      icon={isSelected() ? <FunnelIcon w='20px' h='20px'/> : <FunnelOutlineIcon w='20px' h='20px'/>}
+      onClick={() => setIsOpen(!isOpen)}/>
 
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

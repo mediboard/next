@@ -17,6 +17,11 @@ export default function FeaturedStudiesDeck(props) {
 
 	return (
 		<>
+		<Flex w='100%' pt={[5, 0]} pl={[5, 0]}>
+			<Heading fontSize='18px'>{'Trending Studies: '}</Heading>
+			<Spacer />
+		</Flex>
+		
 		<Show above='sm'>
 		<SimpleGrid spacing={3} columns={3} overflowX='scroll' w='100%'>
 		{ studies?.slice(0, 3)?.map(x => (<StudyVCard key={x.id} {...x}/> )) }

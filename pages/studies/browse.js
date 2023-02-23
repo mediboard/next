@@ -32,11 +32,7 @@ function Main(props) {
 
 	return (
 		<PageBody mt={0} bg='#CED4DB'>
-			<Flex direction={'column'} m={['0', '2.5%']} borderRadius={4} p={[0, 10]} bg='white' w='100%' gap={5}>
-				<Flex w='100%' pt={[5, 0]} pl={[5, 0]}>
-					<Heading fontSize='18px'>{'Trending Studies: '}</Heading>
-					<Spacer />
-				</Flex>
+			<Flex direction={'column'} m={0} borderRadius={4} bg='white' w='100%' gap={5}>
 				{/*<FeaturedStudiesDeck studies={props.featuredStudies}/>*/}
 
 				<Flex flexDirection='column' w='100%' p={[5, 0]} gap={5}>

@@ -23,9 +23,9 @@ export const Button = {
   	},
     outlined: {
       bg: "white",
-      color: "purple.400",
+      color: "grey.400",
       border: "1px",
-      borderColor: "purple.400"
+      borderColor: "grey.400"
     },
     small: {
       bg: "#1E1E1E",
