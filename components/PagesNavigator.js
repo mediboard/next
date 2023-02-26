@@ -44,32 +44,32 @@ export default function PagesNavigator(props) {
           w={['20%', `${100/(noButtons +2)}`]} 
           onClick={() => {if (page_no > 1) { onPageClick(page_no-1); }}}>{'Prev'}</Button>
 
-      {[... new Array(no_pages).keys()].slice((page_no-1), (page_no-1) + noButtons)?.map((x, i) => {
-        if (i === (noButtons - 2) && no_pages >= noButtons) {
+        {[... new Array(no_pages).keys()].slice((page_no-1), (page_no-1) + noButtons)?.map((x, i) => {
+          if (i === (noButtons - 2) && no_pages >= noButtons) {
+            return (
+              <PageButton key={x+'-page-button'}
+                onClick={onPageClick}
+                w={`${100/noButtons}%`}>{'...'}</PageButton>
+            );
+          }
+
+          if (i === (noButtons - 1) && no_pages >= noButtons) {
+            return (
+              <PageButton key={x+'-page-button'}
+                onClick={() => onPageClick(no_pages)}
+                w={`${100/noButtons}%`}>{no_pages}</PageButton>
+            );
+          }
+
           return (
             <PageButton key={x+'-page-button'}
-              onClick={onPageClick}
-              w={`${100/noButtons}%`}>{'...'}</PageButton>
+              borderColor={page_no === x + 1 ? 'purple.400' : 'none'}
+              borderWidth={page_no === x + 1 ? '1px' : '0px'}
+              fontWeight={page_no === x + 1 ? '800' : '500'}
+              onClick={() => onPageClick(x+1)}
+              w={`${100/noButtons}%`}>{x + 1}</PageButton>
           );
-        }
-
-        if (i === (noButtons - 1) && no_pages >= noButtons) {
-          return (
-            <PageButton key={x+'-page-button'}
-              onClick={() => onPageClick(no_pages)}
-              w={`${100/noButtons}%`}>{no_pages}</PageButton>
-          );
-        }
-
-        return (
-          <PageButton key={x+'-page-button'}
-            borderColor={page_no === x + 1 ? 'purple.400' : 'none'}
-            borderWidth={page_no === x + 1 ? '1px' : '0px'}
-            fontWeight={page_no === x + 1 ? '800' : '500'}
-            onClick={() => onPageClick(x+1)}
-            w={`${100/noButtons}%`}>{x + 1}</PageButton>
-        );
-      })}
+        })}
 
         <Button 
           w={['20%', `${100/(noButtons +2)}`]}

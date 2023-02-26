@@ -208,15 +208,14 @@ export default function StudiesTable(props) {
   }
 
   return (
-    <Box>
+    <Box  {...kv}>
       <Flex 
         borderTop='1px'
         borderBottom='1px'
         borderColor='gray.200'
         alignItems='center'
         justifyContent='center'
-        pt={3} pb={3}
-        pl={5} pr={5}>
+        pt={3} pb={3} pl={5} pr={5}>
         <Heading size='md'>{noStudies + ' Trials'}</Heading>
         <Text ml={3} fontWeight='500' color='gray.600'>
           {`${[...Object.keys(router.query)].filter(x => x != 'page').length} Filters applied`}
@@ -242,56 +241,57 @@ export default function StudiesTable(props) {
         </Box>
       </Flex>
 
-      <Box p={5} bg={'gray.100'}>
-        <Box borderWidth='1px' bg='white' maxW='100%'
-          borderRadius='12px' overflowX='scroll' w='100%'>
-        <Table w={table?.getCenterTotalSize()}>
-          <Thead>
-          {table.getHeaderGroups()?.map(headerGroup => (
-            <Tr key={headerGroup.id}>
-            {headerGroup.headers?.map(header => (
-              <Th
-                position='relative'
-                key={header.id}
-                w={header.getSize()}
-                colSpan={header.colSpan}>
-                <FilterModal columnId={header?.id} name={'text'} type={id2Type(header?.id)}/>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())
-                }
-                <Box
-                  onMouseDown={header.getResizeHandler()}
-                  onTouchStart={header.getResizeHandler()}
-                  position='absolute'
-                  right={0}
-                  top={0}
-                  height='100%'
-                  width='5px'
-                  cursor='col-resize'
-                  background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
-                  opacity={header.column.getIsResizing() ? 1 : .5} />
-              </Th>
+      <Box p={5} bg={'gray.100'} h='100%' position='relative'>
+        <Box borderWidth='1px' bg='white' h='calc(100% - 2.5rem)'
+          position='absolute'
+          borderRadius='12px' overflowX='scroll' w='calc(100% - 2.5rem)'>
+          <Table w={table?.getCenterTotalSize()} h='100%'>
+            <Thead>
+            {table.getHeaderGroups()?.map(headerGroup => (
+              <Tr key={headerGroup.id}>
+              {headerGroup.headers?.map(header => (
+                <Th
+                  position='relative'
+                  key={header.id}
+                  w={header.getSize()}
+                  colSpan={header.colSpan}>
+                  <FilterModal columnId={header?.id} name={'text'} type={id2Type(header?.id)}/>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())
+                  }
+                  <Box
+                    onMouseDown={header.getResizeHandler()}
+                    onTouchStart={header.getResizeHandler()}
+                    position='absolute'
+                    right={0}
+                    top={0}
+                    height='100%'
+                    width='5px'
+                    cursor='col-resize'
+                    background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
+                    opacity={header.column.getIsResizing() ? 1 : .5} />
+                </Th>
+              ))}
+              </Tr>
             ))}
-            </Tr>
-          ))}
-          </Thead>
-          <Tbody>
-          {table.getRowModel()?.rows?.map(row => (
-            <Tr key={row.id}>
-            {row.getVisibleCells().map((cell) => {
-              const meta = cell.column.columnDef.meta;
+            </Thead>
+            <Tbody h='100%' overflowY='scroll'>
+            {table.getRowModel()?.rows?.map(row => (
+              <Tr key={row.id}>
+              {row.getVisibleCells().map((cell) => {
+                const meta = cell.column.columnDef.meta;
 
-              return (
-                <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Td>
-              );
-            })}
-            </Tr>
-          ))}
-          </Tbody>
-        </Table> 
+                return (
+                  <Td key={cell.id} isNumeric={meta?.isNumeric}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Td>
+                );
+              })}
+              </Tr>
+            ))}
+            </Tbody>
+          </Table> 
         </Box>
       </Box>
 
