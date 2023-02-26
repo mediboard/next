@@ -102,14 +102,6 @@ const StudyColumns = [
     isVisible: true
   },
   {
-    id: 'conditions',
-    accessorKey: 'conditions',
-    cell: info => <ConditionsDeck>{info.getValue()}</ConditionsDeck>,
-    footer: props => props.column.id,
-    type: 'Select',
-    isVisible: true
-  },
-  {
     id: 'completion_date',
     accessorFn: row => row.completion_date,
     cell: info => info.getValue(),
@@ -123,6 +115,14 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
     type: 'String',
+    isVisible: true
+  },
+  {
+    id: 'conditions',
+    accessorKey: 'conditions',
+    cell: info => <ConditionsDeck>{info.getValue()}</ConditionsDeck>,
+    footer: props => props.column.id,
+    type: 'Select',
     isVisible: true
   },
   {
@@ -214,14 +214,15 @@ export default function StudiesTable(props) {
         borderBottom='1px'
         borderColor='gray.200'
         alignItems='center'
+        justifyContent='center'
         pt={3} pb={3}
         pl={5} pr={5}>
         <Heading size='md'>{noStudies + ' Trials'}</Heading>
         <Text ml={3} fontWeight='500' color='gray.600'>
           {`${[...Object.keys(router.query)].filter(x => x != 'page').length} Filters applied`}
         </Text>
-        <Spacer />
         <CheckableMenu
+          ml={3}
           variant='outlined'
           options={[...StudyColumns].map(x => ({...x, label: x.id}))}
           onOptionToggle={(colId) => setColumns(columns.map(
@@ -231,6 +232,14 @@ export default function StudiesTable(props) {
           selectedOptions={columns.filter(col => col.isVisible).map(x => x.id)}>
           {`${columns.filter(col => !col.isVisible).length} Columns Hidden`}
         </CheckableMenu>
+        <Spacer />
+        <Box w='600px'>
+          <PagesNavigator
+            mt={0}
+            no_pages={Math.ceil(noStudies / 10)}
+            page_no={parseInt(page) || 1}
+            onPageClick={onPageClick}/>
+        </Box>
       </Flex>
 
       <Box p={5} bg={'gray.100'}>
@@ -249,8 +258,8 @@ export default function StudiesTable(props) {
                 <FilterModal columnId={header?.id} name={'text'} type={id2Type(header?.id)}/>
                 {header.isPlaceholder
                   ? null
-                  : flexRender(header.column.columnDef.header, header.getContext()
-                )}
+                  : flexRender(header.column.columnDef.header, header.getContext())
+                }
                 <Box
                   onMouseDown={header.getResizeHandler()}
                   onTouchStart={header.getResizeHandler()}
@@ -286,10 +295,6 @@ export default function StudiesTable(props) {
         </Box>
       </Box>
 
-      <PagesNavigator
-        no_pages={Math.ceil(noStudies / 10)}
-        page_no={parseInt(page) || 1}
-        onPageClick={onPageClick}/>
     </Box>
   )
 }

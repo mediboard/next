@@ -35,15 +35,15 @@ export function PageButton(props) {
 export default function PagesNavigator(props) {
   const { no_pages, page_no, onPageClick, ...kv } = props;
 
-  const noButtons = useBreakpointValue({ base: 4, md:7, lg: 10 });
+  const noButtons = useBreakpointValue({ base: 4, md:5, lg: 5 });
 
   return (
-    <HStack w='100%' mt={10} alignItems='stretch' spacing={1}>
-      <Button variant={'outlined'}
-        w={['20%', '10%']} 
-        onClick={() => {if (page_no > 1) { onPageClick(page_no-1); }}}>{'Prev'}</Button>
+    <HStack w='100%' mt={10} alignItems='stretch' spacing={1} {...kv}>
+      <Flex w={['60%', '100%']} alignItems='stretch'>
+        <Button variant={'outlined'}
+          w={['20%', `${100/(noButtons +2)}`]} 
+          onClick={() => {if (page_no > 1) { onPageClick(page_no-1); }}}>{'Prev'}</Button>
 
-      <Flex w={['60%', '80%']} alignItems='stretch'>
       {[... new Array(no_pages).keys()].slice((page_no-1), (page_no-1) + noButtons)?.map((x, i) => {
         if (i === (noButtons - 2) && no_pages >= noButtons) {
           return (
@@ -70,14 +70,14 @@ export default function PagesNavigator(props) {
             w={`${100/noButtons}%`}>{x + 1}</PageButton>
         );
       })}
-      </Flex>
 
-      <Button 
-        w={['20%', '10%']}
-        m={0}
-        onClick={() => {if(page_no < no_pages) { onPageClick(page_no+1)}}}>
-        {'Next'}
-      </Button>
+        <Button 
+          w={['20%', `${100/(noButtons +2)}`]}
+          m={0}
+          onClick={() => {if(page_no < no_pages) { onPageClick(page_no+1)}}}>
+          {'Next'}
+        </Button>
+      </Flex>
     </HStack>
   )
 }
