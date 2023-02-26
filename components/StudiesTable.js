@@ -7,6 +7,7 @@ import {
   Thead,
   Heading,
   Tbody,
+  Link,
   Tr,
   Th,
   Flex,
@@ -83,12 +84,18 @@ function ConditionsDeck(props) {
   )
 }
 
+const IdColumn = (props) => (
+  <Link href={`/studies/${props.children}`}>
+    {props.children}
+  </Link>
+)
+
 //ids have to map to study fields
 const StudyColumns = [
   {
     id: 'id',
     accessorKey: 'id',
-    cell: info => info.getValue(),
+    cell: info => <IdColumn>{info.getValue()}</IdColumn>,
     footer: props => props.column.id,
     type: 'String',
     isVisible: true
@@ -115,7 +122,8 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
     type: 'String',
-    isVisible: true
+    isVisible: true,
+    size: 400
   },
   {
     id: 'conditions',
@@ -123,6 +131,7 @@ const StudyColumns = [
     cell: info => <ConditionsDeck>{info.getValue()}</ConditionsDeck>,
     footer: props => props.column.id,
     type: 'Select',
+    size: 400,
     isVisible: true
   },
   {
@@ -245,7 +254,7 @@ export default function StudiesTable(props) {
         <Box borderWidth='1px' bg='white' h='calc(100% - 2.5rem)'
           position='absolute'
           borderRadius='12px' overflowX='scroll' w='calc(100% - 2.5rem)'>
-          <Table w={table?.getCenterTotalSize()} h='100%'>
+          <Table w={table?.getCenterTotalSize()}>
             <Thead>
             {table.getHeaderGroups()?.map(headerGroup => (
               <Tr key={headerGroup.id}>
