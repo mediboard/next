@@ -87,7 +87,7 @@ const ValuesBody = ({selectedValues, setSelectedValues, valueType}) => {
   return (
     <VStack align='start'>
     {valuesAreLoading && [... new Array(8)].map((x,i) => (
-      <Flex key={i+'-checkbox-skeleton'} w='100%' >
+      <Flex key={i+'-checkbox-skeleton'} w='100%'>
         <Skeleton w={5} h={5} mr={2} mb={2}/>
         <Skeleton w={'70%'} h={5} />
       </Flex>
@@ -116,8 +116,7 @@ const SelectBody = ({options, setOptions, optionsType}) => (
 const DEFUALT_DATE = '1970-01-01T00:00:00Z';
 
 export default function FilterModal(props) {
-  const { type, name, columnId, ...kv } = props;
-  // Type: Date, String, Values, Select Values
+  const { type, columnId, ...kv } = props;
 
   const router = useRouter();
 

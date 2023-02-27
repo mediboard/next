@@ -16,7 +16,7 @@ import {
   Box,
   Text
 } from '@chakra-ui/react'
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, LinkIcon } from '@chakra-ui/icons';
 import FilterModal from './FilterModal';
 import StudyTableRow from './StudyTableRow';
 import ExpandableDeck from './ExpandableDeck';
@@ -106,8 +106,8 @@ function TreatmentsDeck(props) {
 }
 
 const IdColumn = (props) => (
-  <Link href={`/studies/${props.children}`}>
-    {props.children}
+  <Link whiteSpace='nowrap' href={`/studies/${props.children}`} >
+    {props.children} <LinkIcon />
   </Link>
 )
 
@@ -289,6 +289,7 @@ export default function StudiesTable(props) {
         <Text ml={3} fontWeight='500' color='gray.600'>
           {`${[...Object.keys(router.query)].filter(x => x != 'page').length} Filters applied`}
         </Text>
+        <Spacer />
         <CheckableMenu
           ml={3}
           variant='outlined'
@@ -300,18 +301,10 @@ export default function StudiesTable(props) {
           selectedOptions={columns.filter(col => col.isVisible).map(x => x.id)}>
           {`${columns.filter(col => !col.isVisible).length} Columns Hidden`}
         </CheckableMenu>
-        <Spacer />
-        <Box w='600px'>
-          <PagesNavigator
-            mt={0}
-            no_pages={Math.ceil(noStudies / 10)}
-            page_no={parseInt(page) || 1}
-            onPageClick={onPageClick}/>
-        </Box>
       </Flex>
 
-      <Box p={5} bg={'gray.100'} h='100%' position='relative'>
-        <Box borderWidth='1px' bg='white' h='calc(100% - 2.5rem)'
+      <Box pt={5} pb={1} pt={5} pl={5} bg={'gray.100'} h='100%' position='relative'>
+        <Box borderWidth='1px' bg='white' h='calc(100% - 2rem)'
           position='absolute'
           borderRadius='12px' overflowX='scroll' w='calc(100% - 2.5rem)'>
           <Table w={table?.getCenterTotalSize()}>
@@ -324,22 +317,19 @@ export default function StudiesTable(props) {
                   key={header.id}
                   w={header.getSize()}
                   colSpan={header.colSpan}>
-                  <FilterModal columnId={header?.id} name={'text'} type={id2Type(header?.id)}/>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())
-                  }
+                  <Flex whiteSpace='nowrap' alignItems='center' >
+                    <FilterModal columnId={header?.id} type={id2Type(header?.id)}/>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </Flex>
                   <Box
                     onMouseDown={header.getResizeHandler()}
                     onTouchStart={header.getResizeHandler()}
-                    position='absolute'
-                    right={0}
-                    top={0}
-                    height='100%'
-                    width='5px'
-                    cursor='col-resize'
-                    background={header.column.getIsResizing() ? 'blue' : 'var(--chakra-colors-chakra-border-color)'}
-                    opacity={header.column.getIsResizing() ? 1 : .5} />
+                    position='absolute' right={'-2.5px'}
+                    top={0} height='100%'
+                    width='5px'cursor='col-resize'
+                    background={header.column.getIsResizing() ? 'blue.500' : 
+                      'var(--chakra-colors-chakra-border-color)'}
+                    opacity={header.column.getIsResizing() || header.id.includes('id') ? 1 : .5} />
                 </Th>
               ))}
               </Tr>
@@ -352,7 +342,10 @@ export default function StudiesTable(props) {
                 const meta = cell.column.columnDef.meta;
 
                 return (
-                  <Td key={cell.id} pt={1} pb={1} isNumeric={meta?.isNumeric}>
+                  <Td key={cell.id} 
+                    pt={1} pb={1} 
+                    borderRight={cell.id.includes('id') ? '5px solid var(--chakra-colors-chakra-border-color)' : ''}
+                    isNumeric={meta?.isNumeric}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 );
@@ -363,7 +356,8 @@ export default function StudiesTable(props) {
             {studiesIsLoading && [... new Array(10)].map((x, i) => (
               <Tr key={i+'-skeleton'}>
               {columns?.filter(col => col.isVisible)?.map(y => (
-                <Td key={y.id +'-skeleton'}>
+                <Td key={y.id +'-skeleton'}
+                  borderRight={y.id.includes('id') ? '5px solid var(--chakra-colors-chakra-border-color)' : ''}>
                   <Skeleton w={y.size || 150} h={10}/>
                 </Td>
               ))}
@@ -373,6 +367,34 @@ export default function StudiesTable(props) {
           </Table> 
         </Box>
       </Box>
+
+      <Flex w='100%' pb={5} pl={5} pr={5} bg={'gray.100'}>
+        <Box w='400px'>
+          <PagesNavigator
+            mt={0}
+            no_pages={Math.ceil(noStudies / 10)}
+            page_no={parseInt(page) || 1}
+            onPageClick={onPageClick}/>
+        </Box>
+        <Spacer />
+        <CheckableMenu
+          ml={3}
+          variant='outlined'
+          options={[...Array(5)].map((x,i) => ({ 
+            label: (i+1)*10, id: (i+1)*10}))}
+          onOptionToggle={(limit) => {
+            router.query['limit'] = limit;
+            console.log(limit);
+            router.push({
+              pathname: router.pathname,
+              query: router.query
+            });
+          }}
+          rightIcon={<ChevronDownIcon />}
+          selectedOptions={[parseInt(router.query.limit) || 10]}>
+          {`${router.query.limit || 10} Results Per Page`}
+        </CheckableMenu>
+      </Flex>
     </Box>
   )
 }
