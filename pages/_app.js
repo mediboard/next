@@ -15,6 +15,9 @@ import VerificationProvider from '../components/VerificationProvider';
 import AppLayout from '../components/AppLayout';
 import awsExports from '../aws-exports';
 
+import 'react-datepicker/dist/react-datepicker.css';
+// import '../date-picker.css';
+
 
 export const theme = extendTheme({
   colors: {
