@@ -372,7 +372,7 @@ export default function StudiesTable(props) {
         <Box w='400px'>
           <PagesNavigator
             mt={0}
-            no_pages={Math.ceil(noStudies / 10)}
+            no_pages={Math.ceil(noStudies / (parseInt(router.query.limit) || 10))}
             page_no={parseInt(page) || 1}
             onPageClick={onPageClick}/>
         </Box>
@@ -384,7 +384,6 @@ export default function StudiesTable(props) {
             label: (i+1)*10, id: (i+1)*10}))}
           onOptionToggle={(limit) => {
             router.query['limit'] = limit;
-            console.log(limit);
             router.push({
               pathname: router.pathname,
               query: router.query
