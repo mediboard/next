@@ -31,6 +31,7 @@ import EffectsPage from '../../components/EffectsPage';
 import RelatedStudiesPage from '../../components/RelatedStudiesPage';
 import PageBody from '../../components/PageBody';
 import StudySection from '../../components/StudySection';
+import Header from '../../components/Header';
 
 
 const groupColorWheel = [
@@ -151,6 +152,9 @@ function Main(props) {
   }
 
   return (
+    <>
+    <Header />
+
     <PageBody mt={0} align='center' justifyContent='center' bg='#CED4DB'>
     <Flex minH='90vh' 
       flexDirection={['column', 'row']}
@@ -250,5 +254,6 @@ function Main(props) {
       </Tabs>
     </Flex>
     </PageBody>
+    </>
   ) 
 }

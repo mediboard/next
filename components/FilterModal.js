@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import {
   Button,
+  Skeleton,
   IconButton,
   Box,
   Modal,
@@ -54,18 +55,23 @@ const DateBody = ({startDate, setStartDate, endDate, setEndDate}) => (
   </Flex>
 )
 
+
 const ValuesBody = ({selectedValues, setSelectedValues, valueType}) => {
   const [values, setValues] = useState([]);
+  const [valuesAreLoading, setValuesAreLoading] = useState(true);
 
   useEffect(() => {
     loadValues()
   }, [])
 
   async function loadValues() {
+    setValuesAreLoading(true);
     studyHttpClient.listValues(valueType).then(data => {
       setValues(data.values);
     }).catch(error => {
       console.log(error);
+    }).finally(() => {
+      setValuesAreLoading(false);
     })
   }
 
@@ -79,8 +85,14 @@ const ValuesBody = ({selectedValues, setSelectedValues, valueType}) => {
   }
 
   return (
-    <VStack>
-    {values.map((option) => (
+    <VStack align='start'>
+    {valuesAreLoading && [... new Array(8)].map((x,i) => (
+      <Flex key={i+'-checkbox-skeleton'} w='100%' >
+        <Skeleton w={5} h={5} mr={2} mb={2}/>
+        <Skeleton w={'70%'} h={5} />
+      </Flex>
+    ))}
+    {!valuesAreLoading && values.map((option) => (
       <Flex key={option+'-checkbox'}>
         <Checkbox
           isChecked={selectedValues?.includes(option)}
@@ -202,9 +214,6 @@ export default function FilterModal(props) {
     if ((router.query[columnId+'_end'] == endStr) || (!endStr?.length && !router.query[columnId+'_end'])) {
       return;
     }
-
-    console.log(startStr)
-    console.log(endStr)
 
     router.query[columnId+'_start'] = startStr;
     if (!startStr || (startStr == DEFUALT_DATE.substr(0,10))) {

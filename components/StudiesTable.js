@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   Table,
   Spacer,
+  Skeleton,
   TableContainer,
   Thead,
   Heading,
@@ -71,12 +72,32 @@ function ConditionsDeck(props) {
     <ExpandableDeck
       columnGap={2}
       rowGap={1}
-      mt={2}
-      mb={2}>
+      no_shown={2}
+      mt={2} mb={2}>
       {children?.map(x => (
         <ItemBadge 
           key={x.id}
           color='purpleHover.100' 
+          w='fit-content'
+          textAlign='center'>{x.name}</ItemBadge>
+      ))}
+    </ExpandableDeck>
+  )
+}
+
+function TreatmentsDeck(props) {
+  const { children, ...kv } = props;
+
+  return (
+    <ExpandableDeck
+      columnGap={2}
+      rowGap={1}
+      no_shown={2}
+      mt={2} mb={2}>
+      {children?.map(x => (
+        <ItemBadge 
+          key={x.id}
+          color='purpleHover.600' 
           w='fit-content'
           textAlign='center'>{x.name}</ItemBadge>
       ))}
@@ -106,7 +127,7 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
     type: 'String',
-    isVisible: true
+    size: 200,
   },
   {
     id: 'completion_date',
@@ -114,6 +135,7 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
     type: 'Date',
+    size: 200,
     isVisible: true
   },
   {
@@ -123,7 +145,24 @@ const StudyColumns = [
     footer: props => props.column.id,
     type: 'String',
     isVisible: true,
-    size: 400
+    size: 600
+  },
+  {
+    id: 'status',
+    accessorFn: row => row.status,
+    cell: info => info.getValue(),
+    footer: props => props.column.id,
+    type: 'Values',
+    isVisible: true,
+    size: 200 
+  },
+  {
+    id: 'stopped_reason',
+    accessorFn: row => row.status,
+    cell: info => info.getValue(),
+    footer: props => props.column.id,
+    type: 'String',
+    size: 400 
   },
   {
     id: 'conditions',
@@ -135,10 +174,20 @@ const StudyColumns = [
     isVisible: true
   },
   {
+    id: 'treatments',
+    accessorKey: 'treatments',
+    cell: info => <TreatmentsDeck>{info.getValue()}</TreatmentsDeck>,
+    footer: props => props.column.id,
+    type: 'Select',
+    size: 400,
+    isVisible: true
+  },
+  {
     id: 'description',
     accessorFn: row => row.description,
     cell: info => <Text>{info.getValue()}</Text>,
     type: 'String',
+    size: 600,
     footer: props => props.column.id,
   },
   {
@@ -147,6 +196,7 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
     type: 'Select',
+    size: 200,
     isVisible: true
   },
   {
@@ -155,6 +205,7 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
     type: 'Values',
+    size: 200,
     isVisible: true
   },
   {
@@ -163,6 +214,7 @@ const StudyColumns = [
     cell: info => info.getValue(),
     footer: props => props.column.id,
     type: 'Values',
+    size: 200,
     isVisible: true
   }
 ]
@@ -173,6 +225,8 @@ export default function StudiesTable(props) {
   const { ...kv } = props;
 
   const [studies, setStudies] = useState(() => []);
+  const [studiesIsLoading, setStudiesIsLoading] = useState(true);
+
   const [noPages, setNoPages] = useState(undefined);
   const [noStudies, setNoStudies] = useState(0);
 
@@ -188,11 +242,17 @@ export default function StudiesTable(props) {
   }, [router.query])
 
   async function fetchStudiesFromQuery(hardRefresh=false) {
+    setStudiesIsLoading(true);
     studyHttpClient.search(page || 1, router.query).then(data => {
       let studiesToAdd = data['studies'];
-
       setData(() => studiesToAdd);
       setNoStudies(data['total']);
+
+    }).catch(error => {
+      console.log(error);
+
+    }).finally(() => {
+      setStudiesIsLoading(false);
     })
   }
 
@@ -286,24 +346,33 @@ export default function StudiesTable(props) {
             ))}
             </Thead>
             <Tbody h='100%' overflowY='scroll'>
-            {table.getRowModel()?.rows?.map(row => (
+            {(!studiesIsLoading) && table.getRowModel()?.rows?.map(row => (
               <Tr key={row.id}>
               {row.getVisibleCells().map((cell) => {
                 const meta = cell.column.columnDef.meta;
 
                 return (
-                  <Td key={cell.id} isNumeric={meta?.isNumeric}>
+                  <Td key={cell.id} pt={1} pb={1} isNumeric={meta?.isNumeric}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 );
               })}
               </Tr>
             ))}
+
+            {studiesIsLoading && [... new Array(10)].map((x, i) => (
+              <Tr key={i+'-skeleton'}>
+              {columns?.filter(col => col.isVisible)?.map(y => (
+                <Td key={y.id +'-skeleton'}>
+                  <Skeleton w={y.size || 150} h={10}/>
+                </Td>
+              ))}
+              </Tr>
+            ))}
             </Tbody>
           </Table> 
         </Box>
       </Box>
-
     </Box>
   )
 }
