@@ -2,6 +2,14 @@ export function parseMeasureType(measureType) {
 	return measureType?.split('.')?.[1];
 };
 
+export function parseEnumType(enumString) {
+  return enumString.replace(/_/g, ' ')
+          .toLowerCase()
+          .replace(/\b\w/g, function(match) {
+            return match.toUpperCase();
+          });
+}
+
 export function createDataLoadingObj(data=[], isLoading=true) {
 	return { data: data, isLoading: isLoading };
 }
