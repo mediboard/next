@@ -310,7 +310,7 @@ export default function StudiesTable(props) {
           <Table w={table?.getCenterTotalSize()}>
             <Thead>
             {table.getHeaderGroups()?.map(headerGroup => (
-              <Tr key={headerGroup.id}>
+              <Tr key={headerGroup.id} bg='blue.100'>
               {headerGroup.headers?.map(header => (
                 <Th
                   position='relative'
