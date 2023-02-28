@@ -89,8 +89,8 @@ export async function getStaticProps(context) {
   const baselinesRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/baselines`);
   const baselinesData = await baselinesRes.json();
 
-  const measuresRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/measures`);
-  const measuresData = await measuresRes.json();
+  // const measuresRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/measures`);
+  // const measuresData = await measuresRes.json();
 
   return { props: { 
     study: studyData?.studies[0],
@@ -131,9 +131,12 @@ function Main(props) {
 
   useEffect(() => {
     // Load the measures on the client
-    setMeasuresIsLoading(true);
-    fetchMeasures();
-  }, [id])
+    if (id && router.isReady) {
+      console.log(router);
+      setMeasuresIsLoading(true);
+      fetchMeasures();
+    }
+  }, [router.isReady])
 
   async function fetchMeasures() {
     const measuresRes = await fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}/studies/${id}/measures`);

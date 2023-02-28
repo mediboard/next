@@ -20,6 +20,7 @@ import {
   Spacer,
   Input
 } from "@chakra-ui/react";
+import { parseEnumType } from '../utils';
 import MultiSelect from './MultiSelect';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import ConditionMultiSelect from './ConditionMultiSelect';
@@ -105,12 +106,27 @@ const ValuesBody = ({selectedValues, setSelectedValues, valueType}) => {
   )
 }
 
-const SelectBody = ({options, setOptions, optionsType}) => (
-  <MultiSelect 
+const SelectBody = ({options, setOptions, optionsType}) => {
+
+  if (optionsType == 'conditions') {
+    return (
+      <ConditionMultiSelect 
+        conditions={options?.map(x => ({name: x}))}
+        setConditions={(conditions) => setOptions(conditions.map(x => x.name))}/>)
+  }
+
+  if (optionsType == 'treatments') {
+    return (
+      <TreatmentMultiSelect 
+        treatments={options?.map(x => ({name: x}))}
+        setTreatments={(treats) => setOptions(treats.map(x => x.name))}/>)
+  }
+
+  return (<MultiSelect 
     selectedValues={options}
     setSelectedValues={setOptions}
-    valueType={optionsType}/>
-)
+    valueType={optionsType}/>)
+}
 
 
 const DEFUALT_DATE = '1970-01-01T00:00:00Z';
@@ -167,8 +183,6 @@ export default function FilterModal(props) {
       break;
     }
   }
-
-  // Set the value in the url on close 
 
   function setStringUrl() {
     if ((router.query[columnId] == stringValue) || (!stringValue?.length && !router.query[columnId])) {
@@ -264,7 +278,7 @@ export default function FilterModal(props) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>{`Filter ${parseEnumType(columnId)}`}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {(type === 'String') && <StringBody setValue={setStringValue} value={stringValue}/>}
