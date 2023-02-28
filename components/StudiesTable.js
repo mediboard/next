@@ -287,7 +287,7 @@ export default function StudiesTable(props) {
         pt={3} pb={3} pl={5} pr={5}>
         <Heading size='md'>{noStudies + ' Trials'}</Heading>
         <Text ml={3} fontWeight='500' color='gray.600'>
-          {`${[...Object.keys(router.query)].filter(x => x != 'page').length} Filters applied`}
+          {`${[...Object.keys(router.query)].filter(x => !['page', 'limit'].includes(x)).length} Filters applied`}
         </Text>
         <Spacer />
         <CheckableMenu
