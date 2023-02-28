@@ -56,22 +56,22 @@ export const index2cat = [
   'related studies'
 ]
 
-export async function getStaticPaths() {
-  // const jsonDirectory = path.join(process.cwd(), 'data');
+// export async function getStaticPaths() {
+//   // const jsonDirectory = path.join(process.cwd(), 'data');
 
-  // const staticRoutes = JSON.parse(await fs.readFile(jsonDirectory + '/static_routes.json', 'utf8'));
-  const staticRoutes = {study_routes: [
-    {id: 'NCT01332318'},
-    {id: 'NCT01014533'},
-    {id: 'NCT00392041'},
-    {id: 'NCT00386334'},
-  ]}
+//   // const staticRoutes = JSON.parse(await fs.readFile(jsonDirectory + '/static_routes.json', 'utf8'));
+//   const staticRoutes = {study_routes: [
+//     {id: 'NCT01332318'},
+//     {id: 'NCT01014533'},
+//     {id: 'NCT00392041'},
+//     {id: 'NCT00386334'},
+//   ]}
 
-  return {
-    paths: staticRoutes.study_routes.map(x => ({params: x})),
-    fallback: 'blocking' 
-  }
-}
+//   return {
+//     paths: staticRoutes.study_routes.map(x => ({params: x})),
+//     fallback: 'blocking' 
+//   }
+// }
 
 export async function getStaticProps(context) {
   const { id, ...rest } = context.params;
