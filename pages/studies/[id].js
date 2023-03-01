@@ -223,7 +223,9 @@ function Main(props) {
                 measure={measures?.[0]}/>
             </Box>
           </VStack>
-          : <NoResultsOverview measures={measures} study={props.study}/>
+          : <NoResultsOverview
+              measures={measures}
+              study={{...props.study, has_results: hasResults(measures)}}/>
         }
         </TabPanel>
 

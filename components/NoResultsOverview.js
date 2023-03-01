@@ -7,6 +7,7 @@ import {
 import StudySection from './StudySection';
 import MeasuresTile from './MeasuresTile';
 import StudyKeyItems from './StudyKeyItems';
+import RelatedStudiesPage from './RelatedStudiesPage';
 
 
 export default function NoResultsOverview(props) {
@@ -18,12 +19,18 @@ export default function NoResultsOverview(props) {
         <StudyKeyItems study={study} w='100%' />
       </StudySection>
       <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
+
       <StudySection header='Measures'>
         <VStack>
         {measures.map(measure => (
           <MeasuresTile measure={measure}/>
         ))}
         </VStack>
+      </StudySection>
+      <Divider bg='#cccccc' h={'1px'} mt={1} mb={1}/>
+
+      <StudySection header='Related Studies'>
+        <RelatedStudiesPage studyId={study.id} />
       </StudySection>
     </VStack>
   )
