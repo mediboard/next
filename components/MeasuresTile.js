@@ -34,7 +34,7 @@ export default function MeasuresTile(props) {
 					<Text align='left' fontWeight='500' fontSize='14px'>{measure?.title}</Text>
 				</Box>
 				<Spacer />
-				<Center>
+				<Center display={onClick ? 'default' : 'none'}>
 					<ChevronRightIcon w={5} h={7} />
 				</Center>
 			</Flex>

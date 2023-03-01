@@ -32,14 +32,16 @@ import RelatedStudiesPage from '../../components/RelatedStudiesPage';
 import PageBody from '../../components/PageBody';
 import StudySection from '../../components/StudySection';
 import Header from '../../components/Header';
+import NoResultsOverview from '../../components/NoResultsOverview';
 
 
 const groupColorWheel = [
-'#ffbc80', 
-'#8185FF', 
-'#80c3ff', 
-'#bc80ff', 
-'#fb80ff'];
+  '#ffbc80', 
+  '#8185FF', 
+  '#80c3ff', 
+  '#bc80ff', 
+  '#fb80ff'
+];
 
 export const cat2index = {
   'overview': 0,
@@ -115,6 +117,10 @@ export default function Study(props) {
   );
 }
 
+const hasResults = (measures) => {
+  return !measures.filter(x => !x.outcomes?.length)?.length
+}
+
 function Main(props) {
   const router = useRouter();
   const { id, section } = router.query;
@@ -125,9 +131,7 @@ function Main(props) {
   const [measuresIsLoading, setMeasuresIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load the measures on the client
     if (id && router.isReady) {
-      console.log(router);
       setMeasuresIsLoading(true);
       fetchMeasures();
     }
@@ -156,11 +160,8 @@ function Main(props) {
     <PageBody mt={0} align='center' justifyContent='center' bg='#CED4DB'>
     <Flex minH='90vh' 
       flexDirection={['column', 'row']}
-      w='100%'
-      borderRadius={4}
-      m={['0%', '2.5%']}
-      pb={5}
-      bg='white'
+      w='100%'borderRadius={4}
+      m={['0%', '2.5%']} pb={5} bg='white'
       alignItems='stretch'>
       <VStack mb={[3, 0]} w={['100%', '30%']} pl={[3,5]} pr={[3,5]} pt={5} borderRadius={4}>
         <StudySummary rowGap={[1, 0]} headingSx={{fontSize: '18px'}} {...props.study}/>
@@ -185,15 +186,16 @@ function Main(props) {
           {['Overview', 'Participants', 'Results', 'Adverse Effects', 'Related Studies'].map(x => (
             <Tab key={x +'-tab'}
               border={['1px solid rgb(226, 232, 240)', 'none']}
+              display={(!hasResults(measures) && (x != 'Overview')) ? 'none' : 'default'}
               borderBottom='1px solid rgb(226, 232, 240)' 
               borderColor={[section === x.toLowerCase() ? 'purple.300' : 'rgb(226, 232, 240)', 'none']}
-              ml={[0,1]} 
-              bg='white'>{x}</Tab>
+              ml={[0,1]} bg='white'>{x}</Tab>
           ))}
         </TabList>
 
         <TabPanels bg={['#CED4DB44', 'white']} w={['100%']} borderLeft={['none','1px solid #cccccc']}>
         <TabPanel w='100%'>
+        {hasResults(measures) ?
           <VStack mt={5} spacing={8} w='100%' pl={[2,5]} pr={[2,5]} alignItems='stretch'>
             <StudySection header='Highlights'>
               <InsightsDeck study_id={id} type={'STUDY'} />
@@ -221,6 +223,10 @@ function Main(props) {
                 measure={measures?.[0]}/>
             </Box>
           </VStack>
+          : <NoResultsOverview
+              measures={measures}
+              study={{...props.study, has_results: hasResults(measures)}}/>
+        }
         </TabPanel>
 
         <TabPanel>
