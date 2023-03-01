@@ -67,7 +67,7 @@ export default function UserButton(props) {
 		    		<Text>User Profile</Text>
 		    	</PopoverOption>
 
-		    	<PopoverOption pl={2} pr={2} onClick={onSignOut}>
+		    	<PopoverOption pl={2} pr={2} mt={2} onClick={onSignOut}>
 		    		<Flex alignItems='center'>
 			    		<Text>Sign Out</Text>
 			    		<Spacer />
