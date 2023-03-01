@@ -80,12 +80,8 @@ export default function Header() {
   }
 
   function onSignInClick() {
-    if (router.pathname === '/') {
-      signInContext({'type': 'NewUser'});
-      return;
-    }
-
-    router.push('/');
+    signInContext({'type': 'NewUser'});
+    return;
   }
 
   return (

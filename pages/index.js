@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react';
 import { theme, SignInContext } from './_app';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import Header from '../components/Header'
+
 
 export default function Home() {
   return (
@@ -37,6 +39,9 @@ export function LandingPage() {
   const { user, signOut } = useAuthenticator((context) => [context.user]);
 
   return (
+    <>
+    <Header />
+    
     <Flex flexDirection='column' w='100%'>
       <SimpleGrid w='100%' columns={[1, 2]} bg={'#8285F888'} p={[10, 20]}>
         <Flex flexDirection='column' alignItems='start' w={['100%', '60%']}>
@@ -121,5 +126,6 @@ export function LandingPage() {
         </Flex>
       </SimpleGrid>
     </Flex>
+    </>
   );
 }
