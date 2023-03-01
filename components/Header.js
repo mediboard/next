@@ -117,7 +117,7 @@ export default function Header() {
         <Spacer />
         <NavButton>{'Browse Studies'}</NavButton>
         <Spacer />
-        <NavButton>{'Community'}</NavButton>
+        <NavButton>{'Developers'}</NavButton>
 
         <Spacer />
         <Box>

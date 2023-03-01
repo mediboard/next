@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
 	Text,
 	Box,
@@ -26,8 +27,14 @@ export default function UserButton(props) {
 	const { user, signOut } = useAuthenticator((context) => [context.user]);
 	const [userAttributes, setUserAttributes] = useState({});
 
+	const router = useRouter();
+
 	function onSignOut() {
 		signOut();
+	}
+
+	function onUserProfile() {
+		router.push(`/users/${user?.username}`);
 	}
 
 	return (
@@ -56,6 +63,10 @@ export default function UserButton(props) {
 		    	</Flex>
 		    </PopoverHeader>
 		    <PopoverBody>
+		    	<PopoverOption pl={2} pr={2} onClick={onUserProfile}>
+		    		<Text>User Profile</Text>
+		    	</PopoverOption>
+
 		    	<PopoverOption pl={2} pr={2} onClick={onSignOut}>
 		    		<Flex alignItems='center'>
 			    		<Text>Sign Out</Text>
