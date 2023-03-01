@@ -32,7 +32,7 @@ export const navNameToRoute = {
   'Browse Studies': '/studies/browse',
   Conditions: '/medical/conditions',
   FAQ: '/medical/faq',
-  Blog: '/blog/articles'
+  Blog: '/blog/articles',
 };
 
 export default function Header() {
@@ -66,6 +66,10 @@ export default function Header() {
   };
 
   const handleNavClick = (e) => {
+    if (e.target.id == 'Developers') {
+      window.open("https://docs.mediboard.fyi", "_blank");
+      return;
+    }
     router.push(navNameToRoute[e.target.id]);
   };
 
@@ -80,12 +84,8 @@ export default function Header() {
   }
 
   function onSignInClick() {
-    if (router.pathname === '/') {
-      signInContext({'type': 'NewUser'});
-      return;
-    }
-
-    router.push('/');
+    signInContext({'type': 'NewUser'});
+    return;
   }
 
   return (
@@ -121,7 +121,7 @@ export default function Header() {
         <Spacer />
         <NavButton>{'Browse Studies'}</NavButton>
         <Spacer />
-        <NavButton>{'Community'}</NavButton>
+        <NavButton>{'Developers'}</NavButton>
 
         <Spacer />
         <Box>

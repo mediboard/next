@@ -14,6 +14,17 @@ export function createDataLoadingObj(data=[], isLoading=true) {
 	return { data: data, isLoading: isLoading };
 }
 
+
+// AI generated
+export function copyToClipboard(str) {
+  const el = document.createElement('textarea');  // Create a temporary textarea element
+  el.value = str;  // Set the value of the textarea to the input string
+  document.body.appendChild(el);  // Add the textarea element to the document
+  el.select();  // Select the contents of the textarea
+  document.execCommand('copy');  // Copy the selected text to the clipboard
+  document.body.removeChild(el);  // Remove the temporary textarea element
+}
+
 export function isDataLoading(dataObj) {
 	return dataObj.isLoading;
 }

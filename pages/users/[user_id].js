@@ -7,6 +7,7 @@ import {
 } from '@chakra-ui/react';
 import PageBody from '../../components/PageBody';
 import ApiKeyCard from '../../components/user/ApiKeyCard';
+import Header from '../../components/Header';
 import { theme } from '../_app';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
@@ -32,17 +33,19 @@ function Main(props) {
   const { user } = useAuthenticator((context) => [context.user]);
 
   return (
-    <PageBody>
+    <>
+    <Header />
+    <PageBody bg='gray.100' mt={0}>
       <Flex minH='90vh' 
         flexDirection={['column', 'row']}
         w='100%'
         borderRadius={4}
         m={['0%', '2.5%']}
         pb={5}
-        bg='white'
         alignItems='stretch'>
-        <ApiKeyCard user={user} />
+        <ApiKeyCard user={user} bg='white'/>
       </Flex>
     </PageBody>
+    </>
   );
 }
