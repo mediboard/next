@@ -30,6 +30,23 @@ class StudyHttpClient {
 		return data;
 	}
 
+	async getStudyAttributes(attribute, args, limit) {
+		let config = {
+			url: `${this.base}/studies/data/${attribute}`,
+			params: { limit: limit, ...args }
+		}
+
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to collect related studies, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
 	async getRelatedStudies(study_id, page) {
 		let config = {
 			url: this.base + '/studies/'+study_id+'/related',
