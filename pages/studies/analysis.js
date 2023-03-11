@@ -80,7 +80,7 @@ function Main() {
         query: router.query
       })}}
       {...props}>
-      {'Analyze Results'}
+      {'Browse Studies'}
     </Button>
   )
 
