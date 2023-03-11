@@ -8,7 +8,7 @@ export default function Banner(props) {
 
   return (
     <Flex w='100%'
-      bg='white'
+      bg='white' alignItems='center'
       borderBottom={"1px solid var(--chakra-colors-chakra-border-color)"}
       pt={5} pb={5}
       pl={5} pr={5}>

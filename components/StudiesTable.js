@@ -14,14 +14,20 @@ import {
   Flex,
   Td,
   Box,
+  Button,
   Text
 } from '@chakra-ui/react'
-import { ChevronDownIcon, LinkIcon } from '@chakra-ui/icons';
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  LinkIcon
+} from '@chakra-ui/icons';
 import FilterModal from './FilterModal';
 import StudyTableRow from './StudyTableRow';
 import ExpandableDeck from './ExpandableDeck';
 import CheckableMenu from './CheckableMenu';
 import PagesNavigator from './PagesNavigator';
+import Banner from './Banner';
 import { ItemBadge } from './TreatmentCompareItem';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 import {
@@ -235,7 +241,6 @@ export default function StudiesTable(props) {
   const { treatments, conditions, q, gender, page } = router.query;
 
   useEffect(() => {
-    // Mutliple calls, order is as expected but completion is not
     if (router.isReady) {
       fetchStudiesFromQuery();
     }
@@ -276,19 +281,26 @@ export default function StudiesTable(props) {
     router.push(router, undefined, { shallow: true });
   }
 
+  const AnalyzeButton = (props) => (
+    <Button rightIcon={<ChevronRightIcon />}
+      onClick={() => {router.push({
+        pathname: '/studies/analysis',
+        query: router.query
+      })}}
+      {...props}>
+      {'Analyze Results'}
+    </Button>
+  )
+
+
   return (
     <Box  {...kv}>
-      <Flex 
-        borderTop='1px'
-        borderBottom='1px'
-        borderColor='gray.200'
-        alignItems='center'
-        justifyContent='center'
-        pt={3} pb={3} pl={5} pr={5}>
+      <Banner>
         <Heading size='md'>{noStudies + ' Trials'}</Heading>
         <Text ml={3} fontWeight='500' color='gray.600'>
           {`${[...Object.keys(router.query)].filter(x => !['page', 'limit'].includes(x)).length} Filters applied`}
         </Text>
+        <AnalyzeButton ml={3} />
         <Spacer />
         <CheckableMenu
           ml={3}
@@ -301,7 +313,7 @@ export default function StudiesTable(props) {
           selectedOptions={columns.filter(col => col.isVisible).map(x => x.id)}>
           {`${columns.filter(col => !col.isVisible).length} Columns Hidden`}
         </CheckableMenu>
-      </Flex>
+      </Banner>
 
       <Box pt={5} pb={1} pt={5} pl={5} bg={'gray.100'} h='100%' position='relative'>
         <Box borderWidth='1px' bg='white' h='calc(100% - 2rem)'

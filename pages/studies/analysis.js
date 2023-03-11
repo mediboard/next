@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Text,
+  Button,
   Spacer,
   Grid,
   Link,
@@ -10,7 +11,7 @@ import {
   ColorModeScript,
   Flex,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 import Header from '../../components/Header';
 import AttributesCard from '../../components/analytics/AttributesCard';
 import CheckableMenu from '../../components/CheckableMenu';
@@ -72,11 +73,22 @@ function Main() {
   
   const [visibleAttrs, setVisibleAttrs] = useState(ATTRIBUTES);
 
+  const SearchButton = (props) => (
+    <Button leftIcon={<ChevronLeftIcon />}
+      onClick={() => {router.push({
+        pathname: '/studies/browse',
+        query: router.query
+      })}}
+      {...props}>
+      {'Analyze Results'}
+    </Button>
+  )
+
   return (
     <Box h='100vh' display='flex' flexGrow='1' w='100%' flexDirection='column'>
       <Header />
       <Banner>
-        <Link href={`/studies/browse${buildQueryString(router.query)}`}>{'Back to Search'}</Link>
+        <SearchButton />
         <Text ml={3} fontWeight='500' color='gray.600'>
           {`${[...Object.keys(router.query)].filter(x => !['page', 'limit'].includes(x)).length} Filters applied`}
         </Text>
