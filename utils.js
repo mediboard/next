@@ -15,8 +15,25 @@ export function parseEnumType(enumString) {
     });
 }
 
+export function buildQueryString(query) {
+  const queryString = Object.keys(query)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+    .join("&");
+  return queryString ? `?${queryString}` : "";
+}
+
 export function createDataLoadingObj(data=[], isLoading=true) {
 	return { data: data, isLoading: isLoading };
+}
+
+export function capitalize(str) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(function(word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
 }
 
 

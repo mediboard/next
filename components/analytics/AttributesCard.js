@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
-  Box
+  Skeleton,
+  Heading,
+  Flex
 } from '@chakra-ui/react';
 import studyHttpClient from '../../services/clientapis/StudyHttpClient';
 import RoundedBarChart from '../charts/RoundedBarChart';
 import Tile from '../Tile';
-import { isEnum, parseMeasureType } from '../../utils';
+import { isEnum, parseMeasureType, capitalize } from '../../utils';
 
 
 const groupColorWheel = [
@@ -16,15 +19,19 @@ const groupColorWheel = [
   '#fb80ff'
 ];
 
-function prepDataForChart(data) {
+function prepDataForChart(data, showNA) {
   const newData = [];
   const fills = {};
 
-  Object.keys(data).forEach((key,i) => {
-    newData.push({
-      name: isEnum(key) ? parseMeasureType(key) : key,
-      group_a: data[key]
-    });
+  Object.keys(data)?.forEach((key,i) => {
+    const parsedKey = isEnum(key) ? parseMeasureType(key) : key;
+
+    if (parsedKey != 'NA' || (parsedKey=='NA' && showNA)) {
+      newData.push({
+        name: parsedKey,
+        group_a: data[key]
+      });
+    }
 
   })
 
@@ -36,20 +43,22 @@ function prepDataForChart(data) {
 }
 
 export default function AttributesCard(props) {
-  const { attribute, ...kv }  = props;
+  const { attribute, showNA, ...kv }  = props;
+
+  const router = useRouter();
 
   const [data, setData] = useState({});
-  const [datIsLoading, setDataIsLoading] = useState(true);
+  const [dataIsLoading, setDataIsLoading] = useState(true);
 
   useEffect(() => {
-    if (attribute) {
+    if (attribute && router.isReady) {
       fetchData();
     }
-  }, [attribute])
+  }, [attribute, router.isReady])
 
   async function fetchData() {
     setDataIsLoading(true);
-    studyHttpClient.getStudyAttributes(attribute).then(response => {
+    studyHttpClient.getStudyAttributes(attribute, router.query).then(response => {
       setData(response[attribute]);
     }).catch(error => {
       console.log(error);
@@ -59,9 +68,14 @@ export default function AttributesCard(props) {
   }
 
   return (
-    <Tile>
+    <Tile isLoaded={!dataIsLoading} {...kv}>
+      <Flex w='100%' justifyContent='center'>
+        <Heading size='sm'>
+        {capitalize(attribute)}
+        </Heading>
+      </Flex>
       <RoundedBarChart 
-        data={prepDataForChart(data)[0]}
+        data={prepDataForChart(data, showNA)[0]}
         fills={prepDataForChart(data)[1]}/>
     </Tile>
   )

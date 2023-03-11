@@ -13,8 +13,6 @@ import {
 
 
 const getDataGroups = (data) => {
-  console.log(data);
-
   return Object.keys(data).filter(key => key.includes('group'));
 };
 
