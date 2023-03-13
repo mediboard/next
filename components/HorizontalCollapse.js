@@ -16,6 +16,7 @@ export default function HorizontalCollapse(props) {
         animate={{ width: isOpen ? 300 : 0 }}
         style={{
           background: "white",
+          whiteSpace: 'nowrap',
           height: "100%",
         }}
       >

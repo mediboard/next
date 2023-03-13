@@ -24,7 +24,9 @@ export default function StudiesSideBar(props) {
       <HorizontalCollapse
         isOpen={isOpen}
         getDisclosureProps={getDisclosureProps}>
-        <SearchesDeck />
+        <Box p={5}>
+          <SearchesDeck />
+        </Box>
       </HorizontalCollapse>
     </Flex>
   )
