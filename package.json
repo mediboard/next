@@ -29,6 +29,7 @@
     "react-datepicker": "^4.10.0",
     "react-dom": "18.2.0",
     "recharts": "^2.1.16",
-    "swc-loader": "^0.2.3"
+    "swc-loader": "^0.2.3",
+    "uuid": "^9.0.0"
   }
 }

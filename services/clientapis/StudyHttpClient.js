@@ -181,6 +181,26 @@ class StudyHttpClient {
 		return data;
 	}
 
+	async createSearch(search) {
+		const response = await axios.post(AppConfig.api_url+'/studies/search_value/' + search['id'], search);
+		if (response.status !== 200) {
+			throw new Error("Failed to create search, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async listSearches(username) {
+		const response = await axios.get(AppConfig.api_url+'/studies/user/' + username + '/search_values');
+		if (response.status !== 200) {
+			throw new Error("Failed to list search values, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
 	async updateGroup(groupId, group) {
 		const response = await axios.put(AppConfig.api_url+'/studies/groups/'+groupId, group);
 		if (response.status !== 200) {
