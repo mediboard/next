@@ -56,7 +56,6 @@ const DateBody = ({startDate, setStartDate, endDate, setEndDate}) => (
   </Flex>
 )
 
-
 const ValuesBody = ({selectedValues, setSelectedValues, valueType}) => {
   const [values, setValues] = useState([]);
   const [valuesAreLoading, setValuesAreLoading] = useState(true);
@@ -107,7 +106,6 @@ const ValuesBody = ({selectedValues, setSelectedValues, valueType}) => {
 }
 
 const SelectBody = ({options, setOptions, optionsType}) => {
-
   if (optionsType == 'conditions') {
     return (
       <ConditionMultiSelect 

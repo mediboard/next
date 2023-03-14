@@ -28,6 +28,7 @@ import ExpandableDeck from './ExpandableDeck';
 import CheckableMenu from './CheckableMenu';
 import PagesNavigator from './PagesNavigator';
 import StudiesSideBar from './StudiesSideBar';
+import CurrentSearchCard from './CurrentSearchCard';
 import Banner from './Banner';
 import { ItemBadge } from './TreatmentCompareItem';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
@@ -38,6 +39,7 @@ import {
   ColumnDef,
   flexRender,
 } from '@tanstack/react-table'
+import { parseQueryString } from '../utils';
 
 
 function wrapText(text) {
@@ -234,22 +236,43 @@ export default function StudiesTable(props) {
   const [studies, setStudies] = useState(() => []);
   const [studiesIsLoading, setStudiesIsLoading] = useState(true);
 
-  const [noPages, setNoPages] = useState(undefined);
+  const [currentSearch, setCurrentSearch] = useState(undefined);
+
   const [noStudies, setNoStudies] = useState(0);
+
+  const [selectedColumn, setSelectedColumn] = useState(undefined);
+
+  const [sideBarMode, setSideBarMode] = useState(undefined);
 
   const router = useRouter();
 
-  const { treatments, conditions, q, gender, page } = router.query;
+  useEffect(() => {
+    if (currentSearch?.search_string) {
+      fetchStudiesFromQuery(currentSearch?.search_string);
+    }
+  }, [currentSearch?.search_string])
 
   useEffect(() => {
-    if (router.isReady) {
-      fetchStudiesFromQuery();
+    if (router.isReady && router?.query?.search) {
+      setStudiesIsLoading(true)
+      loadSearchString(router.query.search);
     }
-  }, [router.query])
+  }, [router?.query?.search])
 
-  async function fetchStudiesFromQuery(hardRefresh=false) {
-    setStudiesIsLoading(true);
-    studyHttpClient.search(page || 1, router.query).then(data => {
+  async function loadSearchString(searchString) {
+    studyHttpClient.getSearch(searchString).then(data => {
+      setCurrentSearch(data.search);
+
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  async function fetchStudiesFromQuery(searchString) {
+    const queries = parseQueryString(searchString);
+    console.log(queries);
+
+    studyHttpClient.search(router.page || 1, queries).then(data => {
       let studiesToAdd = data['studies'];
       setData(() => studiesToAdd);
       setNoStudies(data['total']);
@@ -293,6 +316,7 @@ export default function StudiesTable(props) {
     </Button>
   )
 
+  const selectColor = 'var(--chakra-colors-blue-500)';
 
   return (
     <Box  {...kv}>
@@ -301,7 +325,9 @@ export default function StudiesTable(props) {
         <Text ml={3} fontWeight='500' color='gray.600'>
           {`${[...Object.keys(router.query)].filter(x => !['page', 'limit'].includes(x)).length} Filters applied`}
         </Text>
-        <AnalyzeButton ml={3} />
+        <CurrentSearchCard
+          setSearch={setCurrentSearch}
+          search={currentSearch}/>
         <Spacer />
         <CheckableMenu
           ml={3}
@@ -330,9 +356,21 @@ export default function StudiesTable(props) {
                     position='relative'
                     key={header.id}
                     w={header.getSize()}
+                    borderRight={header.id === selectedColumn?.id ? `3px solid ${selectColor}` : ''}
+                    borderLeft={header.id === selectedColumn?.id ? `3px solid ${selectColor}` : ''}
+                    bg={header.id === selectedColumn?.id ? selectColor : ''}
                     colSpan={header.colSpan}>
-                    <Flex whiteSpace='nowrap' alignItems='center' >
-                      <FilterModal columnId={header?.id} type={id2Type(header?.id)}/>
+                    <Flex whiteSpace='nowrap' cursor='pointer' onClick={() => {
+                      if (selectedColumn?.id === header.id) {
+                        setSideBarMode(undefined);
+                        setSelectedColumn(undefined);
+                        return;
+                      }
+
+                      setSelectedColumn({id: header?.id, type: id2Type(header?.id)});
+                      setSideBarMode("filter");
+                    }}>
+                      {/*<FilterModal columnId={header?.id} type={id2Type(header?.id)}/>*/}
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </Flex>
                     <Box
@@ -340,7 +378,7 @@ export default function StudiesTable(props) {
                       onTouchStart={header.getResizeHandler()}
                       position='absolute' right={'-2.5px'}
                       top={0} height='100%'
-                      width='5px'cursor='col-resize'
+                      width='3px'cursor='col-resize'
                       background={header.column.getIsResizing() ? 'blue.500' : 
                         'var(--chakra-colors-chakra-border-color)'}
                       opacity={header.column.getIsResizing() || header.id.includes('id') ? 1 : .5} />
@@ -355,10 +393,23 @@ export default function StudiesTable(props) {
                 {row.getVisibleCells().map((cell) => {
                   const meta = cell.column.columnDef.meta;
 
+                  let borderRight = '';
+                  let borderLeft = '';
+                  if (cell.column.id === selectedColumn?.id) {
+                    borderRight = `3px solid ${selectColor}`;
+                    borderLeft = `3px solid ${selectColor}`;
+                  }
+
+                  if (cell.id.includes('id')) {
+                    borderRight = '3px solid var(--chakra-colors-chakra-border-color)';
+                    borderLeft = '';
+                  }
+
                   return (
                     <Td key={cell.id} 
                       pt={1} pb={1} 
-                      borderRight={cell.id.includes('id') ? '5px solid var(--chakra-colors-chakra-border-color)' : ''}
+                      borderRight={borderRight}
+                      borderLeft={borderLeft}
                       isNumeric={meta?.isNumeric}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
@@ -387,7 +438,7 @@ export default function StudiesTable(props) {
               <PagesNavigator
                 mt={0}
                 no_pages={Math.ceil(noStudies / (parseInt(router.query.limit) || 10))}
-                page_no={parseInt(page) || 1}
+                page_no={parseInt(router.page) || 1}
                 onPageClick={onPageClick}/>
             </Box>
             <Spacer />
@@ -409,7 +460,13 @@ export default function StudiesTable(props) {
             </CheckableMenu>
           </Flex>
         </Flex>
-        <StudiesSideBar w='fit-content' />
+        <StudiesSideBar 
+          setMode={setSideBarMode}
+          mode={sideBarMode}
+          selectedColumn={selectedColumn} 
+          searchString={currentSearch?.search_string}
+          setSearchString={(str) => {setCurrentSearch({...currentSearch, search_string: str})}}
+          w='fit-content' />
       </Box>
     </Box>
   )

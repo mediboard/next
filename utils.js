@@ -15,6 +15,17 @@ export function parseEnumType(enumString) {
     });
 }
 
+export function parseQueryString(searchString) {
+  const params = new URLSearchParams(searchString);
+  const result = {};
+
+  for (let [key, value] of params) {
+    result[key] = value;
+  }
+
+  return result;
+}
+
 export function buildQueryString(query) {
   const queryString = Object.keys(query)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)

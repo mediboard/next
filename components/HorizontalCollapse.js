@@ -3,12 +3,11 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 
 export default function HorizontalCollapse(props) {
-  const { children, getDisclosureProps, isOpen, ...kv } = props;
+  const { children, isOpen, ...kv } = props;
   const [hidden, setHidden] = useState(!isOpen);
 
   return (
       <motion.div
-        {...getDisclosureProps()}
         hidden={hidden}
         initial={false}
         onAnimationStart={() => setHidden(false)}
@@ -17,6 +16,7 @@ export default function HorizontalCollapse(props) {
         style={{
           background: "white",
           whiteSpace: 'nowrap',
+          overflow: 'none',
           height: "100%",
         }}
       >

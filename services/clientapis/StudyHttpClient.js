@@ -201,6 +201,36 @@ class StudyHttpClient {
 		return data;
 	}
 
+	async getSearch(search_id) {
+		const response = await axios.get(AppConfig.api_url+'/studies/search_value/' + search_id);
+		if (response.status !== 200) {
+			throw new Error("Failed to get search value, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async deleteSearch(search_id) {
+		const response = await axios.delete(AppConfig.api_url+'/studies/search_value/' + search_id);
+		if (response.status !== 200) {
+			throw new Error("Failed to delete search value, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async updateSearch(search) {
+		const response = await axios.put(AppConfig.api_url+'/studies/search_value/' + search['id'], search);
+		if (response.status !== 200) {
+			throw new Error("Failed to update search value, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
 	async updateGroup(groupId, group) {
 		const response = await axios.put(AppConfig.api_url+'/studies/groups/'+groupId, group);
 		if (response.status !== 200) {
