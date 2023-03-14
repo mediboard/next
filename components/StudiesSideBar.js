@@ -12,6 +12,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import HorizontalCollapse from './HorizontalCollapse';
 import SearchesDeck from './analytics/SearchesDeck';
 import FilterBody from './FilterBody';
+import AnalyticsSelector from './AnalyticsSelector';
 
 
 export default function StudiesSideBar(props) {
@@ -78,6 +79,7 @@ export default function StudiesSideBar(props) {
             searchString={search?.search_string}
             setSearchString={(str) => {setSearch({...search, search_string: str})}} />}
           {(mode === 'search') && <SearchesDeck currentSearch={search}/>}
+          {(mode === 'analyze') && <AnalyticsSelector />}
         </Box>
       </HorizontalCollapse>
     </Flex>

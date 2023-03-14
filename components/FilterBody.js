@@ -24,14 +24,13 @@ const StringBody = ({value, setValue}) => (
 )
 
 const DateBody = ({startDate, setStartDate, endDate, setEndDate}) => (
-  <Flex>
+  <Flex flexDirection='column'>
     <Box border='1px solid grey' borderRadius={4} p={1}>
       <DatePicker
         showYearDropdown
         selected={startDate}
         onChange={(date) => setStartDate(date)} />
     </Box>
-    <Spacer />
     <Box border='1px solid grey' borderRadius={4} p={1}>
       <DatePicker
         showYearDropdown
