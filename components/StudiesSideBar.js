@@ -15,7 +15,14 @@ import FilterBody from './FilterBody';
 
 
 export default function StudiesSideBar(props) {
-  const { selectedColumn, searchString, setSearchString, mode, setMode, ...kv } = props;
+  const { 
+    selectedColumn,
+    search,
+    setSearch,
+    mode,
+    setMode,
+    ...kv
+  } = props;
   const { getButtonProps, getDisclosureProps, isOpen } = useDisclosure();
 
   function onClick(type) {
@@ -48,9 +55,9 @@ export default function StudiesSideBar(props) {
           {(mode === 'filter') && <FilterBody 
             type={selectedColumn?.type}
             columnId={selectedColumn?.id}
-            searchString={searchString}
-            setSearchString={setSearchString} />}
-          {(mode === 'search') && <SearchesDeck />}
+            searchString={search?.search_string}
+            setSearchString={(str) => {setSearch({...search, search_string: str})}} />}
+          {(mode === 'search') && <SearchesDeck currentSearch={search}/>}
         </Box>
       </HorizontalCollapse>
     </Flex>

@@ -247,16 +247,21 @@ export default function StudiesTable(props) {
   const router = useRouter();
 
   useEffect(() => {
-    if (currentSearch?.search_string) {
-      setStudiesIsLoading(true)
-      fetchStudiesFromQuery(currentSearch?.search_string);
-    }
-  }, [currentSearch?.search_string])
+    setStudiesIsLoading(true)
+    fetchStudiesFromQuery(currentSearch?.search_string);
+  }, [currentSearch])
 
   useEffect(() => {
     if (router.isReady && router?.query?.search) {
+      console.log("firing")
       loadSearchString(router.query.search);
+      return;
     }
+
+    if (router.isReady) {
+      setCurrentSearch('');
+    }
+
   }, [router?.query?.search])
 
   async function loadSearchString(searchString) {
@@ -464,8 +469,8 @@ export default function StudiesTable(props) {
           setMode={setSideBarMode}
           mode={sideBarMode}
           selectedColumn={selectedColumn} 
-          searchString={currentSearch?.search_string}
-          setSearchString={(str) => {setCurrentSearch({...currentSearch, search_string: str})}}
+          search={currentSearch}
+          setSearch={setCurrentSearch}
           w='fit-content' />
       </Box>
     </Box>
