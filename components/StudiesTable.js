@@ -326,16 +326,16 @@ export default function StudiesTable(props) {
   return (
     <Box  {...kv}>
       <Banner>
-        <Heading size='md'>{noStudies + ' Trials'}</Heading>
-        <Text ml={3} fontWeight='500' color='gray.600'>
+        <Heading whiteSpace='pre' size='md'>{noStudies + ' Trials'}</Heading>
+        <Text ml={3} whiteSpace='pre' fontWeight='500' color='gray.600'>
           {`${[...Object.keys(router.query)].filter(x => !['page', 'limit'].includes(x)).length} Filters applied`}
         </Text>
         <CurrentSearchCard
+          justifyContent='center'
+          flexGrow='1'
           setSearch={setCurrentSearch}
           search={currentSearch}/>
-        <Spacer />
         <CheckableMenu
-          ml={3}
           variant='outlined'
           options={[...StudyColumns].map(x => ({...x, label: x.id}))}
           onOptionToggle={(colId) => setColumns(columns.map(

@@ -3,9 +3,14 @@ import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 import {
   Flex,
+  IconButton,
+  Heading,
+  Text,
   Button,
   Input
 } from '@chakra-ui/react';
+import { EditIcon, CloseIcon } from '@chakra-ui/icons';
+import SaveIcon from './icons/SaveIcon';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 
 
@@ -13,6 +18,7 @@ export default function CurrentSearchCard(props) {
   const { search, setSearch, isEdited, ...kv } = props;
 
   const [seachName, setSearchName] = useState(undefined);
+  const [editMode, setEditMode] = useState(false);
   const [searchIsSaving, setSearchIsSaving] = useState(false);
 
   const router = useRouter();
@@ -30,10 +36,10 @@ export default function CurrentSearchCard(props) {
       name: seachName,
       ...search
     }).then(data => {
-      setSearch(search);
+      setSearch(data.search);
 
     }).finally(() => {
-      setSearchIsSaving(true)
+      setSearchIsSaving(false)
     })
   }
 
@@ -41,31 +47,53 @@ export default function CurrentSearchCard(props) {
     studyHttpClient.updateSearch({
       ...search,
       name: seachName
+    }).then(data => {
+      setSearch(data.search);
     }).catch(error => {
       console.log(error);
     }).finally(() => {
-      setSearchIsSaving(true);
+      setSearchIsSaving(false);
     })
   }
 
   function onClick() {
+    setSearchIsSaving(true);
     if (router?.query?.search) {
       updateSearch();
-      return
+    } else {
+      createSearch();
     }
 
-    createSearch();
+    setEditMode(!editMode);
+  }
+
+  function onClear() {
+    router.push('/studies/browse');
   }
 
   return (
-    <Flex>
-      <Input 
-        onChange={(e) => setSearchName(e.target.value)}
-        placeholder='untitled' 
-        value={seachName || ''} />
-      <Button onClick={onClick}>
-      {"Save Search"}
-      </Button>
+    <Flex alignItems='center' {...kv}>
+    {editMode ? 
+      <>
+        <Input 
+          onChange={(e) => setSearchName(e.target.value)}
+          placeholder='untitled' 
+          w='70%'
+          textAlign='center'
+          value={seachName || ''} />
+        <IconButton bg='clear' color='gray.500'
+          onClick={onClick} icon={<SaveIcon />}/>
+        <IconButton bg='clear' color='gray.500'
+          onClick={()=>{setEditMode(!editMode)}} icon={<CloseIcon />}/>
+      </> :
+      ((router?.query?.search) && <>
+        <Text fontWeight='500' fontSize='18px'>{search?.name}</Text>
+        <IconButton bg='clear' color='gray.500'
+          onClick={()=>{setEditMode(!editMode)}} icon={<EditIcon />}/>
+        <IconButton bg='clear' color='gray.500'
+          onClick={onClear} icon={<CloseIcon />}/>
+      </>)
+    }
     </Flex>
   )
 }
