@@ -1,6 +1,8 @@
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import {
   Flex,
+  Button,
   Text,
   Input,
 } from '@chakra-ui/react';
@@ -20,10 +22,15 @@ const groupColorWheel = [
 export function SearchCard(props) {
   const { children, id, fill, ...kv } = props;
 
+  const router = useRouter();
+
   return ( 
-    <Flex bg={fill}>
+    <Button bg={fill} onClick={() => {router.push({
+      pathname: router.pathname,
+      query: { search: id }
+    })}}>
     {children}
-    </Flex>
+    </Button>
   )
 }
 
@@ -53,10 +60,12 @@ export default function SearchesDeck(props) {
 
   return (
     <Flex flexDirection='column' {...props}>
-    {searches.map(search => (
-      <Text key={search.id + '-card'}>
+    {searches.map((search, i) => (
+      <SearchCard key={search.id + '-card'} 
+        id={search.id}
+        fill={groupColorWheel[i % groupColorWheel.length]}>
         {search.name}
-      </Text>
+      </SearchCard>
     ))}
     </Flex>
   );

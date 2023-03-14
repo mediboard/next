@@ -248,13 +248,13 @@ export default function StudiesTable(props) {
 
   useEffect(() => {
     if (currentSearch?.search_string) {
+      setStudiesIsLoading(true)
       fetchStudiesFromQuery(currentSearch?.search_string);
     }
   }, [currentSearch?.search_string])
 
   useEffect(() => {
     if (router.isReady && router?.query?.search) {
-      setStudiesIsLoading(true)
       loadSearchString(router.query.search);
     }
   }, [router?.query?.search])
@@ -358,7 +358,7 @@ export default function StudiesTable(props) {
                     w={header.getSize()}
                     borderRight={header.id === selectedColumn?.id ? `3px solid ${selectColor}` : ''}
                     borderLeft={header.id === selectedColumn?.id ? `3px solid ${selectColor}` : ''}
-                    bg={header.id === selectedColumn?.id ? selectColor : ''}
+                    bg={header.id === selectedColumn?.id ? 'blue.300' : ''}
                     colSpan={header.colSpan}>
                     <Flex whiteSpace='nowrap' cursor='pointer' onClick={() => {
                       if (selectedColumn?.id === header.id) {

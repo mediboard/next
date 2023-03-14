@@ -10,6 +10,8 @@ import {
   Spacer
 } from '@chakra-ui/react';
 import DatePicker from "react-datepicker";
+import ConditionMultiSelect from './ConditionMultiSelect';
+import TreatmentMultiSelect from './TreatmentMultiSelect';
 import { parseQueryString, buildQueryString } from '../utils';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 
@@ -208,7 +210,7 @@ export default function FilterBody(props) {
   }
 
   return (
-    <Flex>
+    <Flex flexDirection='column'>
       {(type === 'String') && <StringBody setValue={setStringValue} value={stringValue}/>}
       {(type === 'Date') && <DateBody
         endDate={endDate}
