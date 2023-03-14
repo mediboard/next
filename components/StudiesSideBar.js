@@ -35,18 +35,38 @@ export default function StudiesSideBar(props) {
   }
 
   return (
-    <Flex {...kv} bg='white' zIndex={3}>
-      <VStack p={2}>
+    <Flex {...kv} bg='white' zIndex={3} 
+      borderLeft='1px' borderColor='var(--chakra-colors-chakra-border-color)'>
+      <Flex flexDirection='column' borderRight='1px' 
+        borderColor='var(--chakra-colors-chakra-border-color)'>
         <IconButton
+          p={4} pt={7} pb={7} 
+          bg={mode === 'search' ? 'blue.100' : 'clear'} 
+          borderRadius={0} borderBottomWidth='1px'
+          color={mode === 'search' ? 'blue.600' : 'gray.500'}
           onClick={() => onClick('search')}
-          icon={<SearchIcon />}/>
+          icon={<SearchIcon h='20px' w='20px'/>}/>
         <IconButton
-          onClick={() => onClick('analyze')}
-          icon={<GraphIcon />}/>
+          p={4} pt={7} pb={7} 
+          bg={mode === 'analyze' ? 'blue.100' : 'clear'} 
+          borderRadius={0}
+          borderBottomWidth='1px'
+          onClick={() => onClick('analyze')} 
+          icon={
+          <GraphIcon 
+            fill={mode === 'analyze' ? 'blue.600' : 'gray.500'} 
+            h='30px' w='30px'/>}/>
         <IconButton
+          p={4} pt={7} pb={7} 
+          bg={mode === 'filter' ? 'blue.100' : 'clear'} 
+          borderRadius={0}
+          borderBottomWidth='1px'
+          color='gray.400'
           onClick={() => onClick('filter')}
-          icon={<FunnelIcon />}/>
-      </VStack>
+          icon={
+            <FunnelIcon 
+              fill={mode === 'filter' ? 'blue.600' : 'gray.500'}/>}/>
+      </Flex>
 
       <HorizontalCollapse
         isOpen={mode !== undefined}
