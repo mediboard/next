@@ -30,6 +30,23 @@ class StudyHttpClient {
 		return data;
 	}
 
+	async getStudyAttributes(attribute, args, limit) {
+		let config = {
+			url: `${this.base}/studies/data/${attribute}`,
+			params: { limit: limit, ...args }
+		}
+
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to collect related studies, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
 	async getRelatedStudies(study_id, page) {
 		let config = {
 			url: this.base + '/studies/'+study_id+'/related',
@@ -158,6 +175,56 @@ class StudyHttpClient {
 		const response = await axios.post(AppConfig.api_url+'/studies/administrations', admin);
 		if (response.status !== 200) {
 			throw new Error("Failed to create administration, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async createSearch(search) {
+		const response = await axios.post(AppConfig.api_url+'/studies/search_value/' + search['id'], search);
+		if (response.status !== 200) {
+			throw new Error("Failed to create search, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async listSearches(username) {
+		const response = await axios.get(AppConfig.api_url+'/studies/user/' + username + '/search_values');
+		if (response.status !== 200) {
+			throw new Error("Failed to list search values, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async getSearch(search_id) {
+		const response = await axios.get(AppConfig.api_url+'/studies/search_value/' + search_id);
+		if (response.status !== 200) {
+			throw new Error("Failed to get search value, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async deleteSearch(search_id) {
+		const response = await axios.delete(AppConfig.api_url+'/studies/search_value/' + search_id);
+		if (response.status !== 200) {
+			throw new Error("Failed to delete search value, status: " + response.status);
+		}
+
+		const data = await response.data;
+		return data;
+	}
+
+	async updateSearch(search) {
+		const response = await axios.put(AppConfig.api_url+'/studies/search_value/' + search['id'], search);
+		if (response.status !== 200) {
+			throw new Error("Failed to update search value, status: " + response.status);
 		}
 
 		const data = await response.data;

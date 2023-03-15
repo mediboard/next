@@ -2,16 +2,49 @@ export function parseMeasureType(measureType) {
 	return measureType?.split('.')?.[1];
 };
 
+export function isEnum(str) {
+  const regex = /^[a-z_]+\.([A-Z_0-9]+)$/;
+  return regex.test(str);
+}
+
 export function parseEnumType(enumString) {
   return enumString.replace(/_/g, ' ')
-          .toLowerCase()
-          .replace(/\b\w/g, function(match) {
-            return match.toUpperCase();
-          });
+    .toLowerCase()
+    .replace(/\b\w/g, function(match) {
+      return match.toUpperCase();
+    });
+}
+
+export function parseQueryString(searchString) {
+  const params = new URLSearchParams(searchString);
+  const result = {};
+
+  for (let [key, value] of params) {
+    result[key] = value;
+  }
+
+  return result;
+}
+
+export function buildQueryString(query) {
+  const queryString = Object.keys(query)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+    .join("&");
+  return queryString ? `?${queryString}` : "";
 }
 
 export function createDataLoadingObj(data=[], isLoading=true) {
 	return { data: data, isLoading: isLoading };
+}
+
+export function capitalize(str) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(function(word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
 }
 
 
