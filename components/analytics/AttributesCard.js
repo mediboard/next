@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import {
   Skeleton,
   Heading,
@@ -8,60 +7,65 @@ import {
 import studyHttpClient from '../../services/clientapis/StudyHttpClient';
 import RoundedBarChart from '../charts/RoundedBarChart';
 import Tile from '../Tile';
-import { isEnum, parseMeasureType, capitalize } from '../../utils';
+import { 
+  isEnum,
+  parseMeasureType,
+  capitalize, 
+  parseQueryString } from '../../utils';
 
 
-const groupColorWheel = [
-  '#ffbc80', 
-  '#8185FF', 
-  '#80c3ff', 
-  '#bc80ff', 
-  '#fb80ff'
-];
-
-function prepDataForChart(data, showNA) {
+function prepDataForChart(dataGroups, showNA) {
   const newData = [];
   const fills = {};
+  if (!dataGroups?.length) { return [[], []] }
 
-  Object.keys(data)?.forEach((key,i) => {
+  // Assuming all keys are present for each
+  Object.keys(dataGroups?.[0]?.data || {})?.forEach((key,i) => {
     const parsedKey = isEnum(key) ? parseMeasureType(key) : key;
 
     if (parsedKey != 'NA' || (parsedKey=='NA' && showNA)) {
-      newData.push({
-        name: parsedKey,
-        group_a: data[key]
-      });
-    }
+      const dataPoint = { name: parsedKey };
 
+      dataGroups.forEach(dataGroup => {
+        dataPoint[`group_${dataGroup?.id}`] = dataGroup.data[key];
+      })
+
+      newData.push(dataPoint);
+    }
   })
 
-  newData.sort((a,b) => (b.group_a - a.group_a))
-
-  fills['group_a'] = groupColorWheel[0];
+  dataGroups.forEach(dataGroup => {
+    fills[`group_${dataGroup?.id}`] = dataGroup.fill;
+  })
 
   return [newData, fills];
 }
 
 export default function AttributesCard(props) {
-  const { attribute, showNA, ...kv }  = props;
+  const { attribute, showNA, searchGroups, ...kv }  = props;
 
-  const router = useRouter();
-
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [dataIsLoading, setDataIsLoading] = useState(true);
 
   useEffect(() => {
-    if (attribute && router.isReady) {
+    if (attribute && searchGroups?.length) {
       fetchData();
     }
-  }, [attribute, router.isReady])
+  }, [attribute, searchGroups])
 
   async function fetchData() {
     setDataIsLoading(true);
-    studyHttpClient.getStudyAttributes(attribute, router.query).then(response => {
-      setData(response[attribute]);
+    Promise.all(searchGroups.map(async group => ({
+      data: (await studyHttpClient.getStudyAttributes(
+        attribute, 
+        parseQueryString(group.search_string)))[attribute],
+      ...group
+    }))).then(data => {
+      setData(data);
+
     }).catch(error => {
       console.log(error);
+
     }).finally(() => {
       setDataIsLoading(false);
     })

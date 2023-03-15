@@ -18,6 +18,7 @@ import CheckableMenu from '../../components/CheckableMenu';
 import Banner from '../../components/Banner';
 import { theme } from '../_app';
 import { buildQueryString } from '../../utils';
+import studyHttpClient from '../../services/clientapis/StudyHttpClient';
 
 
 export default function Analysis() {
@@ -68,10 +69,32 @@ const ATTRIBUTES = [
   }
 ]
 
+const groupColorWheel = [
+  '#ffbc80', 
+  '#8185FF', 
+  '#80c3ff', 
+  '#bc80ff', 
+  '#fb80ff'
+];
+
 function Main() {
   const router = useRouter();
   
   const [visibleAttrs, setVisibleAttrs] = useState(ATTRIBUTES);
+  const [searches, setSearches] = useState([]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const searchIds = router.query.searches.split(',');
+      loadSearches(searchIds);
+    }
+  }, [router.query])
+
+  async function loadSearches(searchIds) {
+    setSearches(await Promise.all(searchIds?.map(async id => (
+      (await studyHttpClient.getSearch(id)).search
+    ))));
+  }
 
   const SearchButton = (props) => (
     <Button leftIcon={<ChevronLeftIcon />}
@@ -109,7 +132,12 @@ function Main() {
       <Grid bg='gray.100' p={5} overflowY='scroll' h='100%' templateColumns='repeat(2, 1fr)' w='100%' gap='4'>
       {visibleAttrs?.filter(col => col.isVisible)?.map(attr => (
         <GridItem key={attr.id+'-card'}>
-          <AttributesCard bg='white' attribute={attr.id}/>
+          <AttributesCard searchGroups={searches?.map((x,i) => ({
+            ...x, 
+            fill: groupColorWheel[i % groupColorWheel.length]
+          }))} 
+            bg='white' 
+            attribute={attr.id}/>
         </GridItem>
       ))}
       </Grid>
