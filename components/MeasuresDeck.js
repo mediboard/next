@@ -9,9 +9,12 @@ import {
 	Text,
 	Box
 } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import MeasureGroupCard from './MeasureGroupCard';
+import CheckableMenu from './CheckableMenu';
 import treatmentHttpClient from '../services/clientapis/TreatmentHttpClient';
 import conditionsHttpClient from '../services/clientapis/ConditionsHttpClient';
+import measuresHttpClient from '../services/clientapis/MeasuresHttpClient';
 
 
 export default function MeasuresDeck(props) {
@@ -23,10 +26,33 @@ export default function MeasuresDeck(props) {
 	const [measureGroups, setMeasureGroups] = useState([]);
 
 	useEffect(() => {
-		if (router.query.groups) {
-			setMeasureGroups(router.query.groups?.split(','))
+		if (treatments.length && conditionId) {
+			loadMeasureGroups();
 		}
-	}, [router.query.groups])
+	}, [treatments, conditionId])
+
+	async function loadMeasureGroups() {
+		setMeasureGroupsIsLoading(true);
+		measuresHttpClient.getMeasureGroups(treatments.map(treat => treat.id), conditionId).then(data => {
+			setMeasureGroups(data['measure_groups']);
+
+		}).catch(error => {
+			console.log(error);
+
+		}).finally(() => {
+			setMeasureGroupsIsLoading(false);
+		})
+	}
+
+	function onGroupOptionToggle(groupId) {
+		const currentGroupIds = router.query.groups?.split(',');
+		if (currentGroupIds.contains(groupId)) {
+			updateMeasureGroups(currentGroupIds?.filter(id => id !== groupId));
+			return
+		}
+
+		updateMeasureGroups([...currentGroupIds, groupId]);
+	}
 
 	function updateMeasureGroups(values) {
 		router.query.groups = values?.join(',');
@@ -35,7 +61,16 @@ export default function MeasuresDeck(props) {
 
 	return (
 		<VStack w='100%'>
-			<MeasureGroupsCreator setGroup={(value) => {updateMeasureGroups([value, ...measureGroups])}} w='100%' alignItems='center'/>
+			<CheckableMenu
+				variant='outlined'
+        rightIcon={<ChevronDownIcon />}
+				onOptionToggle={onGroupOptionToggle}
+				selectedOptions={measureGroups?.filter(
+						group => router.query.groups?.split(',').comtains(group.id)
+					).map(group => ({id: group.id, label: group.name}))}
+				options={measureGroups?.map(group => ({id: group.id, label: group.name}))}>
+			{'Select Endpoints'}
+			</CheckableMenu>
 
 			{measureGroups.map(group => (
 			<MeasureGroupCard 

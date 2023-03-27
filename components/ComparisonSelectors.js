@@ -62,9 +62,6 @@ export default function ComparisonSelectors(props) {
 		setTreatmentsIsLoading(true);
 		conditionsHttpClient.getTreatments(conditionName).then(data => {
 			setTreatments(data);
-			if (!location?.search) {
-				addTreatments([data[0]?.name, data[1]?.name]);
-			}
 
 		}).catch((error)=>{
 			console.log(error);

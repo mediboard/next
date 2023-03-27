@@ -34,7 +34,6 @@ export default function RoundedBarChart(props) {
       <XAxis dataKey="name" />
       <YAxis />
       <Tooltip />
-      <Legend align='left' />
       {getDataGroups(data?.[0] || {})?.map((dataGroup) => (
         <Bar key={dataGroup + '-bar'} 
           shape={<Rectangle radius={[10, 10, 0, 0]}/>}

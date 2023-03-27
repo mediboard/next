@@ -7,47 +7,63 @@ import Tile from './Tile';
 import treatmentHttpClient from '../services/clientapis/TreatmentHttpClient';
 import MeasuresTreatmentWrapper from './MeasuresTreatmentWrapper';
 import MeasureGroupChart from './MeasureGroupChart';
+import appConfig from '../services/AppConfig';
 
 
-function prepMeasures4Chart(measures, treatments) {
-  const data = {};
-  if (!measures) { return data; } 
+function prepData4Chart(measuresData) {
+  const chartData = {};
+  Object.keys(measuresData).forEach((key,i) => {
+    const dataPoints = measuresData[key].map(
+      measure => measure.results.map(
+        result => ({
+          x: result.d_value,
+          measure_title: measure.title,
+          y: i,
+          study: measure.study
+        }))
+      ).flat();
 
-  treatments.forEach(treatment => {
-    if (measures[treatment.name]) {
-      data[treatment.name] = {
-        measures: measures[treatment.name],
-        treatment: treatment
-      }
-    }
+    chartData[key] = dataPoints;
   })
 
-  return data;
+  return chartData;
 }
 
 export default function MeasureGroupCard(props) {
 	const { group, conditionId, treatments, ...kv } = props;
 
-  const [measures, setMeasures] = useState({});
-  const [measuresIsLoading, setMeasuresIsLoading] = useState(true);
+  const [measuresData, setMeasuresData] = useState({});
+  const [dataIsLoading, setDataIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (treatments?.length && group?.id) {
+      treatments.filter(treat => treat.id in measuresData).forEach(treat => {
+       loadData(treat.id, group.id);
+      });
+    }
+  }, [treatments, group])
+
+  async function loadData(treatmentId, measureGroupId) {
+    const treatmentIds = [treatmentId, appConfig.nullTreatment];
+
+    setDataIsLoading(true);
+    treatmentHttpClient.analyzeTreatments(treatmentIds, measureGroupId).then(data => {
+      const newEntry = {};
+      newEntry[treatmentId] = data['results']
+      setMeasuresData({...measuresData, ...newEntry});
+
+    }).catch(error => {
+      console.log(error);
+
+    }).finally(() => {
+      setDataIsLoading(false);
+    })
+  }
 
 	return (
-		<Tile {...kv}>
-    {treatments?.map(treatment => (
-      <MeasuresTreatmentWrapper 
-        key={`${treatment.name}-measure-wrapper`}
-        measures={measures[treatment.name]}
-        setMeasures={(vals) => {
-          const newMeasures = {};
-          newMeasures[treatment.name] = vals;
-          setMeasures((prev) => ({...prev, ...newMeasures}));
-        }}
-        conditionId={conditionId}
-        groupName={group}
-        treatmentName={treatment?.name} />
-    ))}
-			<Text>{group}</Text>
-      <MeasureGroupChart measures={prepMeasures4Chart(measures, treatments)} />
+		<Tile {...kv} textAlign='center'>
+			<Text>{group.name}</Text>
+      <MeasureGroupChart data={prepData4Chart(measuresData)} />
 		</Tile>
 	)
 }

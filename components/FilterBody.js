@@ -12,6 +12,7 @@ import {
 import DatePicker from "react-datepicker";
 import ConditionMultiSelect from './ConditionMultiSelect';
 import TreatmentMultiSelect from './TreatmentMultiSelect';
+import MultiSelect from './MultiSelect';
 import { parseQueryString, buildQueryString } from '../utils';
 import studyHttpClient from '../services/clientapis/StudyHttpClient';
 
@@ -128,6 +129,17 @@ export default function FilterBody(props) {
     }
   }, [searchString])
 
+  useEffect(() => {
+    resetState();
+  }, [columnId])
+
+  function resetState() {
+    setStringValue('');
+    setValues([]);
+    setStartDate(new Date(DEFUALT_DATE));
+    setEndDate(new Date(DEFUALT_DATE));
+  }
+
   function preLoadValues(queryParams) {
     switch(type) {
     case 'String':
@@ -175,7 +187,7 @@ export default function FilterBody(props) {
 
     case 'Select':
       let select_str = values.join(',');
-      newParams[columnId] = values_str;
+      newParams[columnId] = select_str;
       if (!select_str?.length) {
         delete newParams[columnId];
       }

@@ -11,6 +11,7 @@ import {
   Label,
 } from 'recharts';
 import treatmentHttpClient from '../services/clientapis/TreatmentHttpClient';
+import appConfig from '../services/AppConfig';
 
 
 const CustomTooltip = ({ active, payload }) => {
@@ -30,46 +31,16 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 }
 
-function prepOutcomes4Chart(measureData, index) {
-  return measureData?.map(point => ({
-    cat: index,
-    ...point
-  }));
-}
-
 export default function MeasureGroupChart(props) {
-	const { measures, ...kv } = props;
-
-	const [measureData, setMeasureData] = useState([]);
-
-	useEffect(() => {
-		if (Object.keys(measures)?.length) {
-			getTreatmentData();
-		}
-	}, [measures])
-
-	async function getTreatmentData() {
-		const treatmentData = await Promise.all(Object.keys(measures)?.map(async treatment => {
-			const measureIds = measures[treatment]?.measures?.map(x => x.id);
-
-			return await fetchMeasuresData(measureIds, measures[treatment]?.treatment?.id);
-		}));
-
-		setMeasureData(treatmentData);
-	}
-
-	async function fetchMeasuresData(measureIds, treatmentId) {
-		return await treatmentHttpClient.getMeasureData(treatmentId, measureIds);
-	}
+	const { data, ...kv } = props;
 
 	return (
     <ScatterChart width={1100} height={250}
       margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
-      <XAxis type="number" dataKey="cohen_d" domain={[-1,2]}/>
-      <YAxis type="number" dataKey="cat" range={[-1,3]} name="name" />
-      {measureData?.map((data, i) => (
-        <Scatter key={i + '-scatter'}
-          data={prepOutcomes4Chart(data, i)} />
+      <XAxis type="number" dataKey="x" domain={[-1,2]}/>
+      <YAxis type="number" dataKey="y" range={[-1,3]} name="name" />
+      {Object.keys(data)?.map((key) => (
+        <Scatter key={key + '-scatter'} data={data[key]} />
     	))}
       <Tooltip content={CustomTooltip} cursor={{ strokeDasharray: '3 3' }} wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }} />
     </ScatterChart>

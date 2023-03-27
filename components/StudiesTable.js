@@ -225,6 +225,15 @@ const StudyColumns = [
     type: 'Values',
     size: 200,
     isVisible: true
+  },
+  {
+    id: 'primary_success',
+    accessorKey: 'primary_success',
+    cell: info => info.getValue(),
+    footer: props => props.column.id,
+    type: 'Values',
+    size: 200,
+    isVisible: true
   }
 ]
 
@@ -267,7 +276,6 @@ export default function StudiesTable(props) {
   async function loadSearchString(searchString) {
     studyHttpClient.getSearch(searchString).then(data => {
       setCurrentSearch(data.search);
-
     }).catch(error => {
       console.log(error);
     });
