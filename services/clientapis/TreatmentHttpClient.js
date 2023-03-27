@@ -56,6 +56,19 @@ class TreatmentHttpClient {
 		return finalData;
 	}
 
+	async analyzeTreatments(treatmentIds, measureGroupId) {
+		let config = { url: `/treatments/${treatmentIds.join(',')}/group/${measureGroupId}` };
+		let uri = this.instance.getUri(config);
+
+		const response = await axios.get(uri);
+		if (response.status !== 200) {
+			throw new Error("Failed to collect effects, status: " + response.status);
+		}
+		const data = await response.data;
+
+		return data;
+	}
+
 	async getEffects(drug, limit=20, args=undefined) {
 		let config = {
 			url: this.base + '/treatments/'+drug+'/effects',

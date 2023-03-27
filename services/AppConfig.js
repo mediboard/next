@@ -7,7 +7,7 @@ class AppConfig {
     this.API_URL = process.env.NEXT_PUBLIC_REACT_APP_API_URL;
     this.conditionsRoute = conditionsRoute;
     this.treatmentsRoute = treatmentsRoute;
-    console.log('api: ' + process.env.NEXT_PUBLIC_REACT_APP_API_URL);
+    this.nullTreatment = 10;
 	}
 
 	get api_url() {

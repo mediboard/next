@@ -65,11 +65,11 @@ function Main() {
       		</Flex>
 
 					<VStack gap={2} mt={5} w={['100%', '80%']} align='stretch'>
-						<EffectsDataWrapper treatments={treatments} />
+						{/*<EffectsDataWrapper treatments={treatments} />*/}
 
 						<MeasuresComparisonStack condition={conditions[0]} treatments={treatments}/>
 
-						<DemosComparisonStack treatments={treatments}/>
+						{/*<DemosComparisonStack treatments={treatments}/>*/}
 					</VStack>
       	</Flex>
 			</Box>

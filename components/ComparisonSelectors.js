@@ -43,7 +43,7 @@ export default function ComparisonSelectors(props) {
 
 	useEffect(() => {
 		if (treatments != null) {
-			setSelectedTreatments(treatments?.filter(x => location.search?.includes(x.name?.replaceAll(' ', '+')))
+			setSelectedTreatments(treatments?.filter(x => isSelected(x.name))
 				.map((x,i) => ({...x, fill: treatmentsColorWheel[i % treatmentsColorWheel.length]})));
 		}
 	}, [router.query.treatments, treatments?.length])
@@ -62,9 +62,6 @@ export default function ComparisonSelectors(props) {
 		setTreatmentsIsLoading(true);
 		conditionsHttpClient.getTreatments(conditionName).then(data => {
 			setTreatments(data);
-			if (!location?.search) {
-				addTreatments([data[0]?.name, data[1]?.name]);
-			}
 
 		}).catch((error)=>{
 			console.log(error);
@@ -75,7 +72,7 @@ export default function ComparisonSelectors(props) {
 	}
 
 	function onClick(treatmentName) {
-		if (router.query.treatments?.includes(treatmentName?.replaceAll(' ', '+'))) {
+		if (isSelected(treatmentName)) {
 			removeTreatment(treatmentName);
 			return;
 		}
@@ -83,6 +80,12 @@ export default function ComparisonSelectors(props) {
 		if (selectedTreatments?.length < 3) {
 			addTreatments([treatmentName]);
 		}
+	}
+
+	function isSelected(treatmentName) {
+		const currentTreatNames = router.query.treatments?.split(',');
+
+		return currentTreatNames.includes(treatmentName.replaceAll(' ', '+'))
 	}
 
 	return (
@@ -97,9 +100,9 @@ export default function ComparisonSelectors(props) {
 				_hover={{
 					cursor: (selectedTreatments?.length >= 3 && !router.query.treatments?.includes(treatment.name)) ? 'not-allowed' : 'pointer'
 				}}
-				bg={router.query.treatments?.includes(treatment.name?.replaceAll(' ', '+'))
+				bg={isSelected(treatment.name)
 					&& '#cccccc'}
-				border={router.query.treatments?.includes(treatment.name?.replaceAll(' ', '+'))
+				border={isSelected(treatment.name)
 					? '2px solid var(--chakra-colors-purple-300)' : '1px solid #cccccc'}>
 				<Text fontSize={['12px','14px']}>{treatment.name}</Text>
 			</Flex>

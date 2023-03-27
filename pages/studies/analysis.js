@@ -66,6 +66,10 @@ const ATTRIBUTES = [
   {
     id: 'baselines',
     isVisible: true
+  },
+  {
+    id: 'primary_success',
+    isVisible: true
   }
 ]
 
