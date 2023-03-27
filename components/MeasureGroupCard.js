@@ -37,7 +37,7 @@ export default function MeasureGroupCard(props) {
 
   useEffect(() => {
     if (treatments?.length && group?.id) {
-      treatments.filter(treat => treat.id in measuresData).forEach(treat => {
+      treatments.filter(treat => measuresData[treat.id] == null).forEach(treat => {
        loadData(treat.id, group.id);
       });
     }

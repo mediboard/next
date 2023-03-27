@@ -77,7 +77,7 @@ export default function MeasuresDeck(props) {
 				group={group}
 				treatments={treatments}
 				conditionId={conditionId}
-				key={'measure-group-card-'+group}/>
+				key={'measure-group-card-'+group.id}/>
 			))}
 		</VStack>
 	)
